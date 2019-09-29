@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="Notifier.PaveViews.BusCreadentialsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+			 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:local="clr-namespace:Notifier.PageVeiwModels"
+			 xmlns:view ="clr-namespace:Notifier.PaveViews"
+             mc:Ignorable="d" 
+			 d:DataContext="{d:DesignInstance local:BusCredentialsViewModel}">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition/>
+			<RowDefinition/>
+			<RowDefinition/>
+		</Grid.RowDefinitions>
+
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition/>
+			<ColumnDefinition/>
+		</Grid.ColumnDefinitions>
+
+		<Label Grid.Column ="0" Grid.Row ="0" Content="Login: "/>
+		<Label Grid.Column ="0" Grid.Row ="1" Content="Password: "/>
+		<TextBox Grid.Column ="1" Grid.Row ="0" Text="{Binding Login}"/>
+		<PasswordBox Grid.Column ="1" Grid.Row ="1" x:Name="Password">
+			<i:Interaction.Behaviors>
+				<view:SecurePasswordBehavior SecurePassword="{Binding SecurePassword, Mode=TwoWay}"/>
+			</i:Interaction.Behaviors>
+		</PasswordBox>
+		<Grid Grid.Row="2" Grid.ColumnSpan="2" >
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition/>
+				<ColumnDefinition/>
+			</Grid.ColumnDefinitions>
+			<Button Grid.Column="1" Content="Next" Command="{Binding NextCommand}" CommandParameter="{Binding ElementName=Password, Path=SecurePassword}"/>
+			<Button Grid.Column="0" Content="Back" Command="{Binding BackCommand}"/>
+		</Grid>
+	</Grid>
+</UserControl>

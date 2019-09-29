@@ -1,0 +1,26 @@
+﻿<Window x:Class="Notifier.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Notifier"
+        mc:Ignorable="d"
+		ResizeMode="NoResize"
+        Width="200"
+        Height="300"
+		d:DataContext="{d:DesignInstance local:NavigationViewModel}">
+	<Grid>
+        <UserControl Content="{Binding CurentPage}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Grid Visibility="{Binding IsOnWaiting, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Grid.RowDefinitions>
+				<RowDefinition Height="0.3*"/>
+				<RowDefinition/>
+				<RowDefinition Height="0.3*"/>
+			</Grid.RowDefinitions>
+			<Grid.Background>
+				<SolidColorBrush Color="White" Opacity=".2"/>
+			</Grid.Background>
+			<ProgressBar Grid.Row="1"  IsIndeterminate="True" Opacity="0.4" Background="Transparent" BorderThickness="1" />
+		</Grid>
+	</Grid>
+</Window>

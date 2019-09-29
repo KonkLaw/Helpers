@@ -1,0 +1,17 @@
+﻿<UserControl x:Class="Notifier.PaveViews.TransportationSelectionView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+            xmlns:local="clr-namespace:Notifier.PageVeiwModels"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance local:TransportSelectionViewModel}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+		<Button Grid.Column="0" Content="БЧ" Command="{Binding RailwayCommand}"/>
+		<Button Grid.Column="1" Content="Bus" Command="{Binding BusCommand}"/>
+    </Grid>
+</UserControl>

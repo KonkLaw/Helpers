@@ -1,0 +1,34 @@
+﻿<UserControl x:Class="Notifier.PaveViews.TrainSelectionView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Notifier.PageVeiwModels"
+             mc:Ignorable="d" 
+			 d:DataContext="{d:DesignInstance local:TrainSelectionViewModel}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <ListView Grid.Row="0" Grid.ColumnSpan="2"
+                  SelectionMode="Multiple" ItemsSource="{Binding Trains}" SelectedIndex="{Binding SelectedIndex, Mode=OneWayToSource}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding TrainInfo}"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Setter Property="IsSelected" Value="{Binding Mode=TwoWay, Path=IsSelected}"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
+        </ListView>
+		<Button Grid.Column="1" Grid.Row="1" Content="Next" Command="{Binding NextCommand}"/>
+		<Button Grid.Column="0" Grid.Row="1" Content="Back" Command="{Binding BackCommand}"/>
+    </Grid>
+</UserControl>
