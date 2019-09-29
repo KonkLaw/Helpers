@@ -92,7 +92,7 @@ namespace Notifier.PageVeiwModels
         }
 	}
 
-    struct TrainsResult
+	readonly struct TrainsResult
     {
         public readonly List<TrainInfo> Trains;
         public readonly TrainParameters TrainParameters;

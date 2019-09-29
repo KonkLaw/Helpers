@@ -2,7 +2,7 @@
 
 namespace TrainsApi
 {
-	public struct TrainParameters
+	public readonly struct TrainParameters
 	{
 		public readonly DateTime Date;
 		public readonly string FromStation;

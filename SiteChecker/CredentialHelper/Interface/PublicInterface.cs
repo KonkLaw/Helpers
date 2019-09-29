@@ -1,6 +1,4 @@
-﻿using System.Security;
-
-namespace CredentialHelper.Interface
+﻿namespace CredentialHelper.Interface
 {
     public interface ICredentialStorage
     {
@@ -8,7 +6,7 @@ namespace CredentialHelper.Interface
         void Save(UserInfo userInfo);
     }
 
-    public struct UserInfo
+    public readonly struct UserInfo
     {
         public readonly string PrivateLogin;
         public readonly string Password;

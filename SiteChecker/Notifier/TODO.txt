@@ -1,8 +1,6 @@
 ﻿* login check
-* REMOVE PHONE + PASS + CHECK
 * paramters + search for bus
 * Get back to paramters view model
-* readonly struct
 * how to work and store private data
 * GetPhone and phone format
 * refomat of phone nu,ber may the reason of reconnct

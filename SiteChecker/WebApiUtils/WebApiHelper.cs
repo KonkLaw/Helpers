@@ -94,7 +94,7 @@ namespace WebApiUtils
 		}
 	}
 
-	public struct RequestHeader
+	public readonly struct RequestHeader
 	{
 		public readonly string Name;
 		public readonly string Value;
