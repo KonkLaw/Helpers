@@ -1,0 +1,16 @@
+﻿* login check
+* REMOVE PHONE + PASS + CHECK
+* paramters + search for bus
+* Get back to paramters view model
+* readonly struct
+* how to work and store private data
+* GetPhone and phone format
+* refomat of phone nu,ber may the reason of reconnct
+* better time bounds for bus
+* normals password load + store
+* buy + notification after buy
+* today button
+* trains stations refactoring
+* fully secure string (sequre GUI + save + load + usage) + SecurePasswordBehavior (remove?)
+* normal asynch await
+* implrove style

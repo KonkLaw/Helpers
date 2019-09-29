@@ -1,0 +1,19 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:Notifier">
+	<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+	<Style TargetType="Button">
+		<Style.Setters>
+			<Setter Property="Button.Margin" Value="10" />
+			<Setter Property="Button.Padding" Value="5,3" />
+            <Setter Property="Button.HorizontalAlignment" Value="Center"/>
+            <Setter Property="Button.VerticalAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="5,3"/>
+        </Style.Setters>
+		<Style.Triggers>
+			<Trigger Property="IsMouseOver" Value="True">
+				<Setter Property="Foreground" Value="Red" />
+			</Trigger>
+		</Style.Triggers>
+	</Style>
+</ResourceDictionary>
