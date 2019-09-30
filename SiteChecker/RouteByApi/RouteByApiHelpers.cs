@@ -30,26 +30,18 @@ namespace RouteByApi
 			};
 		}
 
-		public static string GetRequestBody(bool fromMinskToStolbtcy, DateTime tripDay)
+		public static string GetRequestBody(SearchParameters searchParameters)
 		{
-			const string minskId = "1";
-			const string stolbcyId = "102";
+			if (searchParameters.FromStation == searchParameters.ToStation)
+				throw new ArgumentException("From station equals to To sattion.");
+			if (BusApi.Stations.IndexOf(searchParameters.FromStation) < 0 || BusApi.Stations.IndexOf(searchParameters.ToStation) < 0)
+				throw new ArgumentException("Unknown stations.");
 
-			string inBus;
-			string outBus;
-			if (fromMinskToStolbtcy)
-			{
-				inBus = minskId;
-				outBus = stolbcyId;
-			}
-			else
-			{
-				inBus = stolbcyId;
-				outBus = minskId;
-			}
+			string inBusStation = searchParameters.FromStation.Id;
+			string outBusStation = searchParameters.ToStation.Id;
+			string dayString = searchParameters.TripDay.ToString("dd.MM.yyyy");
 
-			string dayString = tripDay.ToString("dd.MM.yyyy");
-			string infoRequestBody = $"type=load_list_order&select_in={inBus}&select_out={outBus}&date={dayString}&id_service=144&lines=%7B%220%22%3A192%2C%221%22%3A195%2C%222%22%3A323%2C%223%22%3A368%2C%224%22%3A446%2C%225%22%3A488%2C%226%22%3A491%7D";
+			string infoRequestBody = $"type=load_list_order&select_in={inBusStation}&select_out={outBusStation}&date={dayString}&id_service=144&lines=%7B%220%22%3A192%2C%221%22%3A195%2C%222%22%3A323%2C%223%22%3A368%2C%224%22%3A446%2C%225%22%3A488%2C%226%22%3A491%7D";
 			return infoRequestBody;
 		}
 

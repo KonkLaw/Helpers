@@ -8,7 +8,7 @@ namespace TrainsApi
 {
 	public class TrainsInfoApi
 	{
-		public static ReadOnlyCollection<Station> ReliableStations
+		public static readonly ReadOnlyCollection<Station> ReliableStations
 			= new ReadOnlyCollection<Station>(
 				new[] { new Station("Минск", "2100000"), new Station("Столбцы", "2100123") });
 
@@ -34,6 +34,7 @@ namespace TrainsApi
 
 		public static bool HaveTicketsForNotDisabled(TrainParameters parameters, TrainInfo trainInfo)
 		{
+			CheckStations(parameters.FromStation, parameters.ToStation);
 			string response = WebApiHelper.GetResponseString(GetTicketsReqeust(parameters, trainInfo));
 			return TrainsTicketsParser.HaveTicketsForNotDisabled(response);
 		}
@@ -41,6 +42,7 @@ namespace TrainsApi
 		private static Uri GetTicketsReqeust(TrainParameters parameters, TrainInfo trainInfo)
 		{
 			const string checkTicketsRequest = "https://rasp.rw.by/ru/ajax/route/car_places/?from={0}&to={1}&date={2}&train_number={3}&car_type=2";
+			CheckStations(parameters.FromStation, parameters.ToStation);
 			string trainNumber = trainInfo.TrainId;
 			return new Uri(
 				string.Format(
@@ -49,6 +51,15 @@ namespace TrainsApi
 					parameters.ToStation.Id,
 					parameters.Date.ToString("yyyy-MM-dd"),
 					trainNumber));
+		}
+
+		private static void CheckStations(Station from, Station to)
+		{
+			if (from == to)
+				throw new ArgumentException("From equals to start");
+			
+			if (ReliableStations.IndexOf(from) < 0 || ReliableStations.IndexOf(to) < 0)
+				throw new ArgumentException("Some of sations is not recognized");
 		}
 	}
 
