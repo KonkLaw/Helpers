@@ -1,20 +1,30 @@
-﻿namespace CredentialHelper.Interface
+﻿using System.Xml.Serialization;
+
+namespace CredentialHelper.Interface
 {
-    public interface ICredentialStorage
+    public struct Credentials
     {
-        bool TryLoad(out UserInfo userInfo);
-        void Save(UserInfo userInfo);
+        [XmlAttribute]
+        public string Login;
+        [XmlAttribute]
+        public string Password;
+        [XmlAttribute]
+        public string Sessid;
+        [XmlAttribute]
+        public string Uidh;
+
+        public Credentials(string login, string password, string sessid, string uidh)
+        {
+            Login = login;
+            Password = password;
+            Sessid = sessid;
+            Uidh = uidh;
+        }
     }
 
-    public readonly struct UserInfo
+    public interface ICredentialStorage
     {
-        public readonly string PrivateLogin;
-        public readonly string Password;
-
-        public UserInfo(string privateLogin, string secureString)
-        {
-            PrivateLogin = privateLogin;
-            Password = secureString;
-        }
+        bool TryLoad(out Credentials userInfo);
+        void Save(Credentials userInfo);
     }
 }

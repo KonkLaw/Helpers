@@ -41,5 +41,33 @@ namespace RouteByApi
 			}
 			return new ReadOnlyCollection<BusInfo>(result);
 		}
-	}
+
+        private static readonly string[] KnowsErrors =
+        {
+            "Необходимо пройти дополнительную проверку",
+            "Неверный пароль"
+        };
+
+        internal static bool ContainsError(string message, out string recognizedError)
+        {
+            const string goodResponse = "\"error\":0,";
+
+            if (message.Contains(goodResponse))
+            {
+                recognizedError = default;
+                return false;
+            }
+
+            foreach (string knowsError in KnowsErrors)
+            {
+                if (message.Contains(knowsError))
+                {
+                    recognizedError = knowsError;
+                    return true;
+                }
+            }
+            recognizedError = message;
+            return true;
+        }
+    }
 }

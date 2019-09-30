@@ -1,15 +1,11 @@
-﻿* login check
-* paramters + search for bus
-* Get back to paramters view model
-* how to work and store private data
-* add creadentials validator
+﻿* how to work and store private data
 * GetPhone and phone format
-* refomat of phone nu,ber may the reason of reconnct
+* refomat of phone number may the reason of reconnct
 * better time bounds for bus
-* normals password load + store
-* buy + notification after buy
+* normals password load + store (or remove secure string)
+* add test sound button
 * today button
-* trains stations refactoring
+* trains + bus stations refactoring
 * fully secure string (sequre GUI + save + load + usage) + SecurePasswordBehavior (remove?)
 * normal asynch await
-* implrove style
+* implrove UI style

@@ -8,9 +8,9 @@ namespace Notifier.PageViewModels
 	internal class BusParametersViewmodel : BasePageViewModel
 	{
 		private readonly NavigationViewModel navigationViewModel;
-		private readonly UserInfo userInfo;
+        private readonly RouteApiSession session;
 
-		public DelegateCommand BackCommand { get; }
+        public DelegateCommand BackCommand { get; }
 		public DelegateCommand NextCommand { get; }
 
 		public string[] Stations { get; } = new string[] { "Минск", "Столбцы" };
@@ -88,32 +88,27 @@ namespace Notifier.PageViewModels
 		public TimeSpan StartTimeInList { get; } = new TimeSpan(5, 0, 0);
 		public TimeSpan StopTimeInList { get; } = new TimeSpan(22, 0, 0);
 
-		public BusParametersViewmodel(NavigationViewModel navigationViewModel, UserInfo userInfo)
+		public BusParametersViewmodel(NavigationViewModel navigationViewModel, RouteApiSession session)
 		{
 			this.navigationViewModel = navigationViewModel;
-			this.userInfo = userInfo;
-			BackCommand = new DelegateCommand(
+            this.session = session;
+            BackCommand = new DelegateCommand(
 				() => navigationViewModel.Show(new TransportSelectionViewModel(navigationViewModel)));
 			NextCommand = new DelegateCommand(NextHandler, GetNextEnabled);
 		}
 
 		private void NextHandler()
 		{
-			bool fromMInskToStolbcy;
+			bool fromMinskToS;
 			if (from == Stations[0] && to == Stations[1])
-				fromMInskToStolbcy = true;
+				fromMinskToS = true;
 			else if (from == Stations[1] && to == Stations[0])
-				fromMInskToStolbcy = false;
+				fromMinskToS = false;
 			else
 				throw new Exception();
 
-			var searchParamters = new SearchParamters(fromMInskToStolbcy, date.Value.Date, fromTime.Value.TimeOfDay, toTime.Value.TimeOfDay);
-			navigationViewModel.Show(BusSearchingViewModel.Create(navigationViewModel, searchParamters, new PrivateData()
-			{
-				Pas = userInfo.Password,
-				PhoneNumber = userInfo.PrivateLogin
-			}
-			));
+			var searchParameters = new SearchParameters(fromMinskToS, date.Value.Date, fromTime.Value.TimeOfDay, toTime.Value.TimeOfDay);
+			navigationViewModel.Show(BusSearchingViewModel.Create(navigationViewModel, searchParameters, session));
 		}
 
 		private void ValidateNextButtonAllowed() => NextCommand.RaiseCanExecuteChanged();
@@ -134,16 +129,16 @@ namespace Notifier.PageViewModels
 		}
 	}
 
-	readonly struct SearchParamters
+	readonly struct SearchParameters
 	{
-		public readonly bool FromMinskToStolbcy;
+		public readonly bool FromMinskToS;
 		public readonly DateTime Date;
 		public readonly TimeSpan FromTime;
 		public readonly TimeSpan ToTime;
 
-		public SearchParamters(bool fromMinskToStolbcy, DateTime date, TimeSpan fromTime, TimeSpan toTime)
+		public SearchParameters(bool fromMinskToS, DateTime date, TimeSpan fromTime, TimeSpan toTime)
 		{
-			FromMinskToStolbcy = fromMinskToStolbcy;
+			FromMinskToS = fromMinskToS;
 			Date = date;
 			FromTime = fromTime;
 			ToTime = toTime;

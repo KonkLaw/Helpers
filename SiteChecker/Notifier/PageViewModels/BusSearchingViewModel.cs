@@ -10,21 +10,21 @@ namespace Notifier.PageViewModels
 	class BusSearchingViewModel : BaseSearingViewModel
 	{
 		private readonly RouteApiSession session;
-		private readonly SearchParamters searchParameters;
+		private readonly SearchParameters searchParameters;
 
-        public static BusSearchingViewModel Create(NavigationViewModel navigationViewModel, SearchParamters searchParameters, PrivateData privateData)
+        public static BusSearchingViewModel Create(NavigationViewModel navigationViewModel, SearchParameters searchParameters, RouteApiSession session)
 		{
-            var busSearchingViewmodel = new BusSearchingViewModel(navigationViewModel, searchParameters, privateData);
+            var busSearchingViewmodel = new BusSearchingViewModel(navigationViewModel, searchParameters, session);
 			Task.Run(busSearchingViewmodel.SearchProcess);
 			return busSearchingViewmodel;
 		}
 
-		private BusSearchingViewModel(NavigationViewModel navigationViewModel, SearchParamters searchParameters, PrivateData privateData)
+		private BusSearchingViewModel(NavigationViewModel navigationViewModel, SearchParameters searchParameters, RouteApiSession session)
 			: base(navigationViewModel)
 		{
 			this.searchParameters = searchParameters;
-			session = BusApi.GetSession(privateData);
-		}
+            this.session = session;
+        }
 
 		protected override object GetCancelViewModel()
 		{
@@ -39,27 +39,21 @@ namespace Notifier.PageViewModels
 			if (CancellationSource.IsCancellationRequested)
 				return false;
 
-			ReadOnlyCollection<BusInfo> schedule = session.GetSchedule(searchParameters.FromMinskToStolbcy, searchParameters.Date);
+            if (session.GetSchedule(searchParameters.FromMinskToS, searchParameters.Date,
+                out ReadOnlyCollection<BusInfo> schedule, out _))
+            {
 
-            if (CancellationSource.IsCancellationRequested)
-				return false;
-			List<BusInfo> selected = schedule.Where(
-				bus => bus.Time >= searchParameters.FromTime && bus.Time <= searchParameters.ToTime).ToList();
+                if (CancellationSource.IsCancellationRequested)
+                    return false;
+                List<BusInfo> selected = schedule.Where(
+                    bus => bus.Time >= searchParameters.FromTime && bus.Time <= searchParameters.ToTime).ToList();
 
-			return selected.Count > 0;
-		}
-
-		public void Buy()
-		{
-			//TimeSpan preferredTime = default;
-			//List<BusInfo> selected = null;
-			//long worstMark = long.MaxValue;
-			//List<(int index, long mark)> orderedResult = selected.Select(
-			//	(record, index) => (
-			//		index,
-			//		mark: record.TicketsCount < 1 ? worstMark : (record.Time - preferredTime).Ticks))
-			//	.OrderBy(t => t.mark).ToList();
-			//session.Buy();
-		}
+                return selected.Count > 0;
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
 	}
 }
