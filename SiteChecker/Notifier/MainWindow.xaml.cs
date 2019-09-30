@@ -1,4 +1,4 @@
-﻿using Notifier.PageVeiwModels;
+﻿using Notifier.PageViewModels;
 using Notifier.PaveViews;
 using System.Windows;
 

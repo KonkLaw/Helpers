@@ -1,6 +1,6 @@
 ﻿using Prism.Mvvm;
 
-namespace Notifier.PageVeiwModels
+namespace Notifier.PageViewModels
 {
 	abstract class BasePageViewModel : BindableBase { } // TODO: remove?
 }

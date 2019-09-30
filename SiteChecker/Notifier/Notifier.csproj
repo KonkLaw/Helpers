@@ -50,13 +50,13 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="PageVeiwModels\BasePageViewModel.cs" />
-    <Compile Include="PageVeiwModels\BaseSearingViewModel.cs" />
-    <Compile Include="PageVeiwModels\BusCredentialsViewModel.cs" />
-    <Compile Include="PageVeiwModels\BusParametersViewModel.cs" />
+    <Compile Include="PageViewModels\BasePageViewModel.cs" />
+    <Compile Include="PageViewModels\BaseSearingViewModel.cs" />
+    <Compile Include="PageViewModels\BusCredentialsViewModel.cs" />
+    <Compile Include="PageViewModels\BusParametersViewModel.cs" />
     <Compile Include="Controls\TimePickerExtended.cs" />
-    <Compile Include="PageVeiwModels\BusSearchingViewModel.cs" />
-    <Compile Include="PageVeiwModels\TrainParametersViewModel.cs" />
+    <Compile Include="PageViewModels\BusSearchingViewModel.cs" />
+    <Compile Include="PageViewModels\TrainParametersViewModel.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -91,9 +91,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PageVeiwModels\TrainSearingViewModel.cs" />
-    <Compile Include="PageVeiwModels\TrainSelectionViewModel.cs" />
-    <Compile Include="PageVeiwModels\TransportSelectionViewModel.cs" />
+    <Compile Include="PageViewModels\TrainSearingViewModel.cs" />
+    <Compile Include="PageViewModels\TrainSelectionViewModel.cs" />
+    <Compile Include="PageViewModels\TransportSelectionViewModel.cs" />
     <Compile Include="PaveViews\BusCreadentialsView.xaml.cs">
       <DependentUpon>BusCreadentialsView.xaml</DependentUpon>
     </Compile>

@@ -23,13 +23,13 @@ namespace RouteByApi
 	class SessionInfo
 	{
 		public string PhpSesSid { get; }
-		public string UIDH { get; }
+		public string Uidh { get; }
 		public string PhoneNumber { get; }
 
 		public SessionInfo(string phpSesSid, string uidh, string phoneNumber)
 		{
 			PhpSesSid = phpSesSid;
-			UIDH = uidh;
+			Uidh = uidh;
 			PhoneNumber = phoneNumber;
 		}
 	}
@@ -59,11 +59,11 @@ namespace RouteByApi
 
 		public ReadOnlyCollection<BusInfo> GetSchedule(bool fromMinskToStolbcy, DateTime tripDay)
 		{
-			WebRequest sheduleWebRequest = RouteByApiHelpers.GetRequest(
+			WebRequest scheduleWebRequest = RouteByApiHelpers.GetRequest(
 				RouteByApiHelpers.GetRequestBody(fromMinskToStolbcy, tripDay),
 				RouteByApiHelpers.GetScheduleRequestHeaders(sessionInfo));
-			string responceContent = WebApiHelper.GetResponseString(sheduleWebRequest).DecodeUnicide();
-			ReadOnlyCollection<BusInfo> schedule = BusParser.ParseSchedule(responceContent);
+			string responseContent = WebApiHelper.GetResponseString(scheduleWebRequest).DecodeUnicide();
+			ReadOnlyCollection<BusInfo> schedule = BusParser.ParseSchedule(responseContent);
 			return schedule;
 		}
 

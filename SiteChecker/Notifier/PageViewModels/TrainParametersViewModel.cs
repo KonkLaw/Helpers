@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using TrainsApi;
 
-namespace Notifier.PageVeiwModels
+namespace Notifier.PageViewModels
 {
 	class TrainParametersViewmodel : BasePageViewModel
 	{
@@ -71,7 +71,7 @@ namespace Notifier.PageVeiwModels
         private TrainsResult GetTrains()
         {
             var trainParameters = new TrainParameters(date.Value, from, to);
-            // TODO: posible fancy async here. Pull it down to response reading.
+            // TODO: possible fancy async here. Pull it down to response reading.
             return new TrainsResult(TrainsInfoApi.GetBusinessClassTrains(trainParameters), trainParameters);
         }
 
