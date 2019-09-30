@@ -8,38 +8,38 @@ namespace Notifier.PageViewModels
 {
 	class TrainParametersViewmodel : BasePageViewModel
 	{
-		public string[] Stations => StationsHelpers.ReliableStations;
+		public IEnumerable<Station> Stations => TrainsInfoApi.ReliableStations;
 
         public DelegateCommand NextCommand { get; }
         public DelegateCommand BackCommand { get; }
 		public DelegateCommand Today { get; }
 		public DelegateCommand Tomorow { get; }
 
-		private string from;
-		public string From
+		private Station fromStation;
+		public Station FromStation
 		{
-			get => from;
+			get => fromStation;
 			set
 			{
-				if (SetProperty(ref from, value))
+				if (SetProperty(ref fromStation, value))
 				{
-					if (from != null)
-						To = StationsHelpers.GetOpposite(from);
+					if (fromStation != null)
+						ToStation = StationsHelpers.GetOpposite(fromStation);
                     ValidateNextButtonAllowed();
 				}
 			}
 		}
 
-		private string to;
-		public string To
+		private Station toStation;
+		public Station ToStation
 		{
-			get => to;
+			get => toStation;
 			set
 			{
-				if (SetProperty(ref to, value))
+				if (SetProperty(ref toStation, value))
 				{
-					if (to != null)
-						From = StationsHelpers.GetOpposite(to);
+					if (toStation != null)
+						FromStation = StationsHelpers.GetOpposite(toStation);
                     ValidateNextButtonAllowed();
 				}
 			}
@@ -74,7 +74,7 @@ namespace Notifier.PageViewModels
 
         private TrainsResult GetTrains()
         {
-            var trainParameters = new TrainParameters(date.Value, from, to);
+            var trainParameters = new TrainParameters(date.Value, fromStation, toStation);
             // TODO: possible fancy async here. Pull it down to response reading.
             return new TrainsResult(TrainsInfoApi.GetBusinessClassTrains(trainParameters), trainParameters);
         }
@@ -89,11 +89,7 @@ namespace Notifier.PageViewModels
 
         private void ValidateNextButtonAllowed() => NextCommand.RaiseCanExecuteChanged();
 
-        public bool GetIsNextAllowed()
-		{
-            var dateRounded = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
-            return from != to && date.HasValue && date.Value >= dateRounded;
-        }
+		public bool GetIsNextAllowed() => fromStation != toStation && date.HasValue && date.Value >= DateTime.Now.Date;
 	}
 
 	readonly struct TrainsResult
@@ -110,14 +106,12 @@ namespace Notifier.PageViewModels
 
 	class StationsHelpers
 	{
-		public static string[] ReliableStations = TrainsInfoApi.GetReliableStations();
-
-		internal static string GetOpposite(string station)
+		internal static Station GetOpposite(Station station)
 		{
-			if (ReliableStations[0] == station)
-				return ReliableStations[1];
-			else if (ReliableStations[1] == station)
-				return ReliableStations[0];
+			if (TrainsInfoApi.ReliableStations[0] == station)
+				return TrainsInfoApi.ReliableStations[1];
+			else if (TrainsInfoApi.ReliableStations[1] == station)
+				return TrainsInfoApi.ReliableStations[0];
 			else throw new InvalidOperationException();
 		}
 	}
