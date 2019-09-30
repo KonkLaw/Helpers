@@ -93,7 +93,7 @@ namespace Notifier.PageViewModels
         private bool NextValidator(SecureString obj)
             => login?.Length == 12
                && login.StartsWith("37529")
-               && login.Any(char.IsDigit)
+               && login.All(char.IsDigit)
                && SecurePassword?.Length > 2;
     }
 }

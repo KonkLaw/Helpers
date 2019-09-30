@@ -42,18 +42,19 @@ namespace RouteByApi
 			return new ReadOnlyCollection<BusInfo>(result);
 		}
 
-        private static readonly string[] KnowsErrors =
-        {
-            "Необходимо пройти дополнительную проверку",
-            "Неверный пароль",
-            "Пользователь не зарегистрирован",
-        };
+		private static readonly string[] KnowsErrors =
+{
+			"Необходимо пройти дополнительную проверку",
+			"Неверный пароль",
+			"Пользователь не зарегистрирован",
+		};
 
-        internal static bool ContainsError(string message, out string recognizedError)
+		internal static bool ContainsError(string message, out string recognizedError)
         {
             const string goodResponse = "\"error\":0,";
 
-            if (message.Contains(goodResponse))
+			// {"error":0,"ph":"......."}
+			if (message.Contains(goodResponse))
             {
                 recognizedError = default;
                 return false;
@@ -67,7 +68,19 @@ namespace RouteByApi
                     return true;
                 }
             }
-            recognizedError = message;
+
+			// other
+			// "Превышено количество попыток входа. Повторите попытку через"
+			// "НЕверный номер телефона"
+			const string beginError = "\"error_text\":\"";
+			int indexOf = message.IndexOf(beginError);
+			if (indexOf > 0)
+			{
+				int endError = message.IndexOf('"', indexOf + beginError.Length);
+				recognizedError = message.Substring(indexOf + beginError.Length, endError - indexOf - beginError.Length);
+			}
+			else
+				recognizedError = message;
             return true;
         }
     }
