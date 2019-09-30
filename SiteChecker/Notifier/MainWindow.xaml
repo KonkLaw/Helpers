@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Notifier"
         mc:Ignorable="d"
 		ResizeMode="NoResize"
-        Width="200"
+        Width="250"
         Height="300"
         Left="800" Top="500"
 		d:DataContext="{d:DesignInstance local:NavigationViewModel}">

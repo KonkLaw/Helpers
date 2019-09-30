@@ -15,7 +15,7 @@ namespace Notifier
 
         private void CurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            MessageBox.Show(e.ToString());
+            MessageBox.Show(e.ExceptionObject.ToString());
         }
     }
 }
