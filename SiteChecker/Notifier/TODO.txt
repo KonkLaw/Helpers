@@ -1,7 +1,5 @@
-﻿* show messages
-* GetPhone and phone format
+﻿* GetPhone and phone format
 * refomat of phone number may the reason of reconnct
-* better time bounds for bus
 * normals password load + store (or remove secure string)
 * add test sound button
 * today button

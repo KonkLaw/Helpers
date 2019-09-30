@@ -19,19 +19,32 @@ namespace Notifier.PageViewModels
             set
             {
                 if (SetProperty(ref login, value))
-                    NextCommand.RaiseCanExecuteChanged();
+                    InputChanged();
             }
         }
 
         private SecureString securePassword;
-		public SecureString SecurePassword
+        public SecureString SecurePassword
         {
             get => securePassword;
             set
             {
                 if (SetProperty(ref securePassword, value))
-                    NextCommand.RaiseCanExecuteChanged();
+                    InputChanged();
             }
+        }
+
+        private string message = "";
+        public string Message
+        {
+            get => message;
+            set => SetProperty(ref message, value);
+        }
+
+        private void InputChanged()
+        {
+            Message = null;
+            NextCommand.RaiseCanExecuteChanged();
         }
 
         public DelegateCommand<SecureString> NextCommand { get; }
@@ -58,7 +71,7 @@ namespace Notifier.PageViewModels
             }
             else
             {
-                throw new NotImplementedException();
+                Message = errorMessage;
             }
         }
 
