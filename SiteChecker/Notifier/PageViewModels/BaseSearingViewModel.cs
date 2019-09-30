@@ -12,6 +12,8 @@ namespace Notifier.PageViewModels
 		protected readonly NavigationViewModel NavigationViewModel;
 		protected readonly CancellationTokenSource CancellationSource = new CancellationTokenSource();
 
+		
+		public ICommand TestSound { get; }
 		public ICommand LinkCommand { get; }
 		public ICommand CancelCommand { get; }
 
@@ -27,6 +29,7 @@ namespace Notifier.PageViewModels
 			NavigationViewModel = navigationViewModel;
 			CancelCommand = new DelegateCommand(CancelHandler);
 			LinkCommand = new DelegateCommand(LinkHandler);
+			TestSound = new DelegateCommand(PalySound);
 		}
 
 		protected abstract Uri GetLink();
@@ -57,7 +60,7 @@ namespace Notifier.PageViewModels
 					});
 					while (!CancellationSource.IsCancellationRequested)
 					{
-						System.Media.SystemSounds.Hand.Play();
+						PalySound();
 						Thread.Sleep(2000);
 					}
 				}
@@ -71,6 +74,11 @@ namespace Notifier.PageViewModels
 					Thread.Sleep(waitTimeoutSeconds * 1000);
 				}
 			}
+		}
+
+		private void PalySound()
+		{
+			System.Media.SystemSounds.Hand.Play();
 		}
 	}
 }

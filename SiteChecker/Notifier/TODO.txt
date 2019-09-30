@@ -1,8 +1,6 @@
 ﻿* GetPhone and phone format
 * refomat of phone number may the reason of reconnct
 * normals password load + store (or remove secure string)
-* add test sound button
-* today button
 * trains + bus stations refactoring
 * fully secure string (sequre GUI + save + load + usage) + SecurePasswordBehavior (remove?)
 * normal asynch await
