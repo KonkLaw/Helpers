@@ -17,6 +17,7 @@
             <RowDefinition/>
 			<RowDefinition/>
 			<RowDefinition/>
+			<RowDefinition/>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -30,17 +31,25 @@
         <ComboBox Grid.Column ="1" Grid.Row ="1" SelectedItem="{Binding To}" ItemsSource="{Binding Stations}"/>
         <Label Grid.Column="0" Grid.Row="2" Content="Date:"/>
 		<DatePicker x:Name="FakeName" Grid.Column="1" Grid.Row="2" SelectedDate="{Binding Date}" DisplayDateStart="{Binding StartDate, Mode=OneTime}" DisplayDateEnd="{Binding EndDate, Mode=OneTime}"/>
-		<Label Grid.Column="0" Grid.Row="3" Content="From: "/>
-		<controls:TimePickerExtended Grid.Column="1" Grid.Row="3" TextBoxBase.TextChanged="TimePicker_TextChanged"
+		<Grid Grid.Row="3" Grid.ColumnSpan="2">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="*"/>
+			</Grid.ColumnDefinitions>
+			<Button Grid.Column="0" Content="Today" Command="{Binding Today}"/>
+			<Button Grid.Column="1" Content="Tomorow" Command="{Binding Tomorow}"/>
+		</Grid>
+			<Label Grid.Column="0" Grid.Row="4" Content="From: "/>
+		<controls:TimePickerExtended Grid.Column="1" Grid.Row="4" TextBoxBase.TextChanged="TimePicker_TextChanged"
 						 Value="{Binding Path=FromTime, UpdateSourceTrigger=PropertyChanged}" ClipValueToMinMax="True"
 						Minimum="{Binding MinTime, Mode=OneTime}" Maximum ="{Binding MaxTime, Mode=OneTime}"
 						StartTime="{Binding StartTimeInList, Mode=OneTime}" EndTime="{Binding StopTimeInList, Mode=OneTime}"/>
-		<Label Grid.Column="0" Grid.Row="4" Content="To: "/>
-		<controls:TimePickerExtended Grid.Column="1" Grid.Row="4" TextBoxBase.TextChanged="TimePicker_TextChanged"
+		<Label Grid.Column="0" Grid.Row="5" Content="To: "/>
+		<controls:TimePickerExtended Grid.Column="1" Grid.Row="5" TextBoxBase.TextChanged="TimePicker_TextChanged"
 						 Value="{Binding Path=ToTime, UpdateSourceTrigger=PropertyChanged}" ClipValueToMinMax="True"
 						Minimum="{Binding MinTime, Mode=OneTime}" Maximum ="{Binding MaxTime, Mode=OneTime}"
 						StartTime="{Binding StartTimeInList, Mode=OneTime}" EndTime="{Binding StopTimeInList, Mode=OneTime}"/>
-		<Grid Grid.Row="5" Grid.ColumnSpan="2" >
+		<Grid Grid.Row="6" Grid.ColumnSpan="2" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
