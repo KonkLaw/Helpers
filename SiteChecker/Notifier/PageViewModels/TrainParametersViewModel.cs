@@ -12,8 +12,10 @@ namespace Notifier.PageViewModels
 
         public DelegateCommand NextCommand { get; }
         public DelegateCommand BackCommand { get; }
+		public DelegateCommand Today { get; }
+		public DelegateCommand Tomorow { get; }
 
-        private string from;
+		private string from;
 		public string From
 		{
 			get => from;
@@ -66,7 +68,9 @@ namespace Notifier.PageViewModels
                 () => this.navigationViewModel.Show(new TransportSelectionViewModel(navigationViewModel)));
             getTrainsFunction = GetTrains;
             this.navigationViewModel = navigationViewModel;
-        }
+			Today = new DelegateCommand(() => Date = DateTime.Now.Date);
+			Tomorow = new DelegateCommand(() => Date = DateTime.Now.Date.AddDays(1));
+		}
 
         private TrainsResult GetTrains()
         {

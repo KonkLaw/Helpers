@@ -11,6 +11,8 @@ namespace Notifier.PageViewModels
 
         public DelegateCommand BackCommand { get; }
 		public DelegateCommand NextCommand { get; }
+		public DelegateCommand Today { get; }
+		public DelegateCommand Tomorow { get; }
 
 		public string[] Stations { get; } = new string[] { "Минск", "Столбцы" };
 
@@ -94,6 +96,8 @@ namespace Notifier.PageViewModels
             BackCommand = new DelegateCommand(
 				() => navigationViewModel.Show(new TransportSelectionViewModel(navigationViewModel)));
 			NextCommand = new DelegateCommand(NextHandler, GetNextEnabled);
+			Today = new DelegateCommand(() => Date = DateTime.Now.Date);
+			Tomorow = new DelegateCommand(() => Date = DateTime.Now.Date.AddDays(1));
 		}
 
 		private void NextHandler()
@@ -115,7 +119,7 @@ namespace Notifier.PageViewModels
 		private bool GetNextEnabled()
 			=> from != null && to != null && from != to
 			&& date.HasValue && fromTime.HasValue && toTime.HasValue
-			&& fromTime.Value.Ticks < toTime.Value.Ticks;
+			&& (toTime.Value - fromTime.Value) > new TimeSpan(0, 22, 0);
 
 		private string GetOpposite(string station)
 		{
