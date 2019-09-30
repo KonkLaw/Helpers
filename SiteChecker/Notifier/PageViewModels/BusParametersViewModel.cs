@@ -81,8 +81,8 @@ namespace Notifier.PageViewModels
 			}
 		}
 
-		public DateTime MinTime { get; } = new DateTime(1, 1, 1, BusApi.MinHours, 0, 0);
-		public DateTime MaxTime { get; } = new DateTime(1, 1, 1, BusApi.MaxHours, 0, 0);
+		public DateTime MinTime { get; } = DateTime.Now.Date.AddHours(BusApi.MinHours);
+		public DateTime MaxTime { get; } = DateTime.Now.Date.AddHours(BusApi.MaxHours);
 
         public TimeSpan StartTimeInList { get; } = new TimeSpan(BusApi.MinHours, 0, 0);
 		public TimeSpan StopTimeInList { get; } = new TimeSpan(BusApi.MaxHours, 0, 0);
