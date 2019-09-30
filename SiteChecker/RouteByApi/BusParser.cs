@@ -45,7 +45,8 @@ namespace RouteByApi
         private static readonly string[] KnowsErrors =
         {
             "Необходимо пройти дополнительную проверку",
-            "Неверный пароль"
+            "Неверный пароль",
+            "Пользователь не зарегистрирован",
         };
 
         internal static bool ContainsError(string message, out string recognizedError)
