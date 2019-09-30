@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 
 namespace Notifier
 {
@@ -7,5 +8,14 @@ namespace Notifier
 	/// </summary>
 	public partial class App : Application
 	{
-	}
+        public App()
+        {
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
+        }
+
+        private void CurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            MessageBox.Show(e.ToString());
+        }
+    }
 }

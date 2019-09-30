@@ -1,7 +1,8 @@
-﻿using CredentialHelper;
+﻿using System;
 using CredentialHelper.Interface;
 using Prism.Commands;
 using System.Windows.Input;
+using RouteByApi;
 
 namespace Notifier.PageViewModels
 {
@@ -21,9 +22,20 @@ namespace Notifier.PageViewModels
 
 		private void BusSelect()
 		{
-			if (new WindowsCredentialStorage().TryLoad(out UserInfo userInfo))
-				navigationViewModel.Show(new BusParametersViewmodel(navigationViewModel, userInfo));
-			else
+            if (StorageHelper.TryLoad(out Credentials credentials))
+            {
+                if (BusApi.TryGetCachedSession(
+                    new SessionData(credentials.Login, credentials.Sessid, credentials.Uidh),
+                    out RouteApiSession session))
+                {
+                    navigationViewModel.Show(new BusParametersViewmodel(navigationViewModel, session));
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
+            }
+            else
 				navigationViewModel.Show(new BusCredentialsViewModel(navigationViewModel));
 		}
     }

@@ -13,7 +13,7 @@ namespace RouteByApi
 	{
 		private static readonly Uri UriNonAuthentication = new Uri(@"https://route.by/local/components/route/widget.order/templates/.default/ajax.php");
 
-		public static RequestHeader[] GetScheduleRequestHeaders(SessionInfo sessionInfo)
+		public static RequestHeader[] GetScheduleRequestHeaders(SessionData sessionData)
 		{
 			const string origin = @"https://route.by";
 
@@ -22,11 +22,11 @@ namespace RouteByApi
 				new RequestHeader("Origin", origin),
 				new RequestHeader("Bx-ajax", @"true"),
 				WebApiHelper.CreateCookiesString(
-						("PHPSESSID", sessionInfo.PhpSesSid),
-						("BITRIX_SM_UIDH", sessionInfo.Uidh),
-						("BITRIX_SM_UIDL", sessionInfo.PhoneNumber),
+						("PHPSESSID", sessionData.PhpSesSid),
+						("BITRIX_SM_UIDH", sessionData.Uidh),
+						("BITRIX_SM_UIDL", sessionData.PhoneNumber),
 						("BX_USER_ID", "1ab83d800a7f88a92a431a2c51d7036a"),
-						("BITRIX_SM_LOGIN", sessionInfo.PhoneNumber))
+						("BITRIX_SM_LOGIN", sessionData.PhoneNumber))
 			};
 		}
 
@@ -76,7 +76,7 @@ namespace RouteByApi
 			};
 		}
 
-		public static SessionInfo CreateSession(PrivateData privateData)
+		public static bool TryCreateSession(LoginData loginData, out SessionData sessionData, out string message)
 		{
             string GetPhpSessid()
             {
@@ -93,16 +93,24 @@ namespace RouteByApi
             }
 
             string phpSessid = GetPhpSessid();
-			string request = $"type=auth_login&data=phone{GetPhone(privateData.PhoneNumber)}user_pass%3D{privateData.Pas}%26g-recaptcha-response%3D%26remember%3Don%26sms_registration%3D%26user_pass_new%3D%26user_pass_new_conf%3D%26remember_reg%3Don%26sms_recall%3D%26new_pass%3D%26new_pass_conf%3D";
+			string request = $"type=auth_login&data=phone{GetPhone(loginData.PhoneNumber)}user_pass%3D{loginData.Pas}%26g-recaptcha-response%3D%26remember%3Don%26sms_registration%3D%26user_pass_new%3D%26user_pass_new_conf%3D%26remember_reg%3Don%26sms_recall%3D%26new_pass%3D%26new_pass_conf%3D";
 			WebRequest normalRequest = GetAuthenticationRequest(request, GetNewSessionRequestHeader(phpSessid));
-			string responce = WebApiHelper.GetResponseString(normalRequest, out WebHeaderCollection headers).DecodeUnicide();
-			//if (responce.Contains("Необходимо пройти дополнительную проверку")) "Неверный пароль"
-			//	!!!;
-			string uihd = GetUidhFromHeader(headers.Get("Set-Cookie"));
-			return new SessionInfo(phpSessid, uihd, privateData.PhoneNumber);
-
-			//return new SessionInfo("638950b59f3fa9976aa0b447c179467d", "14cb59caff8fe1163817022dc594e1a8", "375CCxxxYYzz");
-		}
+			string response = WebApiHelper.GetResponseString(normalRequest, out WebHeaderCollection headers).DecodeUnicide();
+            if (BusParser.ContainsError(response, out string errorMessage))
+            {
+                sessionData = default;
+                message = errorMessage;
+                return false;
+            }
+            else
+            {
+                string uihd = GetUidhFromHeader(headers.Get("Set-Cookie"));
+                sessionData = new SessionData(loginData.PhoneNumber, phpSessid, uihd);
+                message = default;
+                //return new SessionInfo("638950b59f3fa9976aa0b447c179467d", "14cb59caff8fe1163817022dc594e1a8", "375CCxxxYYzz");
+                return true;
+            }
+        }
 
 		private static string GetPhone(string phone)
 		{

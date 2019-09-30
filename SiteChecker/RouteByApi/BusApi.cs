@@ -10,31 +10,64 @@ namespace RouteByApi
 		private const string SiteUrl = "https://stolbcy-minsk.by/";
 		public static Uri GetSiteUri() => new Uri(SiteUrl);
 
-		public static RouteApiSession GetSession(PrivateData privateData)
-			=> new RouteApiSession(SessionCreator.CreateSession(privateData));
-	}
+        public static bool TryGetCachedSession(SessionData sessionData, out RouteApiSession session)
+        {
+            var newSession = new RouteApiSession(sessionData);
+            if (newSession.GetSchedule(true, DateTime.Now.AddDays(1).Date, out _, out _))
+            {
+                session = newSession;
+                return true;
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
 
-	public class PrivateData
+		public static bool TryGetNewSession(LoginData loginData, out RouteApiSession session, out string errorMessage)
+        {
+            if (SessionCreator.TryCreateSession(loginData, out SessionData sessionData, out string message))
+            {
+                errorMessage = default;
+                session = new RouteApiSession(sessionData);
+                return true;
+            }
+            else
+            {
+                errorMessage = message;
+                session = default;
+                return false;
+            }
+        }
+    }
+
+    public readonly struct SessionData
+    {
+        public readonly string PhoneNumber;
+        public readonly string PhpSesSid;
+        public readonly string Uidh;
+
+        public SessionData(string phoneNumber, string phpSesSid, string uidh)
+        {
+            PhoneNumber = phoneNumber;
+            PhpSesSid = phpSesSid;
+            Uidh = uidh;
+        }
+    }
+
+	public readonly struct LoginData
 	{
-		public string PhoneNumber;
-		public string Pas;
-	}
+		public readonly string PhoneNumber;
+		public readonly string Pas;
 
-	class SessionInfo
-	{
-		public string PhpSesSid { get; }
-		public string Uidh { get; }
-		public string PhoneNumber { get; }
+        public LoginData(string phoneNumber, string pas)
+        {
+            PhoneNumber = phoneNumber;
+            Pas = pas;
+        }
+    }
 
-		public SessionInfo(string phpSesSid, string uidh, string phoneNumber)
-		{
-			PhpSesSid = phpSesSid;
-			Uidh = uidh;
-			PhoneNumber = phoneNumber;
-		}
-	}
-
-	public readonly struct BusInfo
+    public readonly struct BusInfo
 	{
 		public readonly string Id;
 		public readonly int TicketsCount;
@@ -50,21 +83,22 @@ namespace RouteByApi
 
 	public class RouteApiSession
 	{
-		private readonly SessionInfo sessionInfo;
+		public readonly SessionData SessionData;
 
-		internal RouteApiSession(SessionInfo sessionInfo)
+		internal RouteApiSession(SessionData sessionData)
 		{
-			this.sessionInfo = sessionInfo;
+			SessionData = sessionData;
 		}
 
-		public ReadOnlyCollection<BusInfo> GetSchedule(bool fromMinskToStolbcy, DateTime tripDay)
+		public bool GetSchedule(bool fromMinskToS, DateTime tripDay, out ReadOnlyCollection<BusInfo> schedule, out string errorMessage)
 		{
 			WebRequest scheduleWebRequest = RouteByApiHelpers.GetRequest(
-				RouteByApiHelpers.GetRequestBody(fromMinskToStolbcy, tripDay),
-				RouteByApiHelpers.GetScheduleRequestHeaders(sessionInfo));
+				RouteByApiHelpers.GetRequestBody(fromMinskToS, tripDay),
+				RouteByApiHelpers.GetScheduleRequestHeaders(SessionData));
 			string responseContent = WebApiHelper.GetResponseString(scheduleWebRequest).DecodeUnicide();
-			ReadOnlyCollection<BusInfo> schedule = BusParser.ParseSchedule(responseContent);
-			return schedule;
+			schedule = BusParser.ParseSchedule(responseContent);
+            errorMessage = default;
+            return true;
 		}
 
 		public void Buy()

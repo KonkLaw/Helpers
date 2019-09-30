@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security;
-using CredentialHelper;
 using CredentialHelper.Interface;
 using Prism.Commands;
+using RouteByApi;
 
 namespace Notifier.PageViewModels
 {
@@ -13,19 +14,27 @@ namespace Notifier.PageViewModels
 
 		private string login;
 		public string Login
-		{
-			get => login;
-			set => SetProperty(ref login, value);
-		}
+        {
+            get => login;
+            set
+            {
+                if (SetProperty(ref login, value))
+                    NextCommand.RaiseCanExecuteChanged();
+            }
+        }
 
-		private SecureString securePassword;
+        private SecureString securePassword;
 		public SecureString SecurePassword
-		{
-			get => securePassword;
-			set => SetProperty(ref securePassword, value);
-		}
+        {
+            get => securePassword;
+            set
+            {
+                if (SetProperty(ref securePassword, value))
+                    NextCommand.RaiseCanExecuteChanged();
+            }
+        }
 
-		public DelegateCommand<SecureString> NextCommand { get; }
+        public DelegateCommand<SecureString> NextCommand { get; }
 		public DelegateCommand BackCommand { get; }
 
 		public BusCredentialsViewModel(NavigationViewModel navigationViewModel)
@@ -37,30 +46,41 @@ namespace Notifier.PageViewModels
 
 		private void NextHandler(SecureString obj)
 		{
-			// TODO: pull down to native code
-			string SecureStringToString(SecureString value)
-			{
-				IntPtr valuePtr = IntPtr.Zero;
-				try
-				{
-					valuePtr = Marshal.SecureStringToGlobalAllocUnicode(value);
-					return Marshal.PtrToStringUni(valuePtr);
-				}
-				finally
-				{
-					Marshal.ZeroFreeGlobalAllocUnicode(valuePtr);
-				}
-			}
+            if (BusApi.TryGetNewSession(
+                new LoginData(Login, SecureStringToString(securePassword)),
+                out RouteApiSession session, out string errorMessage))
+            {
+                SessionData sessionData = session.SessionData;
+                var credentials = new Credentials(
+                    sessionData.PhoneNumber, SecureStringToString(securePassword), sessionData.PhpSesSid, sessionData.Uidh);
+                StorageHelper.Save(credentials);
+                navigationViewModel.Show(new BusParametersViewmodel(navigationViewModel, session));
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
 
+        // TODO: pull down to native code or don't use at all
+        string SecureStringToString(SecureString value)
+        {
+            IntPtr valuePtr = IntPtr.Zero;
+            try
+            {
+                valuePtr = Marshal.SecureStringToGlobalAllocUnicode(value);
+                return Marshal.PtrToStringUni(valuePtr);
+            }
+            finally
+            {
+                Marshal.ZeroFreeGlobalAllocUnicode(valuePtr);
+            }
+        }
 
-			var userInfo = new UserInfo(Login, SecureStringToString(securePassword));
-			new WindowsCredentialStorage().Save(userInfo);
-			navigationViewModel.Show(new BusParametersViewmodel(navigationViewModel, userInfo));
-		}
-
-		private bool NextValidator(SecureString obj)
-		{
-			return true;
-		}
-	}
+        private bool NextValidator(SecureString obj)
+            => login?.Length == 12
+               && login.StartsWith("37529")
+               && login.Any(char.IsDigit)
+               && SecurePassword?.Length > 2;
+    }
 }

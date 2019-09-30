@@ -5,28 +5,21 @@ namespace CredentialHelper
 {
 	public class WindowsCredentialStorage : ICredentialStorage
     {
-		private const char Separator = ' ';
-		private readonly string targetName = "route.by";
+        private readonly string targetName = "route.by";
 		private readonly string userName = "route_user";
 
-		public void Save(UserInfo userInfo)
-        {
-			string privateData = userInfo.PrivateLogin + Separator + userInfo.Password;
-			CreadentialsHelper.Wrtire(new CredetiansWriteArg(targetName, null, userName, privateData));
-		}
+		public void Save(Credentials credentials) =>
+            CreadentialsHelper.Wrtire(new CredetiansWriteArg(
+                targetName, null, userName, SerializationHelper<Credentials>.Serialize(credentials)));
 
-        public bool TryLoad(out UserInfo userInfo)
+        public bool TryLoad(out Credentials credentials)
         {
-			if (!CreadentialsHelper.Load(targetName, out CredetiansReadArg credetiansReadArg))
+			if (!CreadentialsHelper.Load(targetName, out CredetiansReadArg credentialsReadArg))
 			{
-				userInfo = default;
+                credentials = default;
 				return false;
 			}
-			string privateData = credetiansReadArg.Password;
-			int separatorIndex = privateData.IndexOf(Separator);
-			userInfo = new UserInfo(
-				privateData.Substring(0, separatorIndex),
-				privateData.Substring(separatorIndex, privateData.Length - separatorIndex));
+            credentials = SerializationHelper<Credentials>.Deserialize(credentialsReadArg.Password); ;
 			return true;
 		}
     }
