@@ -100,7 +100,7 @@
     <Compile Include="PaveViews\BusParametersView.xaml.cs">
       <DependentUpon>BusParametersView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PaveViews\SecurePasswordBehavior.cs" />
+    <Compile Include="SecurePasswordBehavior.cs" />
     <Compile Include="PaveViews\TrainSelectionView.xaml.cs">
       <DependentUpon>TrainSelectionView.xaml</DependentUpon>
     </Compile>
