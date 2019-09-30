@@ -1,5 +1,4 @@
-﻿using CredentialHelper.Interface;
-using Prism.Commands;
+﻿using Prism.Commands;
 using RouteByApi;
 using System;
 
@@ -82,11 +81,11 @@ namespace Notifier.PageViewModels
 			}
 		}
 
-		public DateTime MinTime { get; } = DateTime.Now.AddHours(-5);
-		public DateTime MaxTime { get; } = DateTime.Now.AddHours(+5);
+		public DateTime MinTime { get; } = new DateTime(1, 1, 1, BusApi.MinHours, 0, 0);
+		public DateTime MaxTime { get; } = new DateTime(1, 1, 1, BusApi.MaxHours, 0, 0);
 
-		public TimeSpan StartTimeInList { get; } = new TimeSpan(5, 0, 0);
-		public TimeSpan StopTimeInList { get; } = new TimeSpan(22, 0, 0);
+        public TimeSpan StartTimeInList { get; } = new TimeSpan(BusApi.MinHours, 0, 0);
+		public TimeSpan StopTimeInList { get; } = new TimeSpan(BusApi.MaxHours, 0, 0);
 
 		public BusParametersViewmodel(NavigationViewModel navigationViewModel, RouteApiSession session)
 		{

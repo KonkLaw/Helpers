@@ -7,7 +7,10 @@ namespace RouteByApi
 {
 	public static class BusApi
     {
-		private const string SiteUrl = "https://stolbcy-minsk.by/";
+        public const int MinHours = 6;
+        public const int MaxHours = 21;
+
+        private const string SiteUrl = "https://stolbcy-minsk.by/";
 		public static Uri GetSiteUri() => new Uri(SiteUrl);
 
         public static bool TryGetCachedSession(SessionData sessionData, out RouteApiSession session)

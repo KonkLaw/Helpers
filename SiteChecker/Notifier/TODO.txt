@@ -1,4 +1,4 @@
-﻿* how to work and store private data
+﻿* show messages
 * GetPhone and phone format
 * refomat of phone number may the reason of reconnct
 * better time bounds for bus
