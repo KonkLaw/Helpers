@@ -2,16 +2,15 @@
 using System;
 using System.Diagnostics;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
-namespace Notifier.PageVeiwModels
+namespace Notifier.PageViewModels
 {
 	abstract class BaseSearingViewModel : BasePageViewModel
 	{
-		protected readonly NavigationViewModel NavigaionViewModel;
-		protected readonly CancellationTokenSource CancelationSource = new CancellationTokenSource();
+		protected readonly NavigationViewModel NavigationViewModel;
+		protected readonly CancellationTokenSource CancellationSource = new CancellationTokenSource();
 
 		public ICommand LinkCommand { get; }
 		public ICommand CancelCommand { get; }
@@ -23,9 +22,9 @@ namespace Notifier.PageVeiwModels
 			set => SetProperty(ref message, value);
 		}
 
-		protected BaseSearingViewModel(NavigationViewModel navigaionViewModel)
+		protected BaseSearingViewModel(NavigationViewModel navigationViewModel)
 		{
-			NavigaionViewModel = navigaionViewModel;
+			NavigationViewModel = navigationViewModel;
 			CancelCommand = new DelegateCommand(CancelHandler);
 			LinkCommand = new DelegateCommand(LinkHandler);
 		}
@@ -39,8 +38,8 @@ namespace Notifier.PageVeiwModels
 
 		private void CancelHandler()
 		{
-			CancelationSource.Cancel();
-			NavigaionViewModel.Show(GetCancelViewModel());
+			CancellationSource.Cancel();
+			NavigationViewModel.Show(GetCancelViewModel());
 		}
 
 		protected abstract bool TryFind();
@@ -48,7 +47,7 @@ namespace Notifier.PageVeiwModels
 		protected void SearchProcess()
 		{
 			const int waitTimeoutSeconds = 10;
-			while (!CancelationSource.IsCancellationRequested)
+			while (!CancellationSource.IsCancellationRequested)
 			{
 				if (TryFind())
 				{
@@ -56,7 +55,7 @@ namespace Notifier.PageVeiwModels
 					{
 						Message = "Was found at: " + DateTime.Now.ToLongTimeString();
 					});
-					while (!CancelationSource.IsCancellationRequested)
+					while (!CancellationSource.IsCancellationRequested)
 					{
 						System.Media.SystemSounds.Hand.Play();
 						Thread.Sleep(2000);

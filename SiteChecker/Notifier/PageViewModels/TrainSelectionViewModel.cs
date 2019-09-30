@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TrainsApi;
 
-namespace Notifier.PageVeiwModels
+namespace Notifier.PageViewModels
 {
     class TrainSelectionViewModel : BasePageViewModel
     {
@@ -53,13 +53,13 @@ namespace Notifier.PageVeiwModels
 
     public class TrainViewModel : BindableBase
     {
-        public TrainInfo TrainInfo { get; private set; }
+        public TrainInfo TrainInfo { get; }
 
         private bool isSelected;
 
         public bool IsSelected
         {
-            get { return isSelected; }
+            get => isSelected;
             set
             {
                 isSelected = value;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using TrainsApi;
 
-namespace Notifier.PageVeiwModels
+namespace Notifier.PageViewModels
 {
 	class TrainSearingViewModel : BaseSearingViewModel
 	{
@@ -20,8 +20,8 @@ namespace Notifier.PageVeiwModels
             return resultViewModel;
         }
 
-        private TrainSearingViewModel(TrainParameters trainParameters, List<TrainInfo> selectedTrains, NavigationViewModel navigaionViewModel)
-			: base(navigaionViewModel)
+        private TrainSearingViewModel(TrainParameters trainParameters, List<TrainInfo> selectedTrains, NavigationViewModel navigationViewModel)
+			: base(navigationViewModel)
         {
             this.trainParameters = trainParameters;
             this.selectedTrains = selectedTrains;
@@ -29,16 +29,16 @@ namespace Notifier.PageVeiwModels
 
 		protected override Uri GetLink() => TrainsInfoApi.GetRequestUri(trainParameters);
 
-		protected override object GetCancelViewModel() => new TrainParametersViewmodel(NavigaionViewModel);
+		protected override object GetCancelViewModel() => new TrainParametersViewmodel(NavigationViewModel);
 
 		protected override bool TryFind()
 		{
 			foreach (TrainInfo train in selectedTrains)
 			{
-				if (CancelationSource.IsCancellationRequested)
+				if (CancellationSource.IsCancellationRequested)
 					return false;
 				bool haveTicketsForNotDisabled = TrainsInfoApi.HaveTicketsForNotDisabled(trainParameters, train);
-				if (CancelationSource.IsCancellationRequested)
+				if (CancellationSource.IsCancellationRequested)
 					return false;
 				if (haveTicketsForNotDisabled)
 				{

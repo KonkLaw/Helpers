@@ -3,7 +3,7 @@ using CredentialHelper.Interface;
 using Prism.Commands;
 using System.Windows.Input;
 
-namespace Notifier.PageVeiwModels
+namespace Notifier.PageViewModels
 {
     class TransportSelectionViewModel : BasePageViewModel
     {

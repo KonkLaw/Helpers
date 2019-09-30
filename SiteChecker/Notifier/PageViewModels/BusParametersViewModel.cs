@@ -3,7 +3,7 @@ using Prism.Commands;
 using RouteByApi;
 using System;
 
-namespace Notifier.PageVeiwModels
+namespace Notifier.PageViewModels
 {
 	internal class BusParametersViewmodel : BasePageViewModel
 	{

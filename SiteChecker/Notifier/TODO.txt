@@ -2,6 +2,7 @@
 * paramters + search for bus
 * Get back to paramters view model
 * how to work and store private data
+* add creadentials validator
 * GetPhone and phone format
 * refomat of phone nu,ber may the reason of reconnct
 * better time bounds for bus

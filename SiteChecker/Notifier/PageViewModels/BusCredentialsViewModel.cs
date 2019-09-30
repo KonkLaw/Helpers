@@ -5,7 +5,7 @@ using CredentialHelper;
 using CredentialHelper.Interface;
 using Prism.Commands;
 
-namespace Notifier.PageVeiwModels
+namespace Notifier.PageViewModels
 {
 	class BusCredentialsViewModel : BasePageViewModel
 	{
@@ -37,7 +37,7 @@ namespace Notifier.PageVeiwModels
 
 		private void NextHandler(SecureString obj)
 		{
-			// TODO: pull donw to navive code
+			// TODO: pull down to native code
 			string SecureStringToString(SecureString value)
 			{
 				IntPtr valuePtr = IntPtr.Zero;
