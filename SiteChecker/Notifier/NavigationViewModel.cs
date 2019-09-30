@@ -7,11 +7,11 @@ namespace Notifier
 {
     class NavigationViewModel : BindableBase
 	{
-		private object curentPage;
-		public object CurentPage
+		private object currentPage;
+		public object CurrentPage
 		{
-			get => curentPage;
-			private set => SetProperty(ref curentPage, value);
+			get => currentPage;
+			private set => SetProperty(ref currentPage, value);
 		}
 
 		public object CurrentPageViewmodel { get; private set; }
@@ -45,7 +45,7 @@ namespace Notifier
                 throw new InvalidOperationException();
             }
 			view.DataContext = viewmodel;
-			CurentPage = view;
+			CurrentPage = view;
 			CurrentPageViewmodel = viewmodel;
 		}
 	}

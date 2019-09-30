@@ -11,7 +11,7 @@
         Left="800" Top="500"
 		d:DataContext="{d:DesignInstance local:NavigationViewModel}">
 	<Grid>
-        <UserControl Content="{Binding CurentPage}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <UserControl Content="{Binding CurrentPage}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <Grid Visibility="{Binding IsOnWaiting, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Grid.RowDefinitions>
 				<RowDefinition Height="0.3*"/>
