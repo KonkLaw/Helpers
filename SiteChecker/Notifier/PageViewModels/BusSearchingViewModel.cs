@@ -10,16 +10,16 @@ namespace Notifier.PageViewModels
 	class BusSearchingViewModel : BaseSearingViewModel
 	{
 		private readonly RouteApiSession session;
-		private readonly SearchParameters searchParameters;
+		private readonly BusSearchParameters searchParameters;
 
-        public static BusSearchingViewModel Create(NavigationViewModel navigationViewModel, SearchParameters searchParameters, RouteApiSession session)
+        public static BusSearchingViewModel Create(NavigationViewModel navigationViewModel, BusSearchParameters searchParameters, RouteApiSession session)
 		{
             var busSearchingViewmodel = new BusSearchingViewModel(navigationViewModel, searchParameters, session);
 			Task.Run(busSearchingViewmodel.SearchProcess);
 			return busSearchingViewmodel;
 		}
 
-		private BusSearchingViewModel(NavigationViewModel navigationViewModel, SearchParameters searchParameters, RouteApiSession session)
+		private BusSearchingViewModel(NavigationViewModel navigationViewModel, BusSearchParameters searchParameters, RouteApiSession session)
 			: base(navigationViewModel)
 		{
 			this.searchParameters = searchParameters;
@@ -39,10 +39,10 @@ namespace Notifier.PageViewModels
 			if (CancellationSource.IsCancellationRequested)
 				return false;
 
-            if (session.GetSchedule(searchParameters.FromMinskToS, searchParameters.Date,
+            if (session.GetSchedule(
+				new SearchParameters(searchParameters.FromStation, searchParameters.ToSation, searchParameters.Date),
                 out ReadOnlyCollection<BusInfo> schedule, out _))
-            {
-
+			{
                 if (CancellationSource.IsCancellationRequested)
                     return false;
                 List<BusInfo> selected = schedule.Where(

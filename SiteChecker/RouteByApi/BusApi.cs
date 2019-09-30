@@ -10,13 +10,17 @@ namespace RouteByApi
         public const int MinHours = 6;
         public const int MaxHours = 21;
 
-        private const string SiteUrl = "https://stolbcy-minsk.by/";
+		public static readonly ReadOnlyCollection<Station> Stations = new ReadOnlyCollection<Station>(
+			new [] { new Station("Минск", "1"), new Station("Столбцы", "102") });
+
+		private const string SiteUrl = "https://stolbcy-minsk.by/";
 		public static Uri GetSiteUri() => new Uri(SiteUrl);
 
         public static bool TryGetCachedSession(SessionData sessionData, out RouteApiSession session)
         {
             var newSession = new RouteApiSession(sessionData);
-            if (newSession.GetSchedule(true, DateTime.Now.AddDays(1).Date, out _, out _))
+            if (newSession.GetSchedule(
+				new SearchParameters(Stations[0], Stations[1], DateTime.Now.AddDays(1).Date), out _, out _))
             {
                 session = newSession;
                 return true;
@@ -43,6 +47,20 @@ namespace RouteByApi
             }
         }
     }
+
+	public class Station
+	{
+		private readonly string name;
+		internal readonly string Id;
+
+		public Station(string name, string id)
+		{
+			this.name = name;
+			Id = id;
+		}
+
+		public override string ToString() => name;
+	}
 
     public readonly struct SessionData
     {
@@ -93,10 +111,10 @@ namespace RouteByApi
 			SessionData = sessionData;
 		}
 
-		public bool GetSchedule(bool fromMinskToS, DateTime tripDay, out ReadOnlyCollection<BusInfo> schedule, out string errorMessage)
+		public bool GetSchedule(SearchParameters searchParameters, out ReadOnlyCollection<BusInfo> schedule, out string errorMessage)
 		{
 			WebRequest scheduleWebRequest = RouteByApiHelpers.GetRequest(
-				RouteByApiHelpers.GetRequestBody(fromMinskToS, tripDay),
+				RouteByApiHelpers.GetRequestBody(searchParameters),
 				RouteByApiHelpers.GetScheduleRequestHeaders(SessionData));
 			string responseContent = WebApiHelper.GetResponseString(scheduleWebRequest).DecodeUnicide();
 			schedule = BusParser.ParseSchedule(responseContent);
@@ -107,6 +125,20 @@ namespace RouteByApi
 		public void Buy()
 		{
 			BuyHelper.Buy();
+		}
+	}
+
+	public readonly struct SearchParameters
+	{
+		public readonly Station FromStation;
+		public readonly Station ToStation;
+		public readonly DateTime TripDay;
+
+		public SearchParameters(Station fromStation, Station toStation, DateTime tripDay)
+		{
+			FromStation = fromStation;
+			ToStation = toStation;
+			TripDay = tripDay;
 		}
 	}
 }

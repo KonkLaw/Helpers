@@ -1,6 +1,7 @@
 ﻿using Prism.Commands;
 using RouteByApi;
 using System;
+using System.Collections.Generic;
 
 namespace Notifier.PageViewModels
 {
@@ -14,34 +15,33 @@ namespace Notifier.PageViewModels
 		public DelegateCommand Today { get; }
 		public DelegateCommand Tomorow { get; }
 
-		public string[] Stations { get; } = new string[] { "Минск", "Столбцы" };
+		public IEnumerable<Station> Stations => BusApi.Stations;
 
-		private string from;
-
-		public string From
+		private Station fromStation;
+		public Station FromStation
 		{
-			get => from;
+			get => fromStation;
 			set
 			{
-				if (SetProperty(ref from, value))
+				if (SetProperty(ref fromStation, value))
 				{
-					if (from != null)
-						To = GetOpposite(from);
+					if (fromStation != null)
+						ToStation = GetOpposite(fromStation);
 					ValidateNextButtonAllowed();
 				}
 			}
 		}
 
-		private string to;
-		public string To
+		private Station toStation;
+		public Station ToStation
 		{
-			get => to;
+			get => toStation;
 			set
 			{
-				if (SetProperty(ref to, value))
+				if (SetProperty(ref toStation, value))
 				{
-					if (to != null)
-						From = GetOpposite(to);
+					if (toStation != null)
+						FromStation = GetOpposite(toStation);
 					ValidateNextButtonAllowed();
 				}
 			}
@@ -102,46 +102,40 @@ namespace Notifier.PageViewModels
 
 		private void NextHandler()
 		{
-			bool fromMinskToS;
-			if (from == Stations[0] && to == Stations[1])
-				fromMinskToS = true;
-			else if (from == Stations[1] && to == Stations[0])
-				fromMinskToS = false;
-			else
-				throw new Exception();
-
-			var searchParameters = new SearchParameters(fromMinskToS, date.Value.Date, fromTime.Value.TimeOfDay, toTime.Value.TimeOfDay);
+			var searchParameters = new BusSearchParameters(fromStation, toStation, date.Value.Date, fromTime.Value.TimeOfDay, toTime.Value.TimeOfDay);
 			navigationViewModel.Show(BusSearchingViewModel.Create(navigationViewModel, searchParameters, session));
 		}
 
 		private void ValidateNextButtonAllowed() => NextCommand.RaiseCanExecuteChanged();
 
 		private bool GetNextEnabled()
-			=> from != null && to != null && from != to
+			=> fromStation != null && toStation != null && fromStation != toStation
 			&& date.HasValue && fromTime.HasValue && toTime.HasValue
 			&& (toTime.Value - fromTime.Value) > new TimeSpan(0, 22, 0);
 
-		private string GetOpposite(string station)
+		private Station GetOpposite(Station station)
 		{
-			if (station == Stations[0])
-				return Stations[1];
-			else if (station == Stations[1])
-				return Stations[0];
+			if (station == BusApi.Stations[0])
+				return BusApi.Stations[1];
+			else if (station == BusApi.Stations[1])
+				return BusApi.Stations[0];
 			else
 				throw new InvalidOperationException();
 		}
 	}
 
-	readonly struct SearchParameters
+	readonly struct BusSearchParameters
 	{
-		public readonly bool FromMinskToS;
+		public readonly Station FromStation;
+		public readonly Station ToSation;
 		public readonly DateTime Date;
 		public readonly TimeSpan FromTime;
 		public readonly TimeSpan ToTime;
 
-		public SearchParameters(bool fromMinskToS, DateTime date, TimeSpan fromTime, TimeSpan toTime)
+		public BusSearchParameters(Station fromStation, Station toSation, DateTime date, TimeSpan fromTime, TimeSpan toTime)
 		{
-			FromMinskToS = fromMinskToS;
+			FromStation = fromStation;
+			ToSation = toSation;
 			Date = date;
 			FromTime = fromTime;
 			ToTime = toTime;
