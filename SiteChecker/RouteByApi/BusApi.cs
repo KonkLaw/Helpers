@@ -20,15 +20,16 @@ namespace RouteByApi
         {
             var newSession = new RouteApiSession(in sessionData);
             var searchParameters = new SearchParameters(Stations[0], Stations[1], DateTime.Now.AddDays(1).Date);
-            if (newSession.GetSchedule(in searchParameters, out _, out _))
-            {
-                session = newSession;
-                return true;
-            }
-            else
-            {
-                throw new NotImplementedException();
-            }
+			if (newSession.GetSchedule(in searchParameters, out _))
+			{
+				session = newSession;
+				return true;
+			}
+			else
+			{
+				session = default;
+				return false;
+			}
         }
 
 		public static bool TryGetNewSession(in LoginData loginData, out RouteApiSession session, out string errorMessage)
@@ -114,48 +115,26 @@ namespace RouteByApi
         private WebRequest GetRequest(string requestBody) =>
             RouteByApiHelpers.GetRequest(requestBody, RouteByApiHelpers.GetScheduleRequestHeaders(in SessionData));
         
-        public bool GetSchedule(in SearchParameters searchParameters, out ReadOnlyCollection<BusInfo> schedule, out string errorMessage)
+        public bool GetSchedule(in SearchParameters searchParameters, out ReadOnlyCollection<BusInfo> schedule)
         {
             WebRequest scheduleWebRequest = GetRequest(RouteByApiHelpers.GetScheduleRequestBody(in searchParameters));
 			string responseContent = WebApiHelper.GetResponseString(scheduleWebRequest).DecodeUnicide();
-			schedule = BusParser.ParseSchedule(responseContent);
-            errorMessage = default;
-            return true;
+			if (BusParser.ParseScheduleIsSessionOk(responseContent, out schedule))
+			{
+				return true;
+			}
+			else
+			{
+				schedule = default;
+				return false;
+			}
 		}
 
         public void Order(in OrderParameters orderParameters)
         {
-            string GetValueByKey(string content, string key)
-            {
-                const string valueMarker = "value=\\\"";
-                int index = content.IndexOf(key);
-                index = content.IndexOf(valueMarker, index) + valueMarker.Length;
-                int endIndex = content.IndexOf("\\\"", index);
-                return content.Substring(index, endIndex - index);
-            }
-
             WebRequest preOrderRequest = GetRequest(RouteByApiHelpers.GerOrderRequestBody(in orderParameters));
             string preOrderResponse = WebApiHelper.GetResponseString(preOrderRequest).DecodeUnicide();
-
-            string GetValue(string key) => GetValueByKey(preOrderResponse, key);
-
-            string part = "%5B" + GetValue("aurb_id_add_parts")[1] + "%5D";
-            string orderRequestContent =
-                @"type=load_step2_save&" +
-                $"aurb_id_add_et={GetValue("aurb_id_add_et")}&" +
-                "aurb_id_add_num_space=1&" +
-                $"aurb_id_add_tt={GetValue("aurb_id_add_tt")}&" +
-                $"aurb_id_add_parts={part}&" +
-                "aurb_points_finish[1]=9761&" +
-                "aurb_point_start[1]=9716&" +
-                $"aurb_id_add_df={GetValue("aurb_id_add_df")}&" +
-                $"aurb_id_add_ds={GetValue("aurb_id_add_ds")}&" +
-                "aurb_id_add_comment=&" +
-                $"aurb_id_add_sl={GetValue("aurb_id_add_sl")}&" +
-                $"aurb_id_add_save_points={GetValue("aurb_id_add_save_points")}&" +
-                "aurb_id_service=144";
-
-            WebRequest orderRequest = GetRequest(orderRequestContent);
+            WebRequest orderRequest = GetRequest(BusParser.GetOrderRequest(preOrderResponse));
             string orderResponse = WebApiHelper.GetResponseString(orderRequest).DecodeUnicide();
         }
     }
