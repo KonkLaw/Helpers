@@ -24,7 +24,7 @@ namespace TrainsApi
 		}
 
 		public static List<TrainInfo> GetBusinessClassTrains(in TrainParameters parameters)
-			=> GetTrains(parameters).Where(train => train.IsBusinessClass).ToList();
+			=> GetTrains(in parameters).Where(train => train.IsBusinessClass).ToList();
 
 		private static List<TrainInfo> GetTrains(in TrainParameters parameters)
 		{

@@ -76,7 +76,7 @@ namespace Notifier.PageViewModels
         {
             var trainParameters = new TrainParameters(date.Value, fromStation, toStation);
             // TODO: possible fancy async here. Pull it down to response reading.
-            return new TrainsResult(TrainsInfoApi.GetBusinessClassTrains(trainParameters), trainParameters);
+            return new TrainsResult(TrainsInfoApi.GetBusinessClassTrains(in trainParameters), in trainParameters);
         }
 
         private async void NextHandler()
@@ -84,7 +84,7 @@ namespace Notifier.PageViewModels
             navigationViewModel.IsOnWaiting = true;
             TrainsResult result = await Task.Run(getTrainsFunction);
             navigationViewModel.IsOnWaiting = false;
-            navigationViewModel.Show(new TrainSelectionViewModel(result, navigationViewModel));
+            navigationViewModel.Show(new TrainSelectionViewModel(in result, navigationViewModel));
         }
 
         private void ValidateNextButtonAllowed() => NextCommand.RaiseCanExecuteChanged();

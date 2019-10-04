@@ -14,7 +14,7 @@ namespace Notifier.PageViewModels
 
         public static BusSearchingViewModel Create(NavigationViewModel navigationViewModel, in BusSearchParameters searchParameters, RouteApiSession session)
 		{
-            var busSearchingViewmodel = new BusSearchingViewModel(navigationViewModel, searchParameters, session);
+            var busSearchingViewmodel = new BusSearchingViewModel(navigationViewModel, in searchParameters, session);
 			Task.Run(busSearchingViewmodel.SearchProcess);
 			return busSearchingViewmodel;
 		}
@@ -39,9 +39,10 @@ namespace Notifier.PageViewModels
 			if (CancellationSource.IsCancellationRequested)
 				return false;
 
-            if (session.GetSchedule(
-				new SearchParameters(searchParameters.FromStation, searchParameters.ToStation, searchParameters.Date),
-                out ReadOnlyCollection<BusInfo> schedule, out _))
+			var requestParamters = new SearchParameters(
+				searchParameters.FromStation, searchParameters.ToStation, searchParameters.Date);
+
+			if (session.GetSchedule(in requestParamters, out ReadOnlyCollection<BusInfo> schedule, out _))
 			{
                 if (CancellationSource.IsCancellationRequested)
                     return false;

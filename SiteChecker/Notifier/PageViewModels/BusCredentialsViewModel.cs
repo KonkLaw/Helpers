@@ -59,9 +59,9 @@ namespace Notifier.PageViewModels
 
 		private void NextHandler(SecureString obj)
 		{
-            if (BusApi.TryGetNewSession(
-                new LoginData(Login, SecureStringToString(securePassword)),
-                out RouteApiSession session, out string errorMessage))
+			var loginData = new LoginData(Login, SecureStringToString(securePassword));
+			if (BusApi.TryGetNewSession(
+				in loginData, out RouteApiSession session, out string errorMessage))
             {
                 SessionData sessionData = session.SessionData;
                 var credentials = new Credentials(

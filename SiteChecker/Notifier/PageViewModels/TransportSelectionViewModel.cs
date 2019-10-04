@@ -24,9 +24,8 @@ namespace Notifier.PageViewModels
 		{
             if (StorageHelper.TryLoad(out Credentials credentials))
             {
-                if (BusApi.TryGetCachedSession(
-                    new SessionData(credentials.Login, credentials.Sessid, credentials.Uidh),
-                    out RouteApiSession session))
+				var sessionData = new SessionData(credentials.Login, credentials.Sessid, credentials.Uidh);
+				if (BusApi.TryGetCachedSession(in sessionData, out RouteApiSession session))
                 {
                     navigationViewModel.Show(new BusParametersViewmodel(navigationViewModel, session));
                 }

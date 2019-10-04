@@ -15,7 +15,7 @@ namespace Notifier.PageViewModels
         {
             if (selectedTrains.Count == 0)
                 throw new ArgumentException("Empty collection of trains");
-            var resultViewModel = new TrainSearingViewModel(trainParameters, selectedTrains, mainViewmodel);
+            var resultViewModel = new TrainSearingViewModel(in trainParameters, selectedTrains, mainViewmodel);
             Task.Run(resultViewModel.SearchProcess);
             return resultViewModel;
         }
@@ -27,7 +27,7 @@ namespace Notifier.PageViewModels
             this.selectedTrains = selectedTrains;
         }
 
-		protected override Uri GetLink() => TrainsInfoApi.GetRequestUri(trainParameters);
+		protected override Uri GetLink() => TrainsInfoApi.GetRequestUri(in trainParameters);
 
 		protected override object GetCancelViewModel() => new TrainParametersViewmodel(NavigationViewModel);
 
@@ -37,7 +37,7 @@ namespace Notifier.PageViewModels
 			{
 				if (CancellationSource.IsCancellationRequested)
 					return false;
-				bool haveTicketsForNotDisabled = TrainsInfoApi.HaveTicketsForNotDisabled(trainParameters, train);
+				bool haveTicketsForNotDisabled = TrainsInfoApi.HaveTicketsForNotDisabled(in trainParameters, train);
 				if (CancellationSource.IsCancellationRequested)
 					return false;
 				if (haveTicketsForNotDisabled)

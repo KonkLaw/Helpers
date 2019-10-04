@@ -73,7 +73,6 @@ namespace Notifier.PageViewModels
 		}
 
 		private DateTime? toTime;
-
         public DateTime? ToTime
 		{
 			get => toTime;
