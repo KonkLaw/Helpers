@@ -6,6 +6,10 @@ namespace RouteByApi
 {
 	internal class BusParser
 	{
+		const string goodResponse = "\"error\":0,";
+
+		public static bool IsGoodResponce(string response) => response.Contains(goodResponse);
+
 		private static readonly string[] KnowsErrors =
 {
 			"Необходимо пройти дополнительную проверку",
@@ -15,10 +19,8 @@ namespace RouteByApi
 
 		public static bool ContainsError(string message, out string recognizedError)
         {
-            const string goodResponse = "\"error\":0,";
-
 			// {"error":0,"ph":"......."}
-			if (message.Contains(goodResponse))
+			if (IsGoodResponce(goodResponse))
             {
                 recognizedError = default;
                 return false;
@@ -50,10 +52,7 @@ namespace RouteByApi
 
 		public static bool ParseScheduleIsSessionOk(string response, out ReadOnlyCollection<BusInfo> result)
 		{
-			const string goodResponse = "\"error\":0,";
-
-			// {"error":0,"ph":"......."}
-			if (!response.Contains(goodResponse))
+			if (!IsGoodResponce(response))
 			{
 				throw new InvalidOperationException(response);
 			}
@@ -66,7 +65,7 @@ namespace RouteByApi
 			}
 				
 			const string beginRecordSubstring = "\\\" data-parts=\\\"[1]\\\"><div class=\\\"lol_driver_action\\\"><div class=\\\"lol_driver_time\\\">";
-			const int idLength = 7;
+			const int idLength = 8;
 			const string freeCountSubstring = "<div class=\\\"lol_driver_space_num\\\">";
 
 			var list = new List<BusInfo>();

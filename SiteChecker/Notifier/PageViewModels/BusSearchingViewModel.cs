@@ -34,8 +34,9 @@ namespace Notifier.PageViewModels
 
 		protected override Uri GetLink() => BusApi.GetSiteUri();
 
-		protected override bool TryFind()
+		protected override bool TryFind(out string goodResultMessage)
 		{
+			goodResultMessage = default;
 			if (CancellationSource.IsCancellationRequested)
 				return false;
 
@@ -47,15 +48,26 @@ namespace Notifier.PageViewModels
                 if (CancellationSource.IsCancellationRequested)
                     return false;
                 List<BusInfo> selected = schedule.Where(
-                    bus => bus.Time >= searchParameters.FromTime && bus.Time <= searchParameters.ToTime).ToList();
-
-                if (searchParameters.ShouldBy && selected.Count > 0)
+                    bus =>
+						bus.Time >= searchParameters.FromTime
+						&& bus.Time <= searchParameters.ToTime
+						&& bus.TicketsCount > 0).ToList();
+				
+                if (selected.Count > 0)
                 {
-                    var orderParameters = new OrderParameters(
-                        searchParameters.FromStation, searchParameters.ToStation, selected.First().Id);
-                    session.Order(in orderParameters);
-                    return true;
-                }
+					if (searchParameters.ShouldBy)
+					{
+						var orderParameters = new OrderParameters(
+							searchParameters.FromStation, searchParameters.ToStation, selected.First().Id);
+						session.Order(in orderParameters);
+						goodResultMessage = "Was bought at: " + DateTime.Now.ToLongTimeString();
+					}
+					else
+					{
+						goodResultMessage = "Was found at: " + DateTime.Now.ToLongTimeString();
+					}
+					return true;
+				}
                 else
                     return false;
             }

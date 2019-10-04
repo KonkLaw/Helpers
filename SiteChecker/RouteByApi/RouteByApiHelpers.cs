@@ -45,8 +45,16 @@ namespace RouteByApi
 			return infoRequestBody;
 		}
 
-        public static string GerOrderRequestBody(in OrderParameters orderParameters)
-            => $"type=load_step2&load_in_page=true&id_tt={orderParameters.BusId}&num_selected=1&select_in={orderParameters.FromStation.Id}&select_out={orderParameters.ToStation.Id}&sline=undefined&idtemp=undefined&timer=undefined";
+        public static string GerOrderRequestBody(in OrderParameters orderParameters) =>
+			$"type=load_step2" +
+			$"&load_in_page=true" +
+			$"&id_tt={orderParameters.BusId}" +
+			$"&num_selected=1" +
+			$"&select_in={orderParameters.FromStation.Id}" +
+			$"&select_out={orderParameters.ToStation.Id}" +
+			$"&sline=undefined" +
+			$"&idtemp=undefined" +
+			$"&timer=undefined";
 
         public static WebRequest GetRequest(string requestBody, RequestHeader[] headers)
 		{
