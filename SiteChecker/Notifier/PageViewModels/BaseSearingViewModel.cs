@@ -21,7 +21,7 @@ namespace Notifier.PageViewModels
 		public string Message
 		{
 			get => message;
-			set => SetProperty(ref message, value);
+			private set => SetProperty(ref message, value);
 		}
 
 		protected BaseSearingViewModel(NavigationViewModel navigationViewModel)
@@ -45,18 +45,18 @@ namespace Notifier.PageViewModels
 			NavigationViewModel.Show(GetCancelViewModel());
 		}
 
-		protected abstract bool TryFind();
+		protected abstract bool TryFind(out string goodResultMessage);
 
 		protected void SearchProcess()
 		{
 			const int waitTimeoutSeconds = 10;
 			while (!CancellationSource.IsCancellationRequested)
 			{
-				if (TryFind())
+				if (TryFind(out string goodResultMessage))
 				{
 					Application.Current.Dispatcher.Invoke(() =>
 					{
-						Message = "Was found at: " + DateTime.Now.ToLongTimeString();
+						Message = goodResultMessage;
 					});
 					while (!CancellationSource.IsCancellationRequested)
 					{

@@ -1,5 +1,6 @@
-﻿* Buy notofication
+﻿* add prefered time + test
 * trains better refference
+* proper message for search
 
 * refomat of phone number may the reason of reconnct (GetPhone and phone format)
 * normals password input + store (or remove secure string)

@@ -31,8 +31,9 @@ namespace Notifier.PageViewModels
 
 		protected override object GetCancelViewModel() => new TrainParametersViewmodel(NavigationViewModel);
 
-		protected override bool TryFind()
+		protected override bool TryFind(out string goodResultMessage)
 		{
+			goodResultMessage = default;
 			foreach (TrainInfo train in selectedTrains)
 			{
 				if (CancellationSource.IsCancellationRequested)
@@ -42,6 +43,7 @@ namespace Notifier.PageViewModels
 					return false;
 				if (haveTicketsForNotDisabled)
 				{
+					goodResultMessage = "Was found at: " + DateTime.Now.ToLongTimeString();
 					return true;
 				}
 			}

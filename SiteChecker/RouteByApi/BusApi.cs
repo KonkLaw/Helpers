@@ -134,9 +134,13 @@ namespace RouteByApi
         {
             WebRequest preOrderRequest = GetRequest(RouteByApiHelpers.GerOrderRequestBody(in orderParameters));
             string preOrderResponse = WebApiHelper.GetResponseString(preOrderRequest).DecodeUnicide();
+			if (!BusParser.IsGoodResponce(preOrderResponse))
+				throw new InvalidOperationException(preOrderResponse);
             WebRequest orderRequest = GetRequest(BusParser.GetOrderRequest(preOrderResponse));
             string orderResponse = WebApiHelper.GetResponseString(orderRequest).DecodeUnicide();
-        }
+			if (!BusParser.IsGoodResponce(orderResponse) || !orderResponse.Contains("Ваш заказ добавлен"))
+				throw new InvalidOperationException(orderResponse);
+		}
     }
 
     public readonly struct OrderParameters
