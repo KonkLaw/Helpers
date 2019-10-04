@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Notifier"
         mc:Ignorable="d"
-		ResizeMode="NoResize"
+		ResizeMode="CanMinimize"
         Width="250"
         Height="380"
         Left="800" Top="500"
