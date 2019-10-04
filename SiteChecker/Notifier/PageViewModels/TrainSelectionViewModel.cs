@@ -47,7 +47,7 @@ namespace Notifier.PageViewModels
         private void NextHandler()
         {
             List<TrainInfo> selectedTrains = trains.Where(t => t.IsSelected).Select(t => t.TrainInfo).ToList();
-            mainViewmodel.Show(TrainSearingViewModel.CreateRunSearch(trainParameters, selectedTrains, mainViewmodel));
+            mainViewmodel.Show(TrainSearingViewModel.CreateRunSearch(in trainParameters, selectedTrains, mainViewmodel));
         }
     }
 

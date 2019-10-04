@@ -1,9 +1,6 @@
-﻿* in
-* parser 
+﻿* parser 
 * get and receive
-
 * Buy notofication
-
 
 * refomat of phone number may the reason of reconnct (GetPhone and phone format)
 * normals password input + store (or remove secure string)

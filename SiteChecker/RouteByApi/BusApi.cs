@@ -18,7 +18,7 @@ namespace RouteByApi
 
         public static bool TryGetCachedSession(in SessionData sessionData, out RouteApiSession session)
         {
-            var newSession = new RouteApiSession(sessionData);
+            var newSession = new RouteApiSession(in sessionData);
             var searchParameters = new SearchParameters(Stations[0], Stations[1], DateTime.Now.AddDays(1).Date);
             if (newSession.GetSchedule(in searchParameters, out _, out _))
             {
@@ -33,10 +33,10 @@ namespace RouteByApi
 
 		public static bool TryGetNewSession(in LoginData loginData, out RouteApiSession session, out string errorMessage)
         {
-            if (SessionCreator.TryCreateSession(loginData, out SessionData sessionData, out string message))
+            if (SessionCreator.TryCreateSession(in loginData, out SessionData sessionData, out string message))
             {
                 errorMessage = default;
-                session = new RouteApiSession(sessionData);
+                session = new RouteApiSession(in sessionData);
                 return true;
             }
             else
@@ -116,7 +116,7 @@ namespace RouteByApi
         
         public bool GetSchedule(in SearchParameters searchParameters, out ReadOnlyCollection<BusInfo> schedule, out string errorMessage)
         {
-            WebRequest scheduleWebRequest = GetRequest(RouteByApiHelpers.GetScheduleRequestBody(searchParameters));
+            WebRequest scheduleWebRequest = GetRequest(RouteByApiHelpers.GetScheduleRequestBody(in searchParameters));
 			string responseContent = WebApiHelper.GetResponseString(scheduleWebRequest).DecodeUnicide();
 			schedule = BusParser.ParseSchedule(responseContent);
             errorMessage = default;
