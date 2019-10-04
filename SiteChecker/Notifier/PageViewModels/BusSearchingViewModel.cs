@@ -42,7 +42,7 @@ namespace Notifier.PageViewModels
 			var requestParamters = new SearchParameters(
 				searchParameters.FromStation, searchParameters.ToStation, searchParameters.Date);
 
-			if (session.GetSchedule(in requestParamters, out ReadOnlyCollection<BusInfo> schedule, out _))
+			if (session.GetSchedule(in requestParamters, out ReadOnlyCollection<BusInfo> schedule))
 			{
                 if (CancellationSource.IsCancellationRequested)
                     return false;

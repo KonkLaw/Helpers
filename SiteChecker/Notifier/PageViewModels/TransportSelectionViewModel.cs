@@ -31,8 +31,17 @@ namespace Notifier.PageViewModels
                 }
                 else
                 {
-                    throw new NotImplementedException();
-                }
+					var loginData = new LoginData(credentials.Login, credentials.Password);
+					if (BusApi.TryGetNewSession(in loginData, out session, out string errorMessage))
+					{
+						sessionData = session.SessionData;
+						StorageHelper.Save(new Credentials(
+							credentials.Login, credentials.Password, sessionData.PhpSesSid, sessionData.Uidh));
+						navigationViewModel.Show(new BusParametersViewmodel(navigationViewModel, session));
+					}
+					else
+						throw new InvalidOperationException(errorMessage);
+				}
             }
             else
 				navigationViewModel.Show(new BusCredentialsViewModel(navigationViewModel));
