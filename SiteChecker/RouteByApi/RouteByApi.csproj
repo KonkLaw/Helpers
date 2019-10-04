@@ -45,7 +45,6 @@
   <ItemGroup>
     <Compile Include="BusApi.cs" />
     <Compile Include="BusParser.cs" />
-    <Compile Include="BuyHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RouteByApiHelpers.cs" />
     <Compile Include="StringHelper.cs" />

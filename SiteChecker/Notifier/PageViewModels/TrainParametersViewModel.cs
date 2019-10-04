@@ -97,7 +97,7 @@ namespace Notifier.PageViewModels
         public readonly List<TrainInfo> Trains;
         public readonly TrainParameters TrainParameters;
 
-        public TrainsResult(List<TrainInfo> trains, TrainParameters trainParameters)
+        public TrainsResult(List<TrainInfo> trains, in TrainParameters trainParameters)
         {
             Trains = trains;
             TrainParameters = trainParameters;

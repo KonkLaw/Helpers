@@ -32,7 +32,7 @@ namespace Notifier.PageViewModels
         private readonly NavigationViewModel mainViewmodel;
         private readonly TrainParameters trainParameters;
 
-        public TrainSelectionViewModel(TrainsResult trainsResult, NavigationViewModel mainViewmodel)
+        public TrainSelectionViewModel(in TrainsResult trainsResult, NavigationViewModel mainViewmodel)
         {
             trainParameters = trainsResult.TrainParameters;
             Trains = trainsResult.Trains.Select(t => new TrainViewModel(t)).ToList();

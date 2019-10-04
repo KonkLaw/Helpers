@@ -12,14 +12,14 @@ namespace Notifier.PageViewModels
 		private readonly RouteApiSession session;
 		private readonly BusSearchParameters searchParameters;
 
-        public static BusSearchingViewModel Create(NavigationViewModel navigationViewModel, BusSearchParameters searchParameters, RouteApiSession session)
+        public static BusSearchingViewModel Create(NavigationViewModel navigationViewModel, in BusSearchParameters searchParameters, RouteApiSession session)
 		{
             var busSearchingViewmodel = new BusSearchingViewModel(navigationViewModel, searchParameters, session);
 			Task.Run(busSearchingViewmodel.SearchProcess);
 			return busSearchingViewmodel;
 		}
 
-		private BusSearchingViewModel(NavigationViewModel navigationViewModel, BusSearchParameters searchParameters, RouteApiSession session)
+		private BusSearchingViewModel(NavigationViewModel navigationViewModel, in BusSearchParameters searchParameters, RouteApiSession session)
 			: base(navigationViewModel)
 		{
 			this.searchParameters = searchParameters;
@@ -40,7 +40,7 @@ namespace Notifier.PageViewModels
 				return false;
 
             if (session.GetSchedule(
-				new SearchParameters(searchParameters.FromStation, searchParameters.ToSation, searchParameters.Date),
+				new SearchParameters(searchParameters.FromStation, searchParameters.ToStation, searchParameters.Date),
                 out ReadOnlyCollection<BusInfo> schedule, out _))
 			{
                 if (CancellationSource.IsCancellationRequested)
@@ -48,7 +48,15 @@ namespace Notifier.PageViewModels
                 List<BusInfo> selected = schedule.Where(
                     bus => bus.Time >= searchParameters.FromTime && bus.Time <= searchParameters.ToTime).ToList();
 
-                return selected.Count > 0;
+                if (selected.Count > 0)
+                {
+                    var orderParameters = new OrderParameters(
+                        searchParameters.FromStation, searchParameters.ToStation, selected.First().Id);
+                    session.Order(in orderParameters);
+                    return true;
+                }
+                else
+                    return false;
             }
             else
             {
