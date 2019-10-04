@@ -49,7 +49,7 @@ namespace Notifier.PageViewModels
                 List<BusInfo> selected = schedule.Where(
                     bus => bus.Time >= searchParameters.FromTime && bus.Time <= searchParameters.ToTime).ToList();
 
-                if (selected.Count > 0)
+                if (searchParameters.ShouldBy && selected.Count > 0)
                 {
                     var orderParameters = new OrderParameters(
                         searchParameters.FromStation, searchParameters.ToStation, selected.First().Id);
