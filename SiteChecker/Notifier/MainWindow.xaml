@@ -7,7 +7,7 @@
         mc:Ignorable="d"
 		ResizeMode="NoResize"
         Width="250"
-        Height="350"
+        Height="380"
         Left="800" Top="500"
 		d:DataContext="{d:DesignInstance local:NavigationViewModel}">
 	<Grid>

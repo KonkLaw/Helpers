@@ -73,7 +73,8 @@ namespace Notifier.PageViewModels
 		}
 
 		private DateTime? toTime;
-		public DateTime? ToTime
+
+        public DateTime? ToTime
 		{
 			get => toTime;
 			set
@@ -89,7 +90,14 @@ namespace Notifier.PageViewModels
         public TimeSpan StartTimeInList { get; } = new TimeSpan(BusApi.MinHours, 0, 0);
 		public TimeSpan StopTimeInList { get; } = new TimeSpan(BusApi.MaxHours, 0, 0);
 
-		public BusParametersViewmodel(NavigationViewModel navigationViewModel, RouteApiSession session)
+        private bool shouldBy;
+        public bool ShouldBy
+        {
+            get => shouldBy;
+            set => SetProperty(ref shouldBy, value);
+        }
+
+        public BusParametersViewmodel(NavigationViewModel navigationViewModel, RouteApiSession session)
 		{
 			this.navigationViewModel = navigationViewModel;
             this.session = session;
@@ -102,8 +110,11 @@ namespace Notifier.PageViewModels
 
 		private void NextHandler()
 		{
-			var searchParameters = new BusSearchParameters(fromStation, toStation, date.Value.Date, fromTime.Value.TimeOfDay, toTime.Value.TimeOfDay);
-			navigationViewModel.Show(BusSearchingViewModel.Create(navigationViewModel, searchParameters, session));
+            if (!date.HasValue || !fromTime.HasValue || !toTime.HasValue)
+                return;
+			var searchParameters = new BusSearchParameters(
+                fromStation, toStation, date.Value.Date, fromTime.Value.TimeOfDay, toTime.Value.TimeOfDay, shouldBy);
+			navigationViewModel.Show(BusSearchingViewModel.Create(navigationViewModel, in searchParameters, session));
 		}
 
 		private void ValidateNextButtonAllowed() => NextCommand.RaiseCanExecuteChanged();
@@ -127,18 +138,21 @@ namespace Notifier.PageViewModels
 	readonly struct BusSearchParameters
 	{
 		public readonly Station FromStation;
-		public readonly Station ToSation;
+		public readonly Station ToStation;
 		public readonly DateTime Date;
 		public readonly TimeSpan FromTime;
 		public readonly TimeSpan ToTime;
+        public readonly bool ShouldBy;
 
-		public BusSearchParameters(Station fromStation, Station toSation, DateTime date, TimeSpan fromTime, TimeSpan toTime)
+        public BusSearchParameters(
+            Station fromStation, Station toStation, DateTime date, TimeSpan fromTime, TimeSpan toTime, bool shouldBy)
 		{
 			FromStation = fromStation;
-			ToSation = toSation;
+			ToStation = toStation;
 			Date = date;
 			FromTime = fromTime;
 			ToTime = toTime;
-		}
+            ShouldBy = shouldBy;
+        }
 	}
 }

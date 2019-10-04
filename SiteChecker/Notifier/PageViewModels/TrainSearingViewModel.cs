@@ -11,7 +11,7 @@ namespace Notifier.PageViewModels
         private readonly List<TrainInfo> selectedTrains;
 
         public static TrainSearingViewModel CreateRunSearch(
-            TrainParameters trainParameters, List<TrainInfo> selectedTrains, NavigationViewModel mainViewmodel)
+            in TrainParameters trainParameters, List<TrainInfo> selectedTrains, NavigationViewModel mainViewmodel)
         {
             if (selectedTrains.Count == 0)
                 throw new ArgumentException("Empty collection of trains");
@@ -20,7 +20,7 @@ namespace Notifier.PageViewModels
             return resultViewModel;
         }
 
-        private TrainSearingViewModel(TrainParameters trainParameters, List<TrainInfo> selectedTrains, NavigationViewModel navigationViewModel)
+        private TrainSearingViewModel(in TrainParameters trainParameters, List<TrainInfo> selectedTrains, NavigationViewModel navigationViewModel)
 			: base(navigationViewModel)
         {
             this.trainParameters = trainParameters;

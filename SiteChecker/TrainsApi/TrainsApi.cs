@@ -12,7 +12,7 @@ namespace TrainsApi
 			= new ReadOnlyCollection<Station>(
 				new[] { new Station("Минск", "2100000"), new Station("Столбцы", "2100123") });
 
-		public static Uri GetRequestUri(TrainParameters parameters)
+		public static Uri GetRequestUri(in TrainParameters parameters)
 		{
 			const string getTrainsRequest = "http://rasp.rw.by/ru/route/?from={0}&to={1}&date={2}";
 			return new Uri(
@@ -23,23 +23,23 @@ namespace TrainsApi
 					parameters.Date.ToString("yyyy-MM-dd")));
 		}
 
-		public static List<TrainInfo> GetBusinessClassTrains(TrainParameters parameters)
+		public static List<TrainInfo> GetBusinessClassTrains(in TrainParameters parameters)
 			=> GetTrains(parameters).Where(train => train.IsBusinessClass).ToList();
 
-		private static List<TrainInfo> GetTrains(TrainParameters parameters)
+		private static List<TrainInfo> GetTrains(in TrainParameters parameters)
 		{
 			string response = WebApiHelper.GetResponseString(GetRequestUri(parameters));
 			return TrainsScheduleResponseParser.ParseTrainsInfo(response);
 		}
 
-		public static bool HaveTicketsForNotDisabled(TrainParameters parameters, TrainInfo trainInfo)
+		public static bool HaveTicketsForNotDisabled(in TrainParameters parameters, TrainInfo trainInfo)
 		{
 			CheckStations(parameters.FromStation, parameters.ToStation);
-			string response = WebApiHelper.GetResponseString(GetTicketsReqeust(parameters, trainInfo));
+			string response = WebApiHelper.GetResponseString(GetTicketsRequest(parameters, trainInfo));
 			return TrainsTicketsParser.HaveTicketsForNotDisabled(response);
 		}
 
-		private static Uri GetTicketsReqeust(TrainParameters parameters, TrainInfo trainInfo)
+		private static Uri GetTicketsRequest(in TrainParameters parameters, TrainInfo trainInfo)
 		{
 			const string checkTicketsRequest = "https://rasp.rw.by/ru/ajax/route/car_places/?from={0}&to={1}&date={2}&train_number={3}&car_type=2";
 			CheckStations(parameters.FromStation, parameters.ToStation);

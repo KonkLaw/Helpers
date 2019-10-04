@@ -13,7 +13,7 @@ namespace RouteByApi
 	{
 		private static readonly Uri UriNonAuthentication = new Uri(@"https://route.by/local/components/route/widget.order/templates/.default/ajax.php");
 
-		public static RequestHeader[] GetScheduleRequestHeaders(SessionData sessionData)
+		public static RequestHeader[] GetScheduleRequestHeaders(in SessionData sessionData)
 		{
 			const string origin = @"https://route.by";
 
@@ -30,14 +30,14 @@ namespace RouteByApi
 			};
 		}
 
-		public static string GetRequestBody(SearchParameters searchParameters)
+		public static string GetScheduleRequestBody(in SearchParameters searchParameters)
 		{
-			if (searchParameters.FromStation == searchParameters.ToStation)
-				throw new ArgumentException("From station equals to To sattion.");
-			if (BusApi.Stations.IndexOf(searchParameters.FromStation) < 0 || BusApi.Stations.IndexOf(searchParameters.ToStation) < 0)
-				throw new ArgumentException("Unknown stations.");
+            if (searchParameters.FromStation == searchParameters.ToStation)
+                throw new ArgumentException("From station equals to To station.");
+            if (BusApi.Stations.IndexOf(searchParameters.FromStation) < 0 || BusApi.Stations.IndexOf(searchParameters.ToStation) < 0)
+                throw new ArgumentException("Unknown stations.");
 
-			string inBusStation = searchParameters.FromStation.Id;
+            string inBusStation = searchParameters.FromStation.Id;
 			string outBusStation = searchParameters.ToStation.Id;
 			string dayString = searchParameters.TripDay.ToString("dd.MM.yyyy");
 
@@ -45,7 +45,10 @@ namespace RouteByApi
 			return infoRequestBody;
 		}
 
-		public static WebRequest GetRequest(string requestBody, RequestHeader[] headers)
+        public static string GerOrderRequestBody(in OrderParameters orderParameters)
+            => $"type=load_step2&load_in_page=true&id_tt={orderParameters.BusId}&num_selected=1&select_in={orderParameters.FromStation.Id}&select_out={orderParameters.ToStation.Id}&sline=undefined&idtemp=undefined&timer=undefined";
+
+        public static WebRequest GetRequest(string requestBody, RequestHeader[] headers)
 		{
 			HttpWebRequest httpRequest = WebApiHelper.GetPostRequestWithCookies(
 				UriNonAuthentication, requestBody, CommonHelper.ContentType, headers);
@@ -68,7 +71,7 @@ namespace RouteByApi
 			};
 		}
 
-		public static bool TryCreateSession(LoginData loginData, out SessionData sessionData, out string message)
+		public static bool TryCreateSession(in LoginData loginData, out SessionData sessionData, out string message)
 		{
             string GetPhpSessid()
             {
