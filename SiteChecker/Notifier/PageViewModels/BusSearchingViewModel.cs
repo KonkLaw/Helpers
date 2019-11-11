@@ -48,7 +48,7 @@ namespace Notifier.PageViewModels
                 if (CancellationSource.IsCancellationRequested)
                     return false;
                 List<BusInfo> filteredBusses = schedule.Where(
-                    bus =>
+					bus =>
 						bus.Time >= searchParameters.FromTime
 						&& bus.Time <= searchParameters.ToTime
 						&& bus.TicketsCount > 0).ToList();
@@ -61,11 +61,11 @@ namespace Notifier.PageViewModels
 						var orderParameters = new OrderParameters(
 							searchParameters.FromStation, searchParameters.ToStation, midleBus.Id);
 						session.Order(in orderParameters);
-						goodResultMessage = "Was bought at: " + DateTime.Now.ToLongTimeString();
+						goodResultMessage = $"Was bought at: {DateTime.Now.ToLongTimeString()}. Time: |{midleBus.Time}|";
 					}
 					else
 					{
-						goodResultMessage = "Was found at: " + DateTime.Now.ToLongTimeString();
+						goodResultMessage = $"Was found at: {DateTime.Now.ToLongTimeString()}";
 					}
 					return true;
 				}
