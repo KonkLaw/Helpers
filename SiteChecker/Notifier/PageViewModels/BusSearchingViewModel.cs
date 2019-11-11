@@ -47,18 +47,19 @@ namespace Notifier.PageViewModels
 			{
                 if (CancellationSource.IsCancellationRequested)
                     return false;
-                List<BusInfo> selected = schedule.Where(
+                List<BusInfo> filteredBusses = schedule.Where(
                     bus =>
 						bus.Time >= searchParameters.FromTime
 						&& bus.Time <= searchParameters.ToTime
 						&& bus.TicketsCount > 0).ToList();
 				
-                if (selected.Count > 0)
+                if (filteredBusses.Count > 0)
                 {
+					BusInfo midleBus = filteredBusses[filteredBusses.Count / 2];
 					if (searchParameters.ShouldBy)
 					{
 						var orderParameters = new OrderParameters(
-							searchParameters.FromStation, searchParameters.ToStation, selected.First().Id);
+							searchParameters.FromStation, searchParameters.ToStation, midleBus.Id);
 						session.Order(in orderParameters);
 						goodResultMessage = "Was bought at: " + DateTime.Now.ToLongTimeString();
 					}
