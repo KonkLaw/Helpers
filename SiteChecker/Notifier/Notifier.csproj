@@ -43,6 +43,7 @@
     </ApplicationDefinition>
     <Compile Include="NavigationViewModel.cs" />
     <Compile Include="StorageHelper.cs" />
+    <Compile Include="UtilTypes\Sounds.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -193,6 +194,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="TODO.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Windows Foreground.wav" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
