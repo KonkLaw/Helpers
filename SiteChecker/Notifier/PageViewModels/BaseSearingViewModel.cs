@@ -1,4 +1,5 @@
-﻿using Prism.Commands;
+﻿using Notifier.UtilTypes;
+using Prism.Commands;
 using System;
 using System.Diagnostics;
 using System.Threading;
@@ -29,7 +30,7 @@ namespace Notifier.PageViewModels
 			NavigationViewModel = navigationViewModel;
 			CancelCommand = new DelegateCommand(CancelHandler);
 			LinkCommand = new DelegateCommand(LinkHandler);
-			TestSound = new DelegateCommand(PalySound);
+			TestSound = new DelegateCommand(PlaySound);
 		}
 
 		protected abstract Uri GetLink();
@@ -60,7 +61,7 @@ namespace Notifier.PageViewModels
 					});
 					while (!CancellationSource.IsCancellationRequested)
 					{
-						PalySound();
+						PlaySound();
 						Thread.Sleep(2000);
 					}
 				}
@@ -76,9 +77,6 @@ namespace Notifier.PageViewModels
 			}
 		}
 
-		private void PalySound()
-		{
-			System.Media.SystemSounds.Hand.Play();
-		}
+		private void PlaySound() => Sounds.Instance.Play();
 	}
 }
