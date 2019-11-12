@@ -63,9 +63,12 @@ namespace RouteByApi
 				result = default;
 				return false;
 			}
-				
-			const string beginRecordSubstring = "\\\" data-parts=\\\"[1]\\\"><div class=\\\"lol_driver_action\\\"><div class=\\\"lol_driver_time\\\">";
+
+			const string idSubstring = " id=\\\"";
 			const int idLength = 8;
+
+			const string beginRecordSubstring = "]\\\"><div class=\\\"lol_driver_action\\\"><div class=\\\"lol_driver_time\\\">";
+			
 			const string freeCountSubstring = "<div class=\\\"lol_driver_space_num\\\">";
 
 			var list = new List<BusInfo>();
@@ -73,12 +76,15 @@ namespace RouteByApi
 			int currentIndex = 0;
 			while (currentIndex < response.Length)
 			{
-				int newIndex = response.IndexOf(beginRecordSubstring, currentIndex);
+				int newIndex = response.IndexOf(idSubstring, currentIndex);
 				if (newIndex < 0)
 					break;
-				string time = response.Substring(newIndex + beginRecordSubstring.Length, 5);
-				string id = response.Substring(newIndex - idLength, idLength);
 
+				string id = response.Substring(newIndex + idSubstring.Length, idLength);
+
+				newIndex = response.IndexOf(beginRecordSubstring, newIndex);
+				string time = response.Substring(newIndex + beginRecordSubstring.Length, 5);
+				
 				int countStarIndex = response.IndexOf(freeCountSubstring, newIndex + 1) + freeCountSubstring.Length;
 				int countEndIndex = response.IndexOf('<', countStarIndex + 1);
 

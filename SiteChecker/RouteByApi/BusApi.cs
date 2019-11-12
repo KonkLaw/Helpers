@@ -113,6 +113,8 @@ namespace RouteByApi
 			TicketsCount = ticketsCount;
 			Time = time;
 		}
+
+		public override string ToString() => $"time: {Time}";
 	}
 
 	public class RouteApiSession

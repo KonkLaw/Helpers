@@ -41,7 +41,7 @@ namespace RouteByApi
 			string outBusStation = searchParameters.ToStation.Id;
 			string dayString = searchParameters.TripDay.ToString("dd.MM.yyyy");
 
-			string infoRequestBody = $"type=load_list_order&select_in={inBusStation}&select_out={outBusStation}&date={dayString}&id_service=144&lines=%7B%220%22%3A192%2C%221%22%3A195%2C%222%22%3A323%2C%223%22%3A368%2C%224%22%3A446%2C%225%22%3A488%2C%226%22%3A491%7D";
+			string infoRequestBody = $"type=load_list_order&select_in={inBusStation}&select_out={outBusStation}&date={dayString}&id_service=144&lines=" + "{\"0\":192,\"1\":195,\"2\":323,\"3\":368,\"4\":446,\"5\":488,\"6\":491}";
 			return infoRequestBody;
 		}
 
