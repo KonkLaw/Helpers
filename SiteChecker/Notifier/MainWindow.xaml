@@ -8,7 +8,6 @@
 		ResizeMode="CanMinimize"
         Width="250"
         Height="380"
-        Left="800" Top="500"
 		d:DataContext="{d:DesignInstance local:NavigationViewModel}">
 	<Grid>
         <UserControl Content="{Binding CurrentPage}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
