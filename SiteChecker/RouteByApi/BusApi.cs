@@ -13,6 +13,18 @@ namespace RouteByApi
 		public static readonly ReadOnlyCollection<Station> Stations = new ReadOnlyCollection<Station>(
 			new [] { new Station("Минск", "1"), new Station("Столбцы", "102") });
 
+		internal static bool GetIsFromMinskToStolbtcy(in OrderParameters orderParameters)
+		{
+			bool fromMinskToStolbtcy;
+			if (orderParameters.FromStation == BusApi.Stations[0] && orderParameters.ToStation == BusApi.Stations[1])
+				fromMinskToStolbtcy = true;
+			else if (orderParameters.FromStation == BusApi.Stations[1] && orderParameters.ToStation == BusApi.Stations[0])
+				fromMinskToStolbtcy = false;
+			else
+				throw new ArgumentException("Not valid stations.");
+			return fromMinskToStolbtcy;
+		}
+
 		private const string SiteUrl = "https://stolbcy-minsk.by/";
 		public static Uri GetSiteUri() => new Uri(SiteUrl);
 
@@ -54,7 +66,7 @@ namespace RouteByApi
 		private readonly string name;
 		internal readonly string Id;
 
-		public Station(string name, string id)
+		internal Station(string name, string id)
 		{
 			this.name = name;
 			Id = id;
@@ -136,7 +148,7 @@ namespace RouteByApi
             string preOrderResponse = WebApiHelper.GetResponseString(preOrderRequest).DecodeUnicide();
 			if (!BusParser.IsGoodResponce(preOrderResponse))
 				throw new InvalidOperationException(preOrderResponse);
-            WebRequest orderRequest = GetRequest(BusParser.GetOrderRequest(preOrderResponse));
+			WebRequest orderRequest = GetRequest(BusParser.GetOrderRequest(preOrderResponse, BusApi.GetIsFromMinskToStolbtcy(in orderParameters)));
             string orderResponse = WebApiHelper.GetResponseString(orderRequest).DecodeUnicide();
 			if (!BusParser.IsGoodResponce(orderResponse) || !orderResponse.Contains("Ваш заказ добавлен"))
 				throw new InvalidOperationException(orderResponse);
