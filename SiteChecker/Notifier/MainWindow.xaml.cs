@@ -13,6 +13,9 @@ namespace Notifier
 		{
 			InitializeComponent();
 			DataContext = SetupView();
+
+			Left = (SystemParameters.PrimaryScreenWidth - Width) / 2;
+			Top = (SystemParameters.PrimaryScreenHeight - Height) / 2;
 		}
 
 		private NavigationViewModel SetupView()
