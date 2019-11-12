@@ -6,9 +6,9 @@ namespace RouteByApi
 {
 	internal class BusParser
 	{
-		const string goodResponse = "\"error\":0,";
+		const string GoodResponse = "\"error\":0,";
 
-		public static bool IsGoodResponce(string response) => response.Contains(goodResponse);
+		public static bool IsGoodResponce(string response) => response.Contains(GoodResponse);
 
 		private static readonly string[] KnowsErrors =
 {
@@ -20,7 +20,7 @@ namespace RouteByApi
 		public static bool ContainsError(string message, out string recognizedError)
         {
 			// {"error":0,"ph":"......."}
-			if (IsGoodResponce(goodResponse))
+			if (IsGoodResponce(GoodResponse))
             {
                 recognizedError = default;
                 return false;
@@ -99,8 +99,42 @@ namespace RouteByApi
 			return true;
 		}
 
-		public static string GetOrderRequest(string preOrderResponse)
+		public static string GetOrderRequest(string preOrderResponse, bool fromMinskToStolbtcy)
 		{
+			// MINSK_STOLBTCY
+				// START
+				//<option data-time-points="-15" value="2394">Юго западная Автостанция</option>
+				//<option data-time-points="-10" value="9833">ост. ст.м. Петровщина</option>
+				//<option data-time-points="0" value="2307">Малиновка</option>
+				//<option data-time-points="10" value="2844">Дзедава Карчма</option>
+				//<option data-time-points="10" value="2400">Чечино</option>
+				//<option data-time-points="10" value="2403">Черкасы</option><option data-time-points="15" value="2397">Вязань</option>
+				//<option data-time-points="20" value="2310">Веста</option> 
+				// FINISH
+				//<option value="0" data-time-points="0" selected="selected">не выбрано</option> 
+				//<option data-time-points="-15" value="2325">Кучкуны</option>
+				//<option data-time-points="-15" value="2406">Слабода</option>
+				//<option data-time-points="-10" value="2328">Яблоновка</option>
+				//<option data-time-points="-5" value="2319">Остановка</option>
+				//<option data-time-points="0" value="2322">Автовокзал</option>
+			// STOLBTCY_MINSK
+				// START
+				//<option data-time-points="0" value="2331">Автовокзал</option>
+				//<option data-time-points="1" value="9587" selected="selected">Прыпынак</option>
+				//<option data-time-points="10" value="2337">Яблоновка</option>
+				//<option data-time-points="10" value="2409">Слабода</option>
+				//<option data-time-points="12" value="2340">Кучкуны</option>
+				//<option data-time-points="20" value="2415">306 киллометр</option>
+				//<option data-time-points="25" value="2412">Заправка Энергетик</option>
+				//<option data-time-points="30" value="2847">Дзедава Карчма</option>
+				//<option data-time-points="32" value="2343">Веста </option> </select> 
+				// FINISH
+				//<option value="0" data-time-points="0" selected="selected">не выбрано</option> 
+				//<option data-time-points="-30" value="2361">Веста</option>
+				//<option data-time-points="0" value="2358">Малиновка</option>
+				//<option data-time-points="5" value="2355">Петровщина - Берестье</option>
+				//<option data-time-points="15" value="2418">Юго западная Автостанция</option> </select> 
+
 			string GetValueByKey(string content, string key)
 			{
 				const string valueMarker = "value=\\\"";
@@ -112,6 +146,19 @@ namespace RouteByApi
 
 			string GetValue(string key) => GetValueByKey(preOrderResponse, key);
 
+			string startStation;
+			string finishStation;
+			if (fromMinskToStolbtcy)
+			{
+				startStation = "2307";
+				finishStation = "0";
+			}
+			else
+			{
+				startStation = "9587";
+				finishStation = "0";
+			}
+
 			string part = "%5B" + GetValue("aurb_id_add_parts")[1] + "%5D";
 			string orderRequestContent =
 				@"type=load_step2_save&" +
@@ -119,14 +166,14 @@ namespace RouteByApi
 				"aurb_id_add_num_space=1&" +
 				$"aurb_id_add_tt={GetValue("aurb_id_add_tt")}&" +
 				$"aurb_id_add_parts={part}&" +
-				"aurb_points_finish[1]=9761&" +
-				"aurb_point_start[1]=9716&" +
+				$"aurb_points_finish[1]={finishStation}&" +
+				$"aurb_point_start[1]={startStation}&" +
 				$"aurb_id_add_df={GetValue("aurb_id_add_df")}&" +
 				$"aurb_id_add_ds={GetValue("aurb_id_add_ds")}&" +
 				"aurb_id_add_comment=&" +
 				$"aurb_id_add_sl={GetValue("aurb_id_add_sl")}&" +
 				$"aurb_id_add_save_points={GetValue("aurb_id_add_save_points")}&" +
-				"aurb_id_service=144";
+				"aurb_id_service=144"; // <-- this can be taken from "aurb_id_add_service" m.b.
 
 			return orderRequestContent;
 		}
