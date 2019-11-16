@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TrainsApi
+namespace RwByApi
 {
 	public class TrainInfo
 	{

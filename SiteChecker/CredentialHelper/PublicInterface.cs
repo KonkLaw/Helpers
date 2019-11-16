@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace CredentialHelper.Interface
+namespace CredentialHelper
 {
     public struct Credentials
     {

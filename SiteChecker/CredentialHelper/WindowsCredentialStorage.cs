@@ -1,5 +1,4 @@
-﻿using CredentialHelper.Interface;
-using CredentialManager;
+﻿using CredentialManager;
 
 namespace CredentialHelper
 {

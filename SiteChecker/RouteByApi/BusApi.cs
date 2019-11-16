@@ -126,12 +126,12 @@ namespace RouteByApi
 			SessionData = sessionData;
 		}
 
-        private WebRequest GetRequest(string requestBody) =>
+        private HttpWebRequest GetRequest(string requestBody) =>
             RouteByApiHelpers.GetRequest(requestBody, RouteByApiHelpers.GetScheduleRequestHeaders(in SessionData));
         
         public bool GetSchedule(in SearchParameters searchParameters, out ReadOnlyCollection<BusInfo> schedule)
         {
-            WebRequest scheduleWebRequest = GetRequest(RouteByApiHelpers.GetScheduleRequestBody(in searchParameters));
+            HttpWebRequest scheduleWebRequest = GetRequest(RouteByApiHelpers.GetScheduleRequestBody(in searchParameters));
 			string responseContent = WebApiHelper.GetResponseString(scheduleWebRequest).DecodeUnicide();
 			if (BusParser.ParseScheduleIsSessionOk(responseContent, out schedule))
 			{
@@ -146,11 +146,11 @@ namespace RouteByApi
 
         public void Order(in OrderParameters orderParameters)
         {
-            WebRequest preOrderRequest = GetRequest(RouteByApiHelpers.GerOrderRequestBody(in orderParameters));
+			HttpWebRequest preOrderRequest = GetRequest(RouteByApiHelpers.GerOrderRequestBody(in orderParameters));
             string preOrderResponse = WebApiHelper.GetResponseString(preOrderRequest).DecodeUnicide();
 			if (!BusParser.IsGoodResponce(preOrderResponse))
 				throw new InvalidOperationException(preOrderResponse);
-			WebRequest orderRequest = GetRequest(BusParser.GetOrderRequest(preOrderResponse, BusApi.GetIsFromMinskToStolbtcy(in orderParameters)));
+			HttpWebRequest orderRequest = GetRequest(BusParser.GetOrderRequest(preOrderResponse, BusApi.GetIsFromMinskToStolbtcy(in orderParameters)));
             string orderResponse = WebApiHelper.GetResponseString(orderRequest).DecodeUnicide();
 			if (!BusParser.IsGoodResponce(orderResponse) || !orderResponse.Contains("Ваш заказ добавлен"))
 				throw new InvalidOperationException(orderResponse);

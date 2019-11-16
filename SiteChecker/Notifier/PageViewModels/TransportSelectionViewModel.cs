@@ -1,12 +1,13 @@
 ﻿using System;
-using CredentialHelper.Interface;
+using CredentialHelper;
 using Prism.Commands;
 using System.Windows.Input;
 using RouteByApi;
+using Notifier.UtilTypes;
 
 namespace Notifier.PageViewModels
 {
-    class TransportSelectionViewModel : BasePageViewModel
+	class TransportSelectionViewModel : BasePageViewModel
     {
         private readonly NavigationViewModel navigationViewModel;
 

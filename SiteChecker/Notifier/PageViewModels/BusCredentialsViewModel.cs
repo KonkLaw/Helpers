@@ -2,7 +2,8 @@
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security;
-using CredentialHelper.Interface;
+using CredentialHelper;
+using Notifier.UtilTypes;
 using Prism.Commands;
 using RouteByApi;
 

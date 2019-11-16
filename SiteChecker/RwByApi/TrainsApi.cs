@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using WebApiUtils;
 
-namespace TrainsApi
+namespace RwByApi
 {
 	public class TrainsInfoApi
 	{

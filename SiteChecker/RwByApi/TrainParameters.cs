@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TrainsApi
+namespace RwByApi
 {
 	public readonly struct TrainParameters
 	{
