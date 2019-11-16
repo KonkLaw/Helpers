@@ -1,4 +1,4 @@
-﻿namespace TrainsApi
+﻿namespace RwByApi
 {
 	static class StringExtentions
 	{

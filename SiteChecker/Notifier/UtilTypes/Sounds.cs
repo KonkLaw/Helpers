@@ -1,4 +1,6 @@
-﻿using System.Media;
+﻿using System.IO;
+using System.Media;
+using System.Reflection;
 
 namespace Notifier.UtilTypes
 {
@@ -9,7 +11,12 @@ namespace Notifier.UtilTypes
 
 		private Sounds()
 		{
-			soundsPlayer = new SoundPlayer(Properties.Resources.Windows_Foreground);
+			Assembly assembly = Assembly.GetExecutingAssembly();
+			string resourceName = "Notifier.Resources.Sound.wav";
+
+			using Stream stream = assembly.GetManifestResourceStream(resourceName);
+			soundsPlayer = new SoundPlayer(stream);
+			soundsPlayer.Load();
 		}
 
 		public void Play()

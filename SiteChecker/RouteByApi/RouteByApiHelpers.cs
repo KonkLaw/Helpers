@@ -56,7 +56,7 @@ namespace RouteByApi
 			$"&idtemp=undefined" +
 			$"&timer=undefined";
 
-        public static WebRequest GetRequest(string requestBody, RequestHeader[] headers)
+        public static HttpWebRequest GetRequest(string requestBody, RequestHeader[] headers)
 		{
 			HttpWebRequest httpRequest = WebApiHelper.GetPostRequestWithCookies(
 				UriNonAuthentication, requestBody, CommonHelper.ContentType, headers);
@@ -97,7 +97,7 @@ namespace RouteByApi
 
             string phpSessid = GetPhpSessid();
 			string request = $"type=auth_login&data=phone{GetPhone(loginData.PhoneNumber)}user_pass%3D{loginData.Pas}%26g-recaptcha-response%3D%26remember%3Don%26sms_registration%3D%26user_pass_new%3D%26user_pass_new_conf%3D%26remember_reg%3Don%26sms_recall%3D%26new_pass%3D%26new_pass_conf%3D";
-			WebRequest normalRequest = GetAuthenticationRequest(request, GetNewSessionRequestHeader(phpSessid));
+			HttpWebRequest normalRequest = GetAuthenticationRequest(request, GetNewSessionRequestHeader(phpSessid));
 			string response = WebApiHelper.GetResponseString(normalRequest, out WebHeaderCollection headers).DecodeUnicide();
             if (BusParser.ContainsError(response, out string errorMessage))
             {
@@ -120,7 +120,7 @@ namespace RouteByApi
 			return $"%3D375%2B({phone.Substring(3, 2)})%2B{phone.Substring(5, 3)}-{phone.Substring(8, 2)}-{phone.Substring(10, 2)}%26";
 		}
 
-        private static WebRequest GetAuthenticationRequest(string requestBody, RequestHeader[] headers)
+        private static HttpWebRequest GetAuthenticationRequest(string requestBody, RequestHeader[] headers)
 		{
 			HttpWebRequest httpRequest = WebApiHelper.GetPostRequestWithCookies(
 				UriAuthentication, requestBody, CommonHelper.ContentType, headers);

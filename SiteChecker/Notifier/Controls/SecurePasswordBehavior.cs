@@ -1,9 +1,9 @@
-﻿using System.Security;
+﻿using Microsoft.Xaml.Behaviors;
+using System.Security;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Interactivity;
 
-namespace Notifier.PaveViews
+namespace Notifier.Controls
 {
 	public class SecurePasswordBehavior : Behavior<PasswordBox>
 	{

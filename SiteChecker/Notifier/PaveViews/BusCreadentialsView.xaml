@@ -3,10 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-			 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:local="clr-namespace:Notifier.PageViewModels"
-			 xmlns:view ="clr-namespace:Notifier.PaveViews"
-             mc:Ignorable="d" 
+			 xmlns:Behaviors="http://schemas.microsoft.com/xaml/behaviors"
+			 xmlns:controls="clr-namespace:Notifier.Controls"
+			 mc:Ignorable="d" 
 			 d:DataContext="{d:DesignInstance local:BusCredentialsViewModel}">
 	<Grid>
 		<Grid.RowDefinitions>
@@ -25,9 +25,9 @@
 		<Label Grid.Column ="0" Grid.Row ="1" Content="Password: "/>
         <TextBox Grid.Column ="1" Grid.Row ="0" Text="{Binding Login, UpdateSourceTrigger=PropertyChanged}" MaxLength="12" MaxLines="1" MinWidth="85"/>
 		<PasswordBox Grid.Column ="1" Grid.Row ="1" x:Name="Password">
-			<i:Interaction.Behaviors>
-				<view:SecurePasswordBehavior SecurePassword="{Binding SecurePassword, Mode=TwoWay}"/>
-			</i:Interaction.Behaviors>
+			<Behaviors:Interaction.Behaviors>
+				<controls:SecurePasswordBehavior SecurePassword="{Binding SecurePassword, Mode=TwoWay}"/>
+			</Behaviors:Interaction.Behaviors>
 		</PasswordBox>
         <TextBlock Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" Text="{Binding Message}" Foreground="Red" MinHeight="40" TextWrapping="WrapWithOverflow"/>
         <Grid Grid.Row="3" Grid.ColumnSpan="2" >

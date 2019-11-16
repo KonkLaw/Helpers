@@ -9,31 +9,22 @@ namespace WebApiUtils
 	{
 		public static string GetResponseString(Uri uri)
 		{
-			using (Stream responseStream = WebRequest.Create(uri).GetResponse().GetResponseStream())
-			{
-				using (var streamReader = new StreamReader(responseStream, Encoding.UTF8))
-				{
+			using Stream responseStream = WebRequest.Create(uri).GetResponse().GetResponseStream();
+				using var streamReader = new StreamReader(responseStream, Encoding.UTF8);
 					return streamReader.ReadToEnd();
-				}
-			}
 		}
 
-		public static string GetResponseString(WebRequest request) => GetResponseString(request, out _);
+		public static string GetResponseString(HttpWebRequest request) => GetResponseString(request, out _);
 
-		public static string GetResponseString(WebRequest request, out WebHeaderCollection headers)
+		public static string GetResponseString(HttpWebRequest request, out WebHeaderCollection headers)
 		{
-			var response = request.GetResponse();
+			using WebResponse response = request.GetResponse();
 			headers = response.Headers;
-			using (Stream responseStream = request.GetResponse().GetResponseStream())
-			{
-				using (var streamReader = new StreamReader(responseStream, Encoding.UTF8))
-				{
+			using Stream responseStream = ((HttpWebResponse)response).GetResponseStream();
+				using var streamReader = new StreamReader(responseStream, Encoding.UTF8);
 					return streamReader.ReadToEnd();
-				}
-			}
 		}
 
-		// ======
 		// REQUEST
 
 		private const string PostMethodName = "POST";
@@ -44,10 +35,8 @@ namespace WebApiUtils
 			request.Method = PostMethodName;
 			using (Stream requestBodyStream = request.GetRequestStream())
 			{
-				using (var streamWriter = new StreamWriter(requestBodyStream))
-				{
+				using var streamWriter = new StreamWriter(requestBodyStream);
 					streamWriter.Write(requestBody);
-				}
 			}
 			return request;
 		}
@@ -58,7 +47,7 @@ namespace WebApiUtils
 		{
 			HttpWebRequest request = WebRequest.CreateHttp(uri);
 			request.Method = PostMethodName;
-
+			request.ContentType = contentType;
 			WebHeaderCollection requestHeaders = request.Headers;
 			foreach (RequestHeader header in headers)
 			{
@@ -66,16 +55,12 @@ namespace WebApiUtils
 			}
 			using (Stream requestBodyStream = request.GetRequestStream())
 			{
-				using (var streamWriter = new StreamWriter(requestBodyStream))
-				{
+				using var streamWriter = new StreamWriter(requestBodyStream);
 					streamWriter.Write(requestBody);
-				}
 			}
-			request.ContentType = contentType;
 			return request;
 		}
 
-		// ======
 		// COMMON
 
 		public static RequestHeader CreateCookiesString(params (string key, string value)[] cookies)
