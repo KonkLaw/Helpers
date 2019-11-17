@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace Notifier.UtilTypes
 {
-	class Sounds
+		class Sounds
 	{
 		private readonly SoundPlayer soundsPlayer;
 		public static Sounds Instance = new Sounds();

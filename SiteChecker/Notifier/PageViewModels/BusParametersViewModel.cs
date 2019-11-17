@@ -15,7 +15,7 @@ namespace Notifier.PageViewModels
 		public DelegateCommand Today { get; }
 		public DelegateCommand Tomorow { get; }
 
-		public IEnumerable<Station> Stations => BusApi.Stations;
+		public static IEnumerable<Station> Stations => BusApi.Stations;
 
 		private Station fromStation;
 		public Station FromStation
@@ -58,11 +58,8 @@ namespace Notifier.PageViewModels
 			}
 		}
 
-		public DateTime StartDate { get; } = DateTime.Now;
-		public DateTime EndDate { get; } = DateTime.Now.AddDays(3 - 1);
-
-		private DateTime? fromTime;
-		public DateTime? FromTime
+		private TimeSpan fromTime = new TimeSpan(13, 0, 0);
+		public TimeSpan FromTime
 		{
 			get => fromTime;
 			set
@@ -72,8 +69,8 @@ namespace Notifier.PageViewModels
 			}
 		}
 
-		private DateTime? toTime;
-        public DateTime? ToTime
+		private TimeSpan toTime = new TimeSpan(16, 0, 0);
+        public TimeSpan ToTime
 		{
 			get => toTime;
 			set
@@ -82,12 +79,6 @@ namespace Notifier.PageViewModels
 					ValidateNextButtonAllowed();
 			}
 		}
-
-		public DateTime MinTime { get; } = DateTime.Now.Date.AddHours(BusApi.MinHours);
-		public DateTime MaxTime { get; } = DateTime.Now.Date.AddHours(BusApi.MaxHours);
-
-        public TimeSpan StartTimeInList { get; } = new TimeSpan(BusApi.MinHours, 0, 0);
-		public TimeSpan StopTimeInList { get; } = new TimeSpan(BusApi.MaxHours, 0, 0);
 
         private bool shouldBy;
         public bool ShouldBy
@@ -109,10 +100,10 @@ namespace Notifier.PageViewModels
 
 		private void NextHandler()
 		{
-            if (!date.HasValue || !fromTime.HasValue || !toTime.HasValue)
+            if (!date.HasValue)
                 return;
 			var searchParameters = new BusSearchParameters(
-                fromStation, toStation, date.Value.Date, fromTime.Value.TimeOfDay, toTime.Value.TimeOfDay, shouldBy);
+				fromStation, toStation, date.Value.Date, fromTime, toTime, shouldBy);
 			navigationViewModel.Show(BusSearchingViewModel.Create(navigationViewModel, in searchParameters, session));
 		}
 
@@ -120,10 +111,10 @@ namespace Notifier.PageViewModels
 
 		private bool GetNextEnabled()
 			=> fromStation != null && toStation != null && fromStation != toStation
-			&& date.HasValue && fromTime.HasValue && toTime.HasValue
-			&& (toTime.Value - fromTime.Value) > new TimeSpan(0, 22, 0);
+			&& date.HasValue
+			&& (toTime - fromTime) > new TimeSpan(0, 22, 0);
 
-		private Station GetOpposite(Station station)
+		private static Station GetOpposite(Station station)
 		{
 			if (station == BusApi.Stations[0])
 				return BusApi.Stations[1];

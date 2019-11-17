@@ -77,7 +77,7 @@ namespace Notifier.PageViewModels
         }
 
         // TODO: pull down to native code or don't use at all
-        string SecureStringToString(SecureString value)
+        private static string SecureStringToString(SecureString value)
         {
             IntPtr valuePtr = IntPtr.Zero;
             try
@@ -93,7 +93,7 @@ namespace Notifier.PageViewModels
 
         private bool NextValidator(SecureString obj)
             => login?.Length == 12
-               && login.StartsWith("37529")
+               && login.StartsWith("37529", StringComparison.InvariantCulture)
                && login.All(char.IsDigit)
                && SecurePassword?.Length > 2;
     }

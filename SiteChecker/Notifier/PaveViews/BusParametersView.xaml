@@ -4,9 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Notifier.PageViewModels"
-			 xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-			 xmlns:paveviews="clr-namespace:Notifier.PaveViews"
-			 xmlns:controls="clr-namespace:Notifier.Controls"
+			 xmlns:mycontrols="clr-namespace:MyControls;assembly=MyControls"
 			 mc:Ignorable="d" 
 			 d:DataContext="{d:DesignInstance local:BusParametersViewmodel}">
     <Grid>
@@ -28,8 +26,8 @@
 
         <Label Grid.Column ="0" Grid.Row ="0" Content="From: "/>
         <Label Grid.Column ="0" Grid.Row ="1" Content="To: "/>
-        <ComboBox Grid.Column ="1" Grid.Row ="0" SelectedItem="{Binding FromStation}" ItemsSource="{Binding Stations}"/>
-		<ComboBox Grid.Column ="1" Grid.Row ="1" SelectedItem="{Binding ToStation}" ItemsSource="{Binding Stations}"/>
+		<ComboBox Grid.Column ="1" Grid.Row ="0" SelectedItem="{Binding FromStation}" ItemsSource="{x:Static local:BusParametersViewmodel.Stations}"/>
+		<ComboBox Grid.Column ="1" Grid.Row ="1" SelectedItem="{Binding ToStation}" ItemsSource="{x:Static local:BusParametersViewmodel.Stations}"/>
         <Label Grid.Column="0" Grid.Row="2" Content="Date:"/>
 		<DatePicker x:Name="FakeName" Grid.Column="1" Grid.Row="2" SelectedDate="{Binding Date}" DisplayDateStart="{Binding StartDate, Mode=OneTime}" DisplayDateEnd="{Binding EndDate, Mode=OneTime}"/>
 		<Grid Grid.Row="3" Grid.ColumnSpan="2">
@@ -41,15 +39,9 @@
 			<Button Grid.Column="1" Content="Tomorow" Command="{Binding Tomorow}"/>
 		</Grid>
 			<Label Grid.Column="0" Grid.Row="4" Content="From: "/>
-		<controls:TimePickerExtended Grid.Column="1" Grid.Row="4" TextBoxBase.TextChanged="TimePicker_TextChanged"
-						 Value="{Binding Path=FromTime, UpdateSourceTrigger=PropertyChanged}" ClipValueToMinMax="True"
-						Minimum="{Binding MinTime, Mode=OneTime}" Maximum ="{Binding MaxTime, Mode=OneTime}"
-						StartTime="{Binding StartTimeInList, Mode=OneTime}" EndTime="{Binding StopTimeInList, Mode=OneTime}"/>
+		<mycontrols:TimePicker Grid.Column="1" Grid.Row="4" Value="{Binding Path=FromTime}"/>
 		<Label Grid.Column="0" Grid.Row="5" Content="To: "/>
-		<controls:TimePickerExtended Grid.Column="1" Grid.Row="5" TextBoxBase.TextChanged="TimePicker_TextChanged"
-						 Value="{Binding Path=ToTime, UpdateSourceTrigger=PropertyChanged}" ClipValueToMinMax="True"
-						Minimum="{Binding MinTime, Mode=OneTime}" Maximum ="{Binding MaxTime, Mode=OneTime}"
-						StartTime="{Binding StartTimeInList, Mode=OneTime}" EndTime="{Binding StopTimeInList, Mode=OneTime}"/>
+		<mycontrols:TimePicker Grid.Column="1" Grid.Row="5" Value="{Binding Path=ToTime}"/>
         <CheckBox Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="6" Content="Buy if it's found" IsChecked="{Binding ShouldBy}" />
         <Grid Grid.Column="0" Grid.Row="7" Grid.ColumnSpan="2" >
             <Grid.ColumnDefinitions>

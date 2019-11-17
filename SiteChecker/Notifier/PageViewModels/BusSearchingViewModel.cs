@@ -37,7 +37,7 @@ namespace Notifier.PageViewModels
 		protected override bool TryFind(out string goodResultMessage)
 		{
 			goodResultMessage = default;
-			if (CancellationSource.IsCancellationRequested)
+			if (IsCanceled)
 				return false;
 
 			var requestParamters = new SearchParameters(
@@ -45,7 +45,7 @@ namespace Notifier.PageViewModels
 
 			if (session.GetSchedule(in requestParamters, out ReadOnlyCollection<BusInfo> schedule))
 			{
-                if (CancellationSource.IsCancellationRequested)
+                if (IsCanceled)
                     return false;
                 List<BusInfo> filteredBusses = schedule.Where(
 					bus =>

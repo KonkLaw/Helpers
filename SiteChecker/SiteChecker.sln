@@ -3,17 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29509.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApiUtils", "WebApiUtils\WebApiUtils.csproj", "{A37FD35C-3184-4B7F-9F85-72DF1258117B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApiUtils", "WebApiUtils\WebApiUtils.csproj", "{A37FD35C-3184-4B7F-9F85-72DF1258117B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RwByApi", "RwByApi\RwByApi.csproj", "{CAC807E9-EEB7-4104-A98F-CD3955B446DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RwByApi", "RwByApi\RwByApi.csproj", "{CAC807E9-EEB7-4104-A98F-CD3955B446DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RouteByApi", "RouteByApi\RouteByApi.csproj", "{A048BB3C-3D76-476B-862A-916F8D175556}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RouteByApi", "RouteByApi\RouteByApi.csproj", "{A048BB3C-3D76-476B-862A-916F8D175556}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CredentialManager", "CredentialManager\CredentialManager.csproj", "{DAFCB05F-4EAA-4585-998E-BF46F6CAA699}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CredentialManager", "CredentialManager\CredentialManager.csproj", "{DAFCB05F-4EAA-4585-998E-BF46F6CAA699}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CredentialHelper", "CredentialHelper\CredentialHelper.csproj", "{6C2E3056-C022-401D-9F94-148DA5DE63BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CredentialHelper", "CredentialHelper\CredentialHelper.csproj", "{6C2E3056-C022-401D-9F94-148DA5DE63BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Notifier", "Notifier\Notifier.csproj", "{DAB87653-F11E-41C0-ACBF-132628E181B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Notifier", "Notifier\Notifier.csproj", "{DAB87653-F11E-41C0-ACBF-132628E181B9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyControls", "TimePicker\MyControls.csproj", "{2C3D835C-E217-4EC0-8060-37B83ADF2A58}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{DAB87653-F11E-41C0-ACBF-132628E181B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DAB87653-F11E-41C0-ACBF-132628E181B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DAB87653-F11E-41C0-ACBF-132628E181B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C3D835C-E217-4EC0-8060-37B83ADF2A58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C3D835C-E217-4EC0-8060-37B83ADF2A58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C3D835C-E217-4EC0-8060-37B83ADF2A58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C3D835C-E217-4EC0-8060-37B83ADF2A58}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

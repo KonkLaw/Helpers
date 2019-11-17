@@ -8,7 +8,7 @@ namespace Notifier.PageViewModels
 {
 	class TrainParametersViewmodel : BasePageViewModel
 	{
-		public IEnumerable<Station> Stations => TrainsInfoApi.ReliableStations;
+		public static IEnumerable<Station> Stations => TrainsInfoApi.ReliableStations;
 
         public DelegateCommand NextCommand { get; }
         public DelegateCommand BackCommand { get; }
@@ -82,7 +82,7 @@ namespace Notifier.PageViewModels
         private async void NextHandler()
         {
             navigationViewModel.IsOnWaiting = true;
-            TrainsResult result = await Task.Run(getTrainsFunction);
+            TrainsResult result = await Task.Run(getTrainsFunction).ConfigureAwait(true);
             navigationViewModel.IsOnWaiting = false;
             navigationViewModel.Show(new TrainSelectionViewModel(in result, navigationViewModel));
         }

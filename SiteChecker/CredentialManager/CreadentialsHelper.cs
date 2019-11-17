@@ -42,7 +42,7 @@ namespace CredentialManager
 		}
 	}
 
-	public class CreadentialsHelper
+	public static class CreadentialsHelper
     {
 		private const int FlagsDefault = 0;
 		private const CredentialType CredentialTypeDefault = CredentialType.Generic;
@@ -76,7 +76,7 @@ namespace CredentialManager
 			return true;
 		}
 
-		public void Delete(string targetName)
+		public static void Delete(string targetName)
 			=> CreadentialsManager.Delete(targetName, CredentialTypeDefault);
 	}
 }
