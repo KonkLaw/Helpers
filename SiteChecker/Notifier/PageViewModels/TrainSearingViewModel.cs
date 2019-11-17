@@ -14,8 +14,8 @@ namespace Notifier.PageViewModels
             in TrainParameters trainParameters, List<TrainInfo> selectedTrains, NavigationViewModel mainViewmodel)
         {
             if (selectedTrains.Count == 0)
-                throw new ArgumentException("Empty collection of trains");
-            var resultViewModel = new TrainSearingViewModel(in trainParameters, selectedTrains, mainViewmodel);
+				throw new ArgumentException("Empty collection of trains");
+			var resultViewModel = new TrainSearingViewModel(in trainParameters, selectedTrains, mainViewmodel);
             Task.Run(resultViewModel.SearchProcess);
             return resultViewModel;
         }
@@ -36,10 +36,10 @@ namespace Notifier.PageViewModels
 			goodResultMessage = default;
 			foreach (TrainInfo train in selectedTrains)
 			{
-				if (CancellationSource.IsCancellationRequested)
+				if (IsCanceled)
 					return false;
 				bool haveTicketsForNotDisabled = TrainsInfoApi.HaveTicketsForNotDisabled(in trainParameters, train);
-				if (CancellationSource.IsCancellationRequested)
+				if (IsCanceled)
 					return false;
 				if (haveTicketsForNotDisabled)
 				{

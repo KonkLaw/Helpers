@@ -1,1 +1,4 @@
-﻿1) wpf toolkit issues
+﻿2) normal min max constrains
+3) normal control view
+4) to < from ???
+5) static handler is erlier than apply template

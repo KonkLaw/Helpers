@@ -4,14 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Notifier"
-        mc:Ignorable="d"
+		xmlns:mycontrols="clr-namespace:MyControls;assembly=MyControls"
+		mc:Ignorable="d"
 		ResizeMode="CanMinimize"
         Width="250"
         Height="380"
 		d:DataContext="{d:DesignInstance local:NavigationViewModel}">
 	<Grid>
-        <UserControl Content="{Binding CurrentPage}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <Grid Visibility="{Binding IsOnWaiting, Converter={StaticResource BooleanToVisibilityConverter}}">
+		<UserControl Content="{Binding CurrentPage}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+		<Grid Visibility="{Binding IsOnWaiting, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Grid.RowDefinitions>
 				<RowDefinition Height="0.3*"/>
 				<RowDefinition/>
@@ -20,7 +21,7 @@
 			<Grid.Background>
 				<SolidColorBrush Color="White" Opacity=".2"/>
 			</Grid.Background>
-			<ProgressBar Grid.Row="1"  IsIndeterminate="True" Opacity="0.4" Background="Transparent" BorderThickness="1" />
+			<ProgressBar Grid.Row="1" IsIndeterminate="True" Opacity="0.4" Background="Transparent" BorderThickness="1" />
 		</Grid>
 	</Grid>
 </Window>

@@ -22,8 +22,8 @@
 
 		<Label Grid.Column ="0" Grid.Row ="0" Content="From: "/>
 		<Label Grid.Column ="0" Grid.Row ="1" Content="To: "/>
-		<ComboBox Grid.Column ="1" Grid.Row ="0" SelectedItem="{Binding FromStation}" ItemsSource="{Binding Stations}"/>
-		<ComboBox Grid.Column ="1" Grid.Row ="1" SelectedItem="{Binding ToStation}" ItemsSource="{Binding Stations}"/>
+		<ComboBox Grid.Column ="1" Grid.Row ="0" SelectedItem="{Binding FromStation}" ItemsSource="{x:Static local:TrainParametersViewmodel.Stations}"/>
+		<ComboBox Grid.Column ="1" Grid.Row ="1" SelectedItem="{Binding ToStation}" ItemsSource="{x:Static local:TrainParametersViewmodel.Stations}"/>
         <Label Grid.Column="0" Grid.Row="2" Content="Date:"/>
         <DatePicker Grid.Column="1" Grid.Row="2" SelectedDate="{Binding Date}" DisplayDateStart="{Binding StartDate, Mode=OneTime}"/>
 		<Grid Grid.Row="3" Grid.ColumnSpan="2">

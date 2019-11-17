@@ -2,7 +2,7 @@
 
 namespace Notifier.UtilTypes
 {
-	public class StorageHelper
+	public static class StorageHelper
 	{
 		private static readonly WindowsCredentialStorage Storage = new WindowsCredentialStorage();
 

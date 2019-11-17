@@ -11,8 +11,8 @@ namespace Notifier.PageViewModels
 	abstract class BaseSearingViewModel : BasePageViewModel
 	{
 		protected readonly NavigationViewModel NavigationViewModel;
-		protected readonly CancellationTokenSource CancellationSource = new CancellationTokenSource();
-
+		private bool isCanceled = false;
+		protected bool IsCanceled => isCanceled;
 		
 		public ICommand TestSound { get; }
 		public ICommand LinkCommand { get; }
@@ -42,7 +42,7 @@ namespace Notifier.PageViewModels
 
 		private void CancelHandler()
 		{
-			CancellationSource.Cancel();
+			isCanceled = true;
 			NavigationViewModel.Show(GetCancelViewModel());
 		}
 
@@ -51,7 +51,7 @@ namespace Notifier.PageViewModels
 		protected void SearchProcess()
 		{
 			const int waitTimeoutSeconds = 10;
-			while (!CancellationSource.IsCancellationRequested)
+			while (!isCanceled)
 			{
 				if (TryFind(out string goodResultMessage))
 				{
@@ -59,7 +59,7 @@ namespace Notifier.PageViewModels
 					{
 						Message = goodResultMessage;
 					});
-					while (!CancellationSource.IsCancellationRequested)
+					while (!isCanceled)
 					{
 						PlaySound();
 						Thread.Sleep(2000);
@@ -77,6 +77,6 @@ namespace Notifier.PageViewModels
 			}
 		}
 
-		private void PlaySound() => Sounds.Instance.Play();
+		private static void PlaySound() => Sounds.Instance.Play();
 	}
 }
