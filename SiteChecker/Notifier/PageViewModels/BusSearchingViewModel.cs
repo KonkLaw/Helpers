@@ -36,7 +36,7 @@ namespace Notifier.PageViewModels
 
 		protected override bool TryFind(out string goodResultMessage)
 		{
-			goodResultMessage = default;
+			goodResultMessage = string.Empty;
 			if (IsCanceled)
 				return false;
 

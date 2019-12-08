@@ -7,14 +7,12 @@ namespace Notifier
 {
     class NavigationViewModel : BindableBase
 	{
-		private object currentPage;
-		public object CurrentPage
+		private object? currentPage;
+		public object? CurrentPage
 		{
 			get => currentPage;
 			private set => SetProperty(ref currentPage, value);
 		}
-
-		public object CurrentPageViewmodel { get; private set; }
 
         private bool isOnWaiting;
         public bool IsOnWaiting
@@ -40,13 +38,12 @@ namespace Notifier
 
 		public void Show(object viewmodel)
 		{
-            if (!mapping.TryGetValue(viewmodel.GetType(), out UserControl view))
-            {
-                throw new InvalidOperationException();
-            }
+			Type key = viewmodel.GetType();
+			if (!mapping.ContainsKey(key))
+				throw new InvalidOperationException();
+			UserControl view = mapping[key];
 			view.DataContext = viewmodel;
 			CurrentPage = view;
-			CurrentPageViewmodel = viewmodel;
 		}
 	}
 }

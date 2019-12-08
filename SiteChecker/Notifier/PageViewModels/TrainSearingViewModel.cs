@@ -33,7 +33,7 @@ namespace Notifier.PageViewModels
 
 		protected override bool TryFind(out string goodResultMessage)
 		{
-			goodResultMessage = default;
+			goodResultMessage = string.Empty;
 			foreach (TrainInfo train in selectedTrains)
 			{
 				if (IsCanceled)

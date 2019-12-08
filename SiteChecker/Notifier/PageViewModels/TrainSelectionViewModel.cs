@@ -35,7 +35,7 @@ namespace Notifier.PageViewModels
         public TrainSelectionViewModel(in TrainsResult trainsResult, NavigationViewModel mainViewmodel)
         {
             trainParameters = trainsResult.TrainParameters;
-            Trains = trainsResult.Trains.Select(t => new TrainViewModel(t)).ToList();
+            trains = trainsResult.Trains.Select(t => new TrainViewModel(t)).ToList();
 
             NextCommand = new DelegateCommand(NextHandler, () => trains.Any(t => t.IsSelected));
             BackCommand = new DelegateCommand(() => mainViewmodel.Show(new TrainParametersViewmodel(mainViewmodel)));

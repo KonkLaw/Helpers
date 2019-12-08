@@ -13,7 +13,7 @@ namespace Notifier.PageViewModels
 	{
 		private readonly NavigationViewModel navigationViewModel;
 
-		private string login;
+		private string login = string.Empty;
 		public string Login
         {
             get => login;
@@ -24,7 +24,7 @@ namespace Notifier.PageViewModels
             }
         }
 
-        private SecureString securePassword;
+        private SecureString securePassword = new SecureString();
         public SecureString SecurePassword
         {
             get => securePassword;
@@ -44,7 +44,7 @@ namespace Notifier.PageViewModels
 
         private void InputChanged()
         {
-            Message = null;
+            Message = string.Empty;
             NextCommand.RaiseCanExecuteChanged();
         }
 
@@ -77,7 +77,7 @@ namespace Notifier.PageViewModels
         }
 
         // TODO: pull down to native code or don't use at all
-        private static string SecureStringToString(SecureString value)
+        private static string? SecureStringToString(SecureString value)
         {
             IntPtr valuePtr = IntPtr.Zero;
             try

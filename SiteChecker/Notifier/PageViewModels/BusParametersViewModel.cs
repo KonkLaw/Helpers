@@ -17,8 +17,8 @@ namespace Notifier.PageViewModels
 
 		public static IEnumerable<Station> Stations => BusApi.Stations;
 
-		private Station fromStation;
-		public Station FromStation
+		private Station? fromStation;
+		public Station? FromStation
 		{
 			get => fromStation;
 			set
@@ -32,8 +32,8 @@ namespace Notifier.PageViewModels
 			}
 		}
 
-		private Station toStation;
-		public Station ToStation
+		private Station? toStation;
+		public Station? ToStation
 		{
 			get => toStation;
 			set
@@ -100,7 +100,7 @@ namespace Notifier.PageViewModels
 
 		private void NextHandler()
 		{
-            if (!date.HasValue)
+            if (!date.HasValue || fromStation == null || toStation == null)
                 return;
 			var searchParameters = new BusSearchParameters(
 				fromStation, toStation, date.Value.Date, fromTime, toTime, shouldBy);
