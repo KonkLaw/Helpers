@@ -15,8 +15,8 @@ namespace Notifier.PageViewModels
 		public DelegateCommand Today { get; }
 		public DelegateCommand Tomorow { get; }
 
-		private Station fromStation;
-		public Station FromStation
+		private Station? fromStation;
+		public Station? FromStation
 		{
 			get => fromStation;
 			set
@@ -30,8 +30,8 @@ namespace Notifier.PageViewModels
 			}
 		}
 
-		private Station toStation;
-		public Station ToStation
+		private Station? toStation;
+		public Station? ToStation
 		{
 			get => toStation;
 			set
@@ -58,7 +58,6 @@ namespace Notifier.PageViewModels
 
 		public DateTime StartDate { get; } = DateTime.Now;
 
-        private readonly Func<TrainsResult> getTrainsFunction;
         private readonly NavigationViewModel navigationViewModel;
 
         public TrainParametersViewmodel(NavigationViewModel navigationViewModel)
@@ -66,7 +65,6 @@ namespace Notifier.PageViewModels
             NextCommand = new DelegateCommand(NextHandler, GetIsNextAllowed);
             BackCommand = new DelegateCommand(
                 () => this.navigationViewModel.Show(new TransportSelectionViewModel(navigationViewModel)));
-            getTrainsFunction = GetTrains;
             this.navigationViewModel = navigationViewModel;
 			Today = new DelegateCommand(() => Date = DateTime.Now.Date);
 			Tomorow = new DelegateCommand(() => Date = DateTime.Now.Date.AddDays(1));
@@ -74,7 +72,7 @@ namespace Notifier.PageViewModels
 
         private TrainsResult GetTrains()
         {
-            var trainParameters = new TrainParameters(date.Value, fromStation, toStation);
+            var trainParameters = new TrainParameters(date!.Value, fromStation, toStation);
             // TODO: possible fancy async here. Pull it down to response reading.
             return new TrainsResult(TrainsInfoApi.GetBusinessClassTrains(in trainParameters), in trainParameters);
         }
@@ -82,7 +80,7 @@ namespace Notifier.PageViewModels
         private async void NextHandler()
         {
             navigationViewModel.IsOnWaiting = true;
-            TrainsResult result = await Task.Run(getTrainsFunction).ConfigureAwait(true);
+            TrainsResult result = await Task.Run(GetTrains).ConfigureAwait(true);
             navigationViewModel.IsOnWaiting = false;
             navigationViewModel.Show(new TrainSelectionViewModel(in result, navigationViewModel));
         }

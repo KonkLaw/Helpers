@@ -14,7 +14,7 @@ namespace Notifier.UtilTypes
 			Assembly assembly = Assembly.GetExecutingAssembly();
 			string resourceName = "Notifier.Resources.Sound.wav";
 
-			using Stream stream = assembly.GetManifestResourceStream(resourceName);
+			using Stream? stream = assembly.GetManifestResourceStream(resourceName);
 			soundsPlayer = new SoundPlayer(stream);
 			soundsPlayer.Load();
 		}

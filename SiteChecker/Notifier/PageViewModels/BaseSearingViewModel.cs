@@ -18,7 +18,7 @@ namespace Notifier.PageViewModels
 		public ICommand LinkCommand { get; }
 		public ICommand CancelCommand { get; }
 
-		private string message;
+		private string message = string.Empty;
 		public string Message
 		{
 			get => message;
