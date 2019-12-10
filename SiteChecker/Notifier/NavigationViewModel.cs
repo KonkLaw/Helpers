@@ -38,10 +38,11 @@ namespace Notifier
 
 		public void Show(object viewmodel)
 		{
-			Type key = viewmodel.GetType();
-			if (!mapping.ContainsKey(key))
+			mapping.TryGetValue(viewmodel.GetType(), out UserControl? view);
+			if (view == null)
+			{
 				throw new InvalidOperationException();
-			UserControl view = mapping[key];
+			}
 			view.DataContext = viewmodel;
 			CurrentPage = view;
 		}
