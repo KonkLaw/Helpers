@@ -58,6 +58,17 @@ namespace Notifier.PageViewModels
 			}
 		}
 
+		private DateTime startDate = DateTime.Now.Date;
+		public DateTime StartDate
+		{
+			get => startDate;
+			set
+			{
+				if (SetProperty(ref startDate, value))
+					ValidateNextButtonAllowed();
+			}
+		}
+
 		private TimeSpan fromTime = new TimeSpan(13, 0, 0);
 		public TimeSpan FromTime
 		{
