@@ -29,7 +29,9 @@
 		<ComboBox Grid.Column ="1" Grid.Row ="0" SelectedItem="{Binding FromStation}" ItemsSource="{x:Static local:BusParametersViewmodel.Stations}"/>
 		<ComboBox Grid.Column ="1" Grid.Row ="1" SelectedItem="{Binding ToStation}" ItemsSource="{x:Static local:BusParametersViewmodel.Stations}"/>
         <Label Grid.Column="0" Grid.Row="2" Content="Date:"/>
-		<DatePicker x:Name="FakeName" Grid.Column="1" Grid.Row="2" SelectedDate="{Binding Date}" DisplayDateStart="{Binding StartDate, Mode=OneTime}" DisplayDateEnd="{Binding EndDate, Mode=OneTime}"/>
+		<DatePicker x:Name="FakeName" Grid.Column="1" Grid.Row="2"
+					SelectedDate="{Binding Date}"
+					DisplayDateStart="{Binding StartDate, Mode=OneTime}"/>
 		<Grid Grid.Row="3" Grid.ColumnSpan="2">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="*"/>
