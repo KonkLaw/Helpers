@@ -2,6 +2,7 @@
 using Prism.Commands;
 using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Input;
@@ -38,7 +39,16 @@ namespace Notifier.PageViewModels
 		protected abstract object GetCancelViewModel();
 
 		private void LinkHandler()
-			=> Process.Start(new ProcessStartInfo(GetLink().AbsoluteUri));
+		{
+			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+			{
+				string url = GetLink().AbsoluteUri;
+				url = url.Replace("&", "^&");
+				Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+			}
+			else
+				throw new InvalidOperationException("You are damned as a user of wrong a operating system. Please install correct operating system)");
+		}
 
 		private void CancelHandler()
 		{
