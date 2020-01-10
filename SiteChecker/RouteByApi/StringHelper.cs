@@ -5,7 +5,7 @@ namespace RouteByApi
 {
 	static class StringHelper
 	{
-		private static StringBuilder cache = new StringBuilder();
+		private readonly static StringBuilder cache = new StringBuilder();
 
 		public static string DecodeUnicide(this string input)
 		{
