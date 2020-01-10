@@ -88,7 +88,7 @@ namespace RouteByApi
 				int countStarIndex = response.IndexOf(freeCountSubstring, newIndex + 1) + freeCountSubstring.Length;
 				int countEndIndex = response.IndexOf('<', countStarIndex + 1);
 
-				string count = response.Substring(countStarIndex, countEndIndex - countStarIndex);
+				string count = response[countStarIndex..countEndIndex];
 				int ticketsCount = int.Parse(count);
 
 				list.Add(new BusInfo(
@@ -108,46 +108,46 @@ namespace RouteByApi
 		public static string GetOrderRequest(string preOrderResponse, bool fromMinskToStolbtcy)
 		{
 			// MINSK_STOLBTCY
-				// START
-				//<option data-time-points="-15" value="2394">Юго западная Автостанция</option>
-				//<option data-time-points="-10" value="9833">ост. ст.м. Петровщина</option>
-				//<option data-time-points="0" value="2307">Малиновка</option>
-				//<option data-time-points="10" value="2844">Дзедава Карчма</option>
-				//<option data-time-points="10" value="2400">Чечино</option>
-				//<option data-time-points="10" value="2403">Черкасы</option><option data-time-points="15" value="2397">Вязань</option>
-				//<option data-time-points="20" value="2310">Веста</option> 
-				// FINISH
-				//<option value="0" data-time-points="0" selected="selected">не выбрано</option> 
-				//<option data-time-points="-15" value="2325">Кучкуны</option>
-				//<option data-time-points="-15" value="2406">Слабода</option>
-				//<option data-time-points="-10" value="2328">Яблоновка</option>
-				//<option data-time-points="-5" value="2319">Остановка</option>
-				//<option data-time-points="0" value="2322">Автовокзал</option>
+			// START
+			//<option data-time-points="-15" value="2394">Юго западная Автостанция</option>
+			//<option data-time-points="-10" value="9833">ост. ст.м. Петровщина</option>
+			//<option data-time-points="0" value="2307">Малиновка</option>
+			//<option data-time-points="10" value="2844">Дзедава Карчма</option>
+			//<option data-time-points="10" value="2400">Чечино</option>
+			//<option data-time-points="10" value="2403">Черкасы</option><option data-time-points="15" value="2397">Вязань</option>
+			//<option data-time-points="20" value="2310">Веста</option> 
+			// FINISH
+			//<option value="0" data-time-points="0" selected="selected">не выбрано</option> 
+			//<option data-time-points="-15" value="2325">Кучкуны</option>
+			//<option data-time-points="-15" value="2406">Слабода</option>
+			//<option data-time-points="-10" value="2328">Яблоновка</option>
+			//<option data-time-points="-5" value="2319">Остановка</option>
+			//<option data-time-points="0" value="2322">Автовокзал</option>
 			// STOLBTCY_MINSK
-				// START
-				//<option data-time-points="0" value="2331">Автовокзал</option>
-				//<option data-time-points="1" value="9587" selected="selected">Прыпынак</option>
-				//<option data-time-points="10" value="2337">Яблоновка</option>
-				//<option data-time-points="10" value="2409">Слабода</option>
-				//<option data-time-points="12" value="2340">Кучкуны</option>
-				//<option data-time-points="20" value="2415">306 киллометр</option>
-				//<option data-time-points="25" value="2412">Заправка Энергетик</option>
-				//<option data-time-points="30" value="2847">Дзедава Карчма</option>
-				//<option data-time-points="32" value="2343">Веста </option> </select> 
-				// FINISH
-				//<option value="0" data-time-points="0" selected="selected">не выбрано</option> 
-				//<option data-time-points="-30" value="2361">Веста</option>
-				//<option data-time-points="0" value="2358">Малиновка</option>
-				//<option data-time-points="5" value="2355">Петровщина - Берестье</option>
-				//<option data-time-points="15" value="2418">Юго западная Автостанция</option> </select> 
+			// START
+			//<option data-time-points="0" value="2331">Автовокзал</option>
+			//<option data-time-points="1" value="9587" selected="selected">Прыпынак</option>
+			//<option data-time-points="10" value="2337">Яблоновка</option>
+			//<option data-time-points="10" value="2409">Слабода</option>
+			//<option data-time-points="12" value="2340">Кучкуны</option>
+			//<option data-time-points="20" value="2415">306 киллометр</option>
+			//<option data-time-points="25" value="2412">Заправка Энергетик</option>
+			//<option data-time-points="30" value="2847">Дзедава Карчма</option>
+			//<option data-time-points="32" value="2343">Веста </option> </select> 
+			// FINISH
+			//<option value="0" data-time-points="0" selected="selected">не выбрано</option> 
+			//<option data-time-points="-30" value="2361">Веста</option>
+			//<option data-time-points="0" value="2358">Малиновка</option>
+			//<option data-time-points="5" value="2355">Петровщина - Берестье</option>
+			//<option data-time-points="15" value="2418">Юго западная Автостанция</option> </select> 
 
-			string GetValueByKey(string content, string key)
+			static string GetValueByKey(string content, string key)
 			{
 				const string valueMarker = "value=\\\"";
 				int index = content.IndexOf(key);
 				index = content.IndexOf(valueMarker, index) + valueMarker.Length;
 				int endIndex = content.IndexOf("\\\"", index);
-				return content.Substring(index, endIndex - index);
+				return content[index..endIndex];
 			}
 
 			string GetValue(string key) => GetValueByKey(preOrderResponse, key);
