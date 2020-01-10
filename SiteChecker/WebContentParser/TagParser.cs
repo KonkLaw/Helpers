@@ -53,10 +53,10 @@ namespace WebContentParser
 
 		public void GetText(out string tagContext, out string? tagBody)
 		{
-			tagContext = paramemters.Text.Substring(paramemters.StartIndex, paramemters.EndIndex - paramemters.StartIndex);
+			tagContext = paramemters.Text[paramemters.StartIndex..paramemters.EndIndex];
 			if (paramemters.BodyEndIndex > 0)
 			{
-				tagBody = paramemters.Text.Substring(paramemters.BodyStartIndex, paramemters.BodyEndIndex - paramemters.BodyStartIndex);
+				tagBody = paramemters.Text[paramemters.BodyStartIndex..paramemters.BodyEndIndex];
 			}
 			else
 				tagBody = default;
@@ -65,11 +65,10 @@ namespace WebContentParser
 
 	static class TagParser
 	{
-		const string tagStart = "<";
-		const string closeTag = ">";
-		const string tag = "<div ";
-		const string closingTag = "</div>";
-		
+		const string TagStart = "<";
+		const string CloseTag = ">";
+		const string Tag = "<div ";
+		const string ClosingTag = "</div>";
 
 		public static Node Parse(string text)
 		{
@@ -83,10 +82,10 @@ namespace WebContentParser
 			bool openTagNotClose = true;
 			while (openTagNotClose)
 			{
-				int startTagIndex = text.IndexOf(tag, currentIndex);
-				startTagIndex += tag.Length;
+				int startTagIndex = text.IndexOf(Tag, currentIndex);
+				startTagIndex += Tag.Length;
 				currentIndex = startTagIndex;
-				int endTagIndex = text.IndexOf(closeTag, currentIndex);
+				int endTagIndex = text.IndexOf(CloseTag, currentIndex);
 				currentIndex = endTagIndex;
 				FindNextTagIndex(text, ref currentIndex, out openTagNotClose);
 				if (openTagNotClose)
@@ -113,7 +112,7 @@ namespace WebContentParser
 		{
 			while (true)
 			{
-				currentIndex = text.IndexOf(tagStart, currentIndex);
+				currentIndex = text.IndexOf(TagStart, currentIndex);
 				if (currentIndex < 0)
 				{
 					openTagNotClose = false;
@@ -121,12 +120,12 @@ namespace WebContentParser
 					return;
 				}
 				ReadOnlySpan<char> span = text[currentIndex..];
-				if (span.StartsWith(tag))
+				if (span.StartsWith(Tag))
 				{
 					openTagNotClose = true;
 					break;
 				}
-				else if (span.StartsWith(closingTag))
+				else if (span.StartsWith(ClosingTag))
 				{
 					openTagNotClose = false;
 					break;
