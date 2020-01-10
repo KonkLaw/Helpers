@@ -10,10 +10,17 @@ namespace Notifier.PageViewModels
 	{
 		public static IEnumerable<Station> Stations => TrainsInfoApi.ReliableStations;
 
-        public DelegateCommand NextCommand { get; }
-        public DelegateCommand BackCommand { get; }
+		public DelegateCommand NextCommand { get; }
+		public DelegateCommand BackCommand { get; }
 		public DelegateCommand Today { get; }
 		public DelegateCommand Tomorow { get; }
+
+		private bool isFromListOpened = true;
+		public bool IsFromListOpened
+		{
+			get => isFromListOpened;
+			set => SetProperty(ref isFromListOpened, value);
+		}
 
 		private Station? fromStation;
 		public Station? FromStation
@@ -25,7 +32,7 @@ namespace Notifier.PageViewModels
 				{
 					if (fromStation != null)
 						ToStation = StationsHelpers.GetOpposite(fromStation);
-                    ValidateNextButtonAllowed();
+					ValidateNextButtonAllowed();
 				}
 			}
 		}
@@ -40,52 +47,52 @@ namespace Notifier.PageViewModels
 				{
 					if (toStation != null)
 						FromStation = StationsHelpers.GetOpposite(toStation);
-                    ValidateNextButtonAllowed();
+					ValidateNextButtonAllowed();
 				}
 			}
 		}
 
-        private DateTime? date;
+		private DateTime? date;
 		public DateTime? Date
 		{
 			get => date;
 			set
 			{
 				if (SetProperty(ref date, value))
-                    ValidateNextButtonAllowed();
+					ValidateNextButtonAllowed();
 			}
 		}
 
 		public DateTime StartDate { get; } = DateTime.Now;
 
-        private readonly NavigationViewModel navigationViewModel;
+		private readonly NavigationViewModel navigationViewModel;
 
-        public TrainParametersViewmodel(NavigationViewModel navigationViewModel)
-        {
-            NextCommand = new DelegateCommand(NextHandler, GetIsNextAllowed);
-            BackCommand = new DelegateCommand(
-                () => this.navigationViewModel.Show(new TransportSelectionViewModel(navigationViewModel)));
-            this.navigationViewModel = navigationViewModel;
+		public TrainParametersViewmodel(NavigationViewModel navigationViewModel)
+		{
+			NextCommand = new DelegateCommand(NextHandler, GetIsNextAllowed);
+			BackCommand = new DelegateCommand(
+				() => this.navigationViewModel.Show(new TransportSelectionViewModel(navigationViewModel)));
+			this.navigationViewModel = navigationViewModel;
 			Today = new DelegateCommand(() => Date = DateTime.Now.Date);
 			Tomorow = new DelegateCommand(() => Date = DateTime.Now.Date.AddDays(1));
 		}
 
-        private TrainsResult GetTrains()
-        {
-            var trainParameters = new TrainParameters(date!.Value, fromStation, toStation);
-            // TODO: possible fancy async here. Pull it down to response reading.
-            return new TrainsResult(TrainsInfoApi.GetBusinessClassTrains(in trainParameters), in trainParameters);
-        }
+		private TrainsResult GetTrains()
+		{
+			var trainParameters = new TrainParameters(date!.Value, fromStation, toStation);
+			// TODO: possible fancy async here. Pull it down to response reading.
+			return new TrainsResult(TrainsInfoApi.GetBusinessClassTrains(in trainParameters), in trainParameters);
+		}
 
-        private async void NextHandler()
-        {
-            navigationViewModel.IsOnWaiting = true;
-            TrainsResult result = await Task.Run(GetTrains).ConfigureAwait(true);
-            navigationViewModel.IsOnWaiting = false;
-            navigationViewModel.Show(new TrainSelectionViewModel(in result, navigationViewModel));
-        }
+		private async void NextHandler()
+		{
+			navigationViewModel.IsOnWaiting = true;
+			TrainsResult result = await Task.Run(GetTrains).ConfigureAwait(true);
+			navigationViewModel.IsOnWaiting = false;
+			navigationViewModel.Show(new TrainSelectionViewModel(in result, navigationViewModel));
+		}
 
-        private void ValidateNextButtonAllowed() => NextCommand.RaiseCanExecuteChanged();
+		private void ValidateNextButtonAllowed() => NextCommand.RaiseCanExecuteChanged();
 
 		public bool GetIsNextAllowed() => fromStation != toStation && date.HasValue && date.Value >= DateTime.Now.Date;
 	}

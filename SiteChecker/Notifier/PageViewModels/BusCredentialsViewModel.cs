@@ -1,100 +1,100 @@
-﻿using System;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Security;
-using CredentialHelper;
-using Notifier.UtilTypes;
-using Prism.Commands;
-using RouteByApi;
+﻿//using System;
+//using System.Linq;
+//using System.Runtime.InteropServices;
+//using System.Security;
+//using CredentialHelper;
+//using Notifier.UtilTypes;
+//using Prism.Commands;
+//using RouteByApi;
 
-namespace Notifier.PageViewModels
-{
-	class BusCredentialsViewModel : BasePageViewModel
-	{
-		private readonly NavigationViewModel navigationViewModel;
+//namespace Notifier.PageViewModels
+//{
+//	class BusCredentialsViewModel : BasePageViewModel
+//	{
+//		private readonly NavigationViewModel navigationViewModel;
 
-		private string login = string.Empty;
-		public string Login
-        {
-            get => login;
-            set
-            {
-                if (SetProperty(ref login, value))
-                    InputChanged();
-            }
-        }
+//		private string login = string.Empty;
+//		public string Login
+//        {
+//            get => login;
+//            set
+//            {
+//                if (SetProperty(ref login, value))
+//                    InputChanged();
+//            }
+//        }
 
-        private SecureString securePassword = new SecureString();
-        public SecureString SecurePassword
-        {
-            get => securePassword;
-            set
-            {
-                if (SetProperty(ref securePassword, value))
-                    InputChanged();
-            }
-        }
+//        private SecureString securePassword = new SecureString();
+//        public SecureString SecurePassword
+//        {
+//            get => securePassword;
+//            set
+//            {
+//                if (SetProperty(ref securePassword, value))
+//                    InputChanged();
+//            }
+//        }
 
-        private string message = "";
-        public string Message
-        {
-            get => message;
-            set => SetProperty(ref message, value);
-        }
+//        private string message = "";
+//        public string Message
+//        {
+//            get => message;
+//            set => SetProperty(ref message, value);
+//        }
 
-        private void InputChanged()
-        {
-            Message = string.Empty;
-            NextCommand.RaiseCanExecuteChanged();
-        }
+//        private void InputChanged()
+//        {
+//            Message = string.Empty;
+//            NextCommand.RaiseCanExecuteChanged();
+//        }
 
-        public DelegateCommand<SecureString> NextCommand { get; }
-		public DelegateCommand BackCommand { get; }
+//        public DelegateCommand<SecureString> NextCommand { get; }
+//		public DelegateCommand BackCommand { get; }
 
-		public BusCredentialsViewModel(NavigationViewModel navigationViewModel)
-		{
-			this.navigationViewModel = navigationViewModel;
-			NextCommand = new DelegateCommand<SecureString>(NextHandler, NextValidator);
-			BackCommand = new DelegateCommand(() => navigationViewModel.Show(new TransportSelectionViewModel(navigationViewModel)));
-		}
+//		public BusCredentialsViewModel(NavigationViewModel navigationViewModel)
+//		{
+//			this.navigationViewModel = navigationViewModel;
+//			NextCommand = new DelegateCommand<SecureString>(NextHandler, NextValidator);
+//			BackCommand = new DelegateCommand(() => navigationViewModel.Show(new TransportSelectionViewModel(navigationViewModel)));
+//		}
 
-		private void NextHandler(SecureString obj)
-		{
-			var loginData = new LoginData(Login, SecureStringToString(securePassword));
-			if (BusApi.TryGetNewSession(
-				in loginData, out RouteApiSession session, out string errorMessage))
-            {
-                SessionData sessionData = session.SessionData;
-                var credentials = new Credentials(
-                    sessionData.PhoneNumber, SecureStringToString(securePassword), sessionData.PhpSesSid, sessionData.Uidh);
-                StorageHelper.Save(credentials);
-                navigationViewModel.Show(new BusParametersViewmodel(navigationViewModel, session));
-            }
-            else
-            {
-                Message = errorMessage;
-            }
-        }
+//		private void NextHandler(SecureString obj)
+//		{
+//			var loginData = new LoginData(Login, SecureStringToString(securePassword));
+//			if (BusApi.TryGetNewSession(
+//				in loginData, out RouteApiSession session, out string errorMessage))
+//            {
+//                SessionData sessionData = session.SessionData;
+//                var credentials = new Credentials(
+//                    sessionData.PhoneNumber, SecureStringToString(securePassword), sessionData.PhpSesSid, sessionData.Uidh);
+//                StorageHelper.Save(credentials);
+//                navigationViewModel.Show(new BusParametersViewmodel(navigationViewModel, session));
+//            }
+//            else
+//            {
+//                Message = errorMessage;
+//            }
+//        }
 
-        // TODO: pull down to native code or don't use at all
-        private static string? SecureStringToString(SecureString value)
-        {
-            IntPtr valuePtr = IntPtr.Zero;
-            try
-            {
-                valuePtr = Marshal.SecureStringToGlobalAllocUnicode(value);
-                return Marshal.PtrToStringUni(valuePtr);
-            }
-            finally
-            {
-                Marshal.ZeroFreeGlobalAllocUnicode(valuePtr);
-            }
-        }
+//        // TODO: pull down to native code or don't use at all
+//        private static string? SecureStringToString(SecureString value)
+//        {
+//            IntPtr valuePtr = IntPtr.Zero;
+//            try
+//            {
+//                valuePtr = Marshal.SecureStringToGlobalAllocUnicode(value);
+//                return Marshal.PtrToStringUni(valuePtr);
+//            }
+//            finally
+//            {
+//                Marshal.ZeroFreeGlobalAllocUnicode(valuePtr);
+//            }
+//        }
 
-        private bool NextValidator(SecureString obj)
-            => login?.Length == 12
-               && login.StartsWith("37529", StringComparison.InvariantCulture)
-               && login.All(char.IsDigit)
-               && SecurePassword?.Length > 2;
-    }
-}
+//        private bool NextValidator(SecureString obj)
+//            => login?.Length == 12
+//               && login.StartsWith("37529", StringComparison.InvariantCulture)
+//               && login.All(char.IsDigit)
+//               && SecurePassword?.Length > 2;
+//    }
+//}

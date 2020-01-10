@@ -1,5 +1,5 @@
-﻿using Prism.Commands;
-using RouteByApi;
+﻿using AtlasbusByApi;
+using Prism.Commands;
 using System;
 using System.Collections.Generic;
 
@@ -8,12 +8,18 @@ namespace Notifier.PageViewModels
 	internal class BusParametersViewmodel : BasePageViewModel
 	{
 		private readonly NavigationViewModel navigationViewModel;
-        private readonly RouteApiSession session;
-
+        
         public DelegateCommand BackCommand { get; }
 		public DelegateCommand NextCommand { get; }
 		public DelegateCommand Today { get; }
 		public DelegateCommand Tomorow { get; }
+
+		private bool isFromListOpened = true;
+		public bool IsFromListOpened
+		{
+			get => isFromListOpened;
+			set => SetProperty(ref isFromListOpened, value);
+		}
 
 		public static IEnumerable<Station> Stations => BusApi.Stations;
 
@@ -98,10 +104,9 @@ namespace Notifier.PageViewModels
             set => SetProperty(ref shouldBy, value);
         }
 
-        public BusParametersViewmodel(NavigationViewModel navigationViewModel, RouteApiSession session)
+        public BusParametersViewmodel(NavigationViewModel navigationViewModel)
 		{
 			this.navigationViewModel = navigationViewModel;
-            this.session = session;
             BackCommand = new DelegateCommand(
 				() => navigationViewModel.Show(new TransportSelectionViewModel(navigationViewModel)));
 			NextCommand = new DelegateCommand(NextHandler, GetNextEnabled);
@@ -115,7 +120,7 @@ namespace Notifier.PageViewModels
                 return;
 			var searchParameters = new BusSearchParameters(
 				fromStation, toStation, date.Value.Date, fromTime, toTime, shouldBy);
-			navigationViewModel.Show(BusSearchingViewModel.Create(navigationViewModel, in searchParameters, session));
+			navigationViewModel.Show(BusSearchingViewModel.Create(navigationViewModel, in searchParameters));
 		}
 
 		private void ValidateNextButtonAllowed() => NextCommand.RaiseCanExecuteChanged();

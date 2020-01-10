@@ -23,8 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AtlasbusByApi\AtlasbusByApi.csproj" />
     <ProjectReference Include="..\CredentialHelper\CredentialHelper.csproj" />
-    <ProjectReference Include="..\RouteByApi\RouteByApi.csproj" />
     <ProjectReference Include="..\RwByApi\RwByApi.csproj" />
     <ProjectReference Include="..\TimePicker\MyControls.csproj" />
   </ItemGroup>
