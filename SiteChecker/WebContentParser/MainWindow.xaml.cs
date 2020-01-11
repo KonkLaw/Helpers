@@ -1,19 +1,7 @@
 ﻿using Prism.Mvvm;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace WebContentParser
 {
@@ -29,21 +17,23 @@ namespace WebContentParser
 
 		private void Button_Click(object sender, RoutedEventArgs e)
 		{
+			if (string.IsNullOrEmpty(TextBox.Text))
+				return;
 			Node rootNode = TagParser.Parse(TextBox.Text);
-			Tree.ItemsSource = Process(rootNode);
+			Tree.ItemsSource = ConverToViewModels(rootNode);
 		}
 
-		private IEnumerable<NodeModel> Process(Node rootNode)
+		private IEnumerable<NodeModel> ConverToViewModels(Node rootNode)
 		{
 			var rootList = new List<NodeModel>();
 			foreach (Node child in rootNode.ListOrNot!)
 			{
-				rootList.Add(GetNode(child));
+				rootList.Add(ConvertNode(child));
 			}
 			return rootList;
 		}
 
-		private NodeModel GetNode(Node node)
+		private NodeModel ConvertNode(Node node)
 		{
 			string resultString;
 			node.GetText(out string tagContent, out string? tagBody);
@@ -62,10 +52,10 @@ namespace WebContentParser
 			}
 			else
 			{
-				List<NodeModel> nodeModels = new List<NodeModel>(node.ListOrNot.Count);
+				var nodeModels = new List<NodeModel>(node.ListOrNot.Count);
 				foreach (Node child in node.ListOrNot)
 				{
-					nodeModels.Add(GetNode(child));
+					nodeModels.Add(ConvertNode(child));
 				}
 				return new NodeModel(nodeModels, resultString);
 			}
