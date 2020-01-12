@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApiUtils", "WebApiUtils\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RwByApi", "RwByApi\RwByApi.csproj", "{CAC807E9-EEB7-4104-A98F-CD3955B446DE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RouteByApi", "RouteByApi\RouteByApi.csproj", "{A048BB3C-3D76-476B-862A-916F8D175556}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CredentialManager", "CredentialManager\CredentialManager.csproj", "{DAFCB05F-4EAA-4585-998E-BF46F6CAA699}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CredentialHelper", "CredentialHelper\CredentialHelper.csproj", "{6C2E3056-C022-401D-9F94-148DA5DE63BA}"
@@ -17,9 +15,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Notifier", "Notifier\Notifi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyControls", "TimePicker\MyControls.csproj", "{2C3D835C-E217-4EC0-8060-37B83ADF2A58}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtlasbusByApi", "AtlasbusByApi\AtlasbusByApi.csproj", "{4D975248-BB35-4740-ABDF-77BFBE9E0C51}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AtlasbusByApi", "AtlasbusByApi\AtlasbusByApi.csproj", "{4D975248-BB35-4740-ABDF-77BFBE9E0C51}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebContentParser", "WebContentParser\WebContentParser.csproj", "{16E768A7-CB43-4D09-A3D2-18F2F2B78145}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{C4DF3664-18F6-45C1-B990-B0823837662E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebContentParser", "Utilities\WebContentParser\WebContentParser.csproj", "{935E468B-68F0-4742-A308-B2CBDC63BBB9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Depricated", "Depricated", "{E73429D5-10BB-42AC-946F-651873EF3410}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RouteByApi", "Depricated\RouteByApi\RouteByApi.csproj", "{72142BCE-CA46-4A1D-97F7-FB9626CD3D2D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +39,6 @@ Global
 		{CAC807E9-EEB7-4104-A98F-CD3955B446DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CAC807E9-EEB7-4104-A98F-CD3955B446DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CAC807E9-EEB7-4104-A98F-CD3955B446DE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A048BB3C-3D76-476B-862A-916F8D175556}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A048BB3C-3D76-476B-862A-916F8D175556}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A048BB3C-3D76-476B-862A-916F8D175556}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A048BB3C-3D76-476B-862A-916F8D175556}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DAFCB05F-4EAA-4585-998E-BF46F6CAA699}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DAFCB05F-4EAA-4585-998E-BF46F6CAA699}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DAFCB05F-4EAA-4585-998E-BF46F6CAA699}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -59,13 +59,20 @@ Global
 		{4D975248-BB35-4740-ABDF-77BFBE9E0C51}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D975248-BB35-4740-ABDF-77BFBE9E0C51}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D975248-BB35-4740-ABDF-77BFBE9E0C51}.Release|Any CPU.Build.0 = Release|Any CPU
-		{16E768A7-CB43-4D09-A3D2-18F2F2B78145}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{16E768A7-CB43-4D09-A3D2-18F2F2B78145}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{16E768A7-CB43-4D09-A3D2-18F2F2B78145}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{16E768A7-CB43-4D09-A3D2-18F2F2B78145}.Release|Any CPU.Build.0 = Release|Any CPU
+		{935E468B-68F0-4742-A308-B2CBDC63BBB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{935E468B-68F0-4742-A308-B2CBDC63BBB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{935E468B-68F0-4742-A308-B2CBDC63BBB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{935E468B-68F0-4742-A308-B2CBDC63BBB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72142BCE-CA46-4A1D-97F7-FB9626CD3D2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72142BCE-CA46-4A1D-97F7-FB9626CD3D2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72142BCE-CA46-4A1D-97F7-FB9626CD3D2D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{935E468B-68F0-4742-A308-B2CBDC63BBB9} = {C4DF3664-18F6-45C1-B990-B0823837662E}
+		{72142BCE-CA46-4A1D-97F7-FB9626CD3D2D} = {E73429D5-10BB-42AC-946F-651873EF3410}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2D6D3DFC-32BE-4A2B-AA82-2015848C9813}
