@@ -28,14 +28,14 @@ namespace RwByApi
 
 		private static List<TrainInfo> GetTrains(in TrainParameters parameters)
 		{
-			string response = WebApiHelper.GetResponseString(GetRequestUri(parameters));
+			string response = WebApiHelper.GetRequestGetBody(GetRequestUri(parameters));
 			return TrainsScheduleResponseParser.ParseTrainsInfo(response);
 		}
 
 		public static bool HaveTicketsForNotDisabled(in TrainParameters parameters, TrainInfo trainInfo)
 		{
 			CheckStations(parameters.FromStation, parameters.ToStation);
-			string response = WebApiHelper.GetResponseString(GetTicketsRequest(parameters, trainInfo));
+			string response = WebApiHelper.GetRequestGetBody(GetTicketsRequest(parameters, trainInfo));
 			return TrainsTicketsParser.HaveTicketsForNotDisabled(response);
 		}
 

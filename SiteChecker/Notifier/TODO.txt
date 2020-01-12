@@ -2,3 +2,8 @@
 3) normal control view
 4) to < from ???
 5) static handler is erlier than apply template
+
+
+* remove all private data
+* code clean up
+* // TODO NO Dictionay - use web collection

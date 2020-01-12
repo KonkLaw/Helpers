@@ -5,60 +5,66 @@ using System.Text;
 
 namespace WebApiUtils
 {
+	public readonly struct PostRequestOptions
+	{
+		public readonly string ContentType;
+		public readonly DecompressionMethods DecompressionMethods;
+		public readonly RequestHeader[]? Headers;
+
+		public PostRequestOptions(
+			string contentType,
+			DecompressionMethods decompressionMethods,
+			RequestHeader[]? headers = null)
+		{
+			ContentType = contentType;
+			DecompressionMethods = decompressionMethods;
+			Headers = headers;
+		}
+	}
+
 	public static class WebApiHelper
 	{
-		public static string GetResponseString(Uri uri)
+		public static string GetRequestGetBody(Uri uri)
 		{
-			using Stream responseStream = WebRequest.Create(uri).GetResponse().GetResponseStream();
-				using var streamReader = new StreamReader(responseStream, Encoding.UTF8);
-					return streamReader.ReadToEnd();
+			using WebResponse webResponse = WebRequest.Create(uri).GetResponse();
+			using Stream responseStream = webResponse.GetResponseStream();
+			using var streamReader = new StreamReader(responseStream);
+			return streamReader.ReadToEnd();
 		}
 
-		public static string GetResponseString(HttpWebRequest request) => GetResponseString(request, out _);
-
-		public static string GetResponseString(HttpWebRequest request, out WebHeaderCollection headers)
+		public static WebHeaderCollection GetRequestGetHeaders(Uri uri)
 		{
-			using WebResponse response = request.GetResponse();
-			headers = response.Headers;
-			using Stream responseStream = ((HttpWebResponse)response).GetResponseStream();
-				using var streamReader = new StreamReader(responseStream, Encoding.UTF8);
-					return streamReader.ReadToEnd();
+			using WebResponse webResponse = WebRequest.Create(uri).GetResponse();
+			return webResponse.Headers;
 		}
 
 		// REQUEST
 
-		private const string PostMethodName = "POST";
-
-		public static WebRequest GetPostRequest(Uri uri, string requestBody)
-		{
-			WebRequest request = WebRequest.Create(uri);
-			request.Method = PostMethodName;
-			using (Stream requestBodyStream = request.GetRequestStream())
-			{
-				using var streamWriter = new StreamWriter(requestBodyStream);
-					streamWriter.Write(requestBody);
-			}
-			return request;
-		}
-
-		public static HttpWebRequest GetPostRequestWithCookies(
-			Uri uri, string requestBody, string contentType,
-			params RequestHeader[] headers)
+		public static string PostRequest(
+			Uri uri, string requestBody, in PostRequestOptions postRequestOptions, out WebHeaderCollection responseHeaders)
 		{
 			HttpWebRequest request = WebRequest.CreateHttp(uri);
+			request.AutomaticDecompression = postRequestOptions.DecompressionMethods;
+			const string PostMethodName = "POST";
 			request.Method = PostMethodName;
-			request.ContentType = contentType;
+			request.ContentType = postRequestOptions.ContentType;
 			WebHeaderCollection requestHeaders = request.Headers;
-			foreach (RequestHeader header in headers)
-			{
-				requestHeaders.Add(header.Name, header.Value);
-			}
+			if (postRequestOptions.Headers != null)
+				foreach (RequestHeader header in postRequestOptions.Headers)
+				{
+					requestHeaders.Add(header.Name, header.Value);
+				}
 			using (Stream requestBodyStream = request.GetRequestStream())
 			{
 				using var streamWriter = new StreamWriter(requestBodyStream);
-					streamWriter.Write(requestBody);
+				streamWriter.Write(requestBody);
 			}
-			return request;
+
+			using WebResponse response = request.GetResponse();
+			responseHeaders = response.Headers;
+			using Stream responseStream = ((HttpWebResponse)response).GetResponseStream();
+			using var streamReader = new StreamReader(responseStream);
+			return streamReader.ReadToEnd();
 		}
 
 		// COMMON
