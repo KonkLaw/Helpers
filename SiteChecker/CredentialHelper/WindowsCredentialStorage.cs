@@ -4,8 +4,8 @@ namespace CredentialHelper
 {
 	public class WindowsCredentialStorage : ICredentialStorage
     {
-        private readonly string targetName = "route.by";
-		private readonly string userName = "route_user";
+        private readonly string targetName = "Notifier.Bus";
+		private readonly string userName = "Notifier.Bus.User";
 
 		public void Save(Credentials credentials) =>
             CreadentialsHelper.Wrtire(new CredetiansWriteArg(

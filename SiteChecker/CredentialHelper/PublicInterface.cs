@@ -8,17 +8,11 @@ namespace CredentialHelper
         public string Login;
         [XmlAttribute]
         public string Password;
-        [XmlAttribute]
-        public string Sessid;
-        [XmlAttribute]
-        public string Uidh;
 
-        public Credentials(string login, string password, string sessid, string uidh)
+        public Credentials(string login, string password)
         {
             Login = login;
             Password = password;
-            Sessid = sessid;
-            Uidh = uidh;
         }
     }
 

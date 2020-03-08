@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Net;
-using System.Text;
 
 namespace WebApiUtils
 {
@@ -38,10 +37,8 @@ namespace WebApiUtils
 			return webResponse.Headers;
 		}
 
-		// REQUEST
-
-		public static string PostRequest(
-			Uri uri, string requestBody, in PostRequestOptions postRequestOptions, out WebHeaderCollection responseHeaders)
+		public static string PostRequestResponseBody(
+			Uri uri, string requestBody, in PostRequestOptions postRequestOptions)
 		{
 			HttpWebRequest request = WebRequest.CreateHttp(uri);
 			request.AutomaticDecompression = postRequestOptions.DecompressionMethods;
@@ -61,27 +58,9 @@ namespace WebApiUtils
 			}
 
 			using WebResponse response = request.GetResponse();
-			responseHeaders = response.Headers;
 			using Stream responseStream = ((HttpWebResponse)response).GetResponseStream();
 			using var streamReader = new StreamReader(responseStream);
 			return streamReader.ReadToEnd();
-		}
-
-		// COMMON
-
-		public static RequestHeader CreateCookiesString(params (string key, string value)[] cookies)
-		{
-			const string cookieHeaderName = "Cookie";
-
-			var result = new StringBuilder();
-			foreach ((string key, string value) in cookies)
-			{
-				result.Append(key);
-				result.Append('=');
-				result.Append(value);
-				result.Append("; ");
-			}
-			return new RequestHeader(cookieHeaderName, result.ToString());
 		}
 	}
 

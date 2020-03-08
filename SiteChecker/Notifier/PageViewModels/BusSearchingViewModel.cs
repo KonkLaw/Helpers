@@ -11,9 +11,9 @@ namespace Notifier.PageViewModels
 	{
 		private readonly BusSearchParameters searchParameters;
 
-        public static BusSearchingViewModel Create(NavigationViewModel navigationViewModel, in BusSearchParameters searchParameters)
+		public static BusSearchingViewModel Create(NavigationViewModel navigationViewModel, in BusSearchParameters searchParameters)
 		{
-            var busSearchingViewmodel = new BusSearchingViewModel(navigationViewModel, in searchParameters);
+			var busSearchingViewmodel = new BusSearchingViewModel(navigationViewModel, in searchParameters);
 			Task.Run(busSearchingViewmodel.SearchProcess);
 			return busSearchingViewmodel;
 		}
@@ -22,8 +22,7 @@ namespace Notifier.PageViewModels
 			: base(navigationViewModel)
 		{
 			this.searchParameters = searchParameters;
-            //this.session = session;
-        }
+		}
 
 		protected override object GetCancelViewModel() => new TransportSelectionViewModel(NavigationViewModel);
 
@@ -50,15 +49,15 @@ namespace Notifier.PageViewModels
 
 				if (filteredBusses.Count > 0)
 				{
-					BusInfo midleBus = filteredBusses[filteredBusses.Count / 2];
-					//if (searchParameters.ShouldBy)
-					//{
-					//	var orderParameters = new OrderParameters(
-					//		searchParameters.FromStation, searchParameters.ToStation, midleBus.Id);
-					//	session.Order(in orderParameters);
-					//	goodResultMessage = $"Was bought at: {DateTime.Now.ToLongTimeString()}. Time: |{midleBus.Time}|";
-					//}
-					//else
+					if (searchParameters.SessionForOrder != null)
+					{
+						BusInfo midleBus = filteredBusses[filteredBusses.Count / 2];
+						var orderParameters = new OrderParameters(
+							searchParameters.FromStation, searchParameters.ToStation, midleBus.Id, midleBus.ServiceId);
+						searchParameters.SessionForOrder.Order(in orderParameters);
+						goodResultMessage = $"Was bought at: {DateTime.Now.ToLongTimeString()}. Time: |{midleBus.Time}|";
+					}
+					else
 					{
 						goodResultMessage = $"Was found at: {DateTime.Now.ToLongTimeString()}";
 					}
