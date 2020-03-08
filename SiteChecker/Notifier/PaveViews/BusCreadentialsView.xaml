@@ -13,6 +13,7 @@
 			<RowDefinition/>
 			<RowDefinition/>
 			<RowDefinition/>
+			<RowDefinition/>
             <RowDefinition/>
 		</Grid.RowDefinitions>
 
@@ -21,16 +22,18 @@
 			<ColumnDefinition/>
 		</Grid.ColumnDefinitions>
 
-		<Label Grid.Column ="0" Grid.Row ="0" Content="Login: "/>
-		<Label Grid.Column ="0" Grid.Row ="1" Content="Password: "/>
-        <TextBox Grid.Column ="1" Grid.Row ="0" Text="{Binding Login, UpdateSourceTrigger=PropertyChanged}" MaxLength="12" MaxLines="1" MinWidth="85"/>
-		<PasswordBox Grid.Column ="1" Grid.Row ="1" x:Name="Password">
+		<Label Grid.Column ="0" Grid.Row ="0" Content="Login (examle): "/>
+		<Label Grid.Column ="1" Grid.Row ="0" Content="375ccxxxyyzz"/>
+		<Label Grid.Column ="0" Grid.Row ="1" Content="Login: "/>
+		<Label Grid.Column ="0" Grid.Row ="2" Content="Password: "/>
+        <TextBox Grid.Column ="1" Grid.Row ="1" Text="{Binding Login, UpdateSourceTrigger=PropertyChanged}" MaxLength="12" MaxLines="1" MinWidth="85"/>
+		<PasswordBox Grid.Column ="1" Grid.Row ="2" x:Name="Password">
 			<Behaviors:Interaction.Behaviors>
 				<controls:SecurePasswordBehavior SecurePassword="{Binding SecurePassword, Mode=TwoWay}"/>
 			</Behaviors:Interaction.Behaviors>
 		</PasswordBox>
-        <TextBlock Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" Text="{Binding Message}" Foreground="Red" MinHeight="40" TextWrapping="WrapWithOverflow"/>
-        <Grid Grid.Row="3" Grid.ColumnSpan="2" >
+        <TextBlock Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Center" Text="{Binding Message}" Foreground="Red" MinHeight="40" TextWrapping="WrapWithOverflow"/>
+        <Grid Grid.Row="4" Grid.ColumnSpan="2" >
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition/>
 				<ColumnDefinition/>

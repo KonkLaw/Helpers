@@ -29,8 +29,9 @@ namespace Notifier
 			mainViewmodel.DeclareMapping<TrainSearingViewModel>(new SearchingVeiw());
 
             mainViewmodel.DeclareMapping<BusParametersViewmodel>(new BusParametersView());
+			mainViewmodel.DeclareMapping<BusCredentialsViewModel>(new BusCreadentialsView());
 
-            mainViewmodel.Show(new TransportSelectionViewModel(mainViewmodel));
+			mainViewmodel.Show(new TransportSelectionViewModel(mainViewmodel));
 			return mainViewmodel;
 		}
 	}

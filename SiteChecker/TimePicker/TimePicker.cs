@@ -8,7 +8,8 @@ namespace MyControls
 {
 	public class TimePicker : Control
 	{
-		const double defaultStepMinutes = 5;
+		private const double DefaultSmallStepMinutes = 5;
+		private const double DefaultBigStepMinutes = 60;
 		static readonly TimeSpan MinValue = new TimeSpan(6, 0, 0);
 		static readonly TimeSpan MaxValue = new TimeSpan(22, 0, 0);
 
@@ -71,11 +72,27 @@ namespace MyControls
 			listView.ItemsSource = Enumerable.Range(6, 22 - 6).Select(t => new TimeSpan(t, 0, 0));
 			listView.SelectionChanged += ListView_SelectionChanged;
 
+			hoursButton.MouseWheel += HoursButton_MouseWheel;
 			hoursButton.Click += HoursButton_Click;
 			plusButton.Click += PlusButton_Click;
 			minusButton.Click += MinusButton_Click;
+			MouseWheel += TimePicker_MouseWheel;
 			textBox.Text = GetText(Value);
 			base.OnApplyTemplate();
+		}
+
+		private void HoursButton_MouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
+		{
+			e.Handled = true;
+			ChangeTime(Math.Sign(e.Delta) * DefaultBigStepMinutes);
+		}
+
+		private void TimePicker_MouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
+		{
+			if (e.GetPosition(this).X > ActualWidth / 2)
+				ChangeTime(Math.Sign(e.Delta) * DefaultSmallStepMinutes);
+			else
+				ChangeTime(Math.Sign(e.Delta) * DefaultBigStepMinutes);
 		}
 
 		private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -89,8 +106,10 @@ namespace MyControls
 
 		private void HoursButton_Click(object sender, RoutedEventArgs e) => popup.IsOpen = !popup.IsOpen;
 
-		private void MinusButton_Click(object sender, RoutedEventArgs e) => Value = Value.Add(TimeSpan.FromMinutes(-defaultStepMinutes));
+		private void MinusButton_Click(object sender, RoutedEventArgs e) => ChangeTime(-DefaultSmallStepMinutes);
 
-		private void PlusButton_Click(object sender, RoutedEventArgs e) => Value = Value.Add(TimeSpan.FromMinutes(defaultStepMinutes));
+		private void PlusButton_Click(object sender, RoutedEventArgs e) => ChangeTime(DefaultSmallStepMinutes);
+
+		private void ChangeTime(double minutesDelta) => Value = Value.Add(TimeSpan.FromMinutes(minutesDelta));
 	}
 }
