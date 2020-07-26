@@ -25,6 +25,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Depricated", "Depricated", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RouteByApi", "Depricated\RouteByApi\RouteByApi.csproj", "{72142BCE-CA46-4A1D-97F7-FB9626CD3D2D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{284C6A3C-75BC-4A6F-9259-8442FB082C38}"
+	ProjectSection(SolutionItems) = preProject
+		Build\Notifier.exe = Build\Notifier.exe
+		Build\Notifier.pdb = Build\Notifier.pdb
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
