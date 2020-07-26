@@ -116,23 +116,21 @@ namespace Notifier.PageViewModels
 		{
 			if (cachedSession != null)
 				return;
+
+			string messageForLoginWindow = string.Empty;
 			if (new WindowsCredentialStorage().TryLoad(out Credentials credentials))
 			{
 				var loginData = new LoginData(credentials.Login, credentials.Password);
 				cachedSession = BusApi.TryLogin(in loginData, out string errorMessage);
-				if (cachedSession == null)
-				{
-					var credViewModel = new BusCredentialsViewModel(navigationViewModel, this)
-					{
-						Message = "Previous credentials was wrong: " + errorMessage
-					};
-					navigationViewModel.Show(credViewModel);
-				}
-			}
-			else
+                if (cachedSession == null)
+                    messageForLoginWindow = "Previous credentials was wrong: " + errorMessage;
+                else
+                    return;
+            }			
+			navigationViewModel.Show(new BusCredentialsViewModel(navigationViewModel, this)
 			{
-				navigationViewModel.Show(new BusCredentialsViewModel(navigationViewModel, this));
-			}
+				Message = messageForLoginWindow
+			});
 		}
 
 		public BusParametersViewmodel(NavigationViewModel navigationViewModel)
@@ -151,8 +149,13 @@ namespace Notifier.PageViewModels
 		{
             if (!date.HasValue || fromStation == null || toStation == null)
                 return;
+			BusApiSession? sessionForOrder = shouldBy ? cachedSession : null;
+            if (shouldBy && sessionForOrder == null)
+			{
+				throw new InvalidOperationException();
+			}
 			var searchParameters = new BusSearchParameters(
-				fromStation, toStation, date.Value.Date, fromTime, toTime, cachedSession);
+				fromStation, toStation, date.Value.Date, fromTime, toTime, sessionForOrder);
 			navigationViewModel.Show(BusSearchingViewModel.Create(navigationViewModel, in searchParameters));
 		}
 
