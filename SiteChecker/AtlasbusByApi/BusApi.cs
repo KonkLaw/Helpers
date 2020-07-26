@@ -65,7 +65,7 @@ namespace AtlasbusByApi
 
 	public class BusApi
 	{
-		private static readonly Uri GetSessidUri = new Uri("https://atlasbus.by/index.php");
+		private static readonly Uri GetSessidUri = new Uri("https://bx.atlasbus.by");
 		private static readonly Uri ScheduleRequestUri = new Uri(@"https://atlasbus.by/local/components/route/user.order/templates/.default/ajax.php");
 		private static readonly Uri AuthenticateUri = new Uri("https://atlasbus.by/local/components/route/user.auth/templates/.default/ajax.php");
 

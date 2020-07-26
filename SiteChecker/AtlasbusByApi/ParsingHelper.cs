@@ -60,7 +60,7 @@ namespace AtlasbusByApi
 			string? valueCode = responceDecoded.ExtractValue("error");
 			if (valueCode == null)
 				throw new InvalidOperationException(responceDecoded);
-			if (valueCode == "0")
+			if (valueCode == "0" || valueCode == "2")
 			{
 				erroeMessage = string.Empty;
 				return true;
