@@ -66,7 +66,7 @@ namespace AtlasbusByApi
 	public class BusApi
 	{
 		private static readonly Uri GetSessidUri = new Uri("https://bx.atlasbus.by");
-		private static readonly Uri ScheduleRequestUri = new Uri(@"https://atlasbus.by/local/components/route/user.order/templates/.default/ajax.php");
+		private static readonly Uri ScheduleRequestUri = new Uri(@"https://bx.atlasbus.by/local/components/route/user.order_frame/templates/.default/ajax.php");
 		private static readonly Uri AuthenticateUri = new Uri("https://atlasbus.by/local/components/route/user.auth/templates/.default/ajax.php");
 
 		internal static PostRequestOptions GetPostRequestOptions(RequestHeader[]? headers = null)
@@ -82,7 +82,9 @@ namespace AtlasbusByApi
 			string requestBodyTemplate =
 				$"type=load_list_order&select_in={searchParameters.FromStation.Id}" +
 				$"&select_out={searchParameters.ToStation.Id}" +
-				$"&date={dateString}&strGET=";
+				$"&date={dateString}" +
+				$"&id_service=334" +
+				"&lines={\"0\":1600,\"1\":1603}";
 
 			string response = WebApiHelper.PostRequestResponseBody(ScheduleRequestUri, requestBodyTemplate, GetPostRequestOptions());
 			return ParsingHelper.ParseScheduleIsSessionOk(response, out schedule);
