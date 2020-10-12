@@ -1,6 +1,5 @@
-﻿using AtlasbusByApi;
-using CredentialHelper;
-using Prism.Commands;
+﻿using Prism.Commands;
+using StolbcyMinskBy;
 using System;
 using System.Collections.Generic;
 
@@ -8,7 +7,6 @@ namespace Notifier.PageViewModels
 {
 	internal class BusParametersViewmodel : BasePageViewModel
 	{
-		private static BusApiSession? cachedSession;
 		private readonly NavigationViewModel navigationViewModel;
         
         public DelegateCommand BackCommand { get; }
@@ -99,40 +97,6 @@ namespace Notifier.PageViewModels
 			}
 		}
 
-        private bool shouldBy;
-        public bool ShouldBy
-		{
-			get => shouldBy;
-			set
-			{
-				if (SetProperty(ref shouldBy, value) && value)
-				{
-					Check();
-				}
-			}
-		}
-
-		private void Check()
-		{
-			if (cachedSession != null)
-				return;
-
-			string messageForLoginWindow = string.Empty;
-			if (new WindowsCredentialStorage().TryLoad(out Credentials credentials))
-			{
-				var loginData = new LoginData(credentials.Login, credentials.Password);
-				cachedSession = BusApi.TryLogin(in loginData, out string errorMessage);
-                if (cachedSession == null)
-                    messageForLoginWindow = "Previous credentials was wrong: " + errorMessage;
-                else
-                    return;
-            }			
-			navigationViewModel.Show(new BusCredentialsViewModel(navigationViewModel, this)
-			{
-				Message = messageForLoginWindow
-			});
-		}
-
 		public BusParametersViewmodel(NavigationViewModel navigationViewModel)
 		{
 			this.navigationViewModel = navigationViewModel;
@@ -143,19 +107,12 @@ namespace Notifier.PageViewModels
 			Tomorow = new DelegateCommand(() => Date = DateTime.Now.Date.AddDays(1));
 		}
 
-		public void SetSession(BusApiSession busApiSession) => cachedSession = busApiSession;
-
 		private void NextHandler()
 		{
             if (!date.HasValue || fromStation == null || toStation == null)
                 return;
-			BusApiSession? sessionForOrder = shouldBy ? cachedSession : null;
-            if (shouldBy && sessionForOrder == null)
-			{
-				throw new InvalidOperationException();
-			}
 			var searchParameters = new BusSearchParameters(
-				fromStation, toStation, date.Value.Date, fromTime, toTime, sessionForOrder);
+				fromStation, toStation, date.Value.Date, fromTime, toTime);
 			navigationViewModel.Show(BusSearchingViewModel.Create(navigationViewModel, in searchParameters));
 		}
 
@@ -184,17 +141,15 @@ namespace Notifier.PageViewModels
 		public readonly DateTime Date;
 		public readonly TimeSpan FromTime;
 		public readonly TimeSpan ToTime;
-        public readonly BusApiSession? SessionForOrder;
 
         public BusSearchParameters(
-            Station fromStation, Station toStation, DateTime date, TimeSpan fromTime, TimeSpan toTime, BusApiSession? sessionForOrder)
+            Station fromStation, Station toStation, DateTime date, TimeSpan fromTime, TimeSpan toTime)
 		{
 			FromStation = fromStation;
 			ToStation = toStation;
 			Date = date;
 			FromTime = fromTime;
 			ToTime = toTime;
-			SessionForOrder = sessionForOrder;
         }
 	}
 }
