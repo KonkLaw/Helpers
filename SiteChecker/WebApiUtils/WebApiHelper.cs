@@ -42,8 +42,8 @@ namespace WebApiUtils
 		{
 			HttpWebRequest request = WebRequest.CreateHttp(uri);
 			request.AutomaticDecompression = postRequestOptions.DecompressionMethods;
-			const string PostMethodName = "POST";
-			request.Method = PostMethodName;
+			const string postMethodName = "POST";
+			request.Method = postMethodName;
 			request.ContentType = postRequestOptions.ContentType;
 			WebHeaderCollection requestHeaders = request.Headers;
 			if (postRequestOptions.Headers != null)
