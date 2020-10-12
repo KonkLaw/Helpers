@@ -14,7 +14,7 @@ namespace RwByApi
 
 		public static Uri GetRequestUri(in TrainParameters parameters)
 		{
-			const string getTrainsRequest = "http://rasp.rw.by/ru/route/?from={0}&to={1}&date={2}";
+			const string getTrainsRequest = "https://pass.rw.by/ru/route/?from={0}&to={1}&date={2}";
 			return new Uri(
 				string.Format(
 					getTrainsRequest,
