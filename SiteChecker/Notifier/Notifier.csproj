@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AtlasbusByApi\AtlasbusByApi.csproj" />
+    <ProjectReference Include="..\BusProBy\BusProBy.csproj" />
     <ProjectReference Include="..\CredentialHelper\CredentialHelper.csproj" />
     <ProjectReference Include="..\RwByApi\RwByApi.csproj" />
     <ProjectReference Include="..\TimePicker\MyControls.csproj" />

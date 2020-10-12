@@ -1,4 +1,4 @@
-﻿using AtlasbusByApi;
+﻿using StolbcyMinskBy;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -26,7 +26,7 @@ namespace Notifier.PageViewModels
 
 		protected override object GetCancelViewModel() => new TransportSelectionViewModel(NavigationViewModel);
 
-		protected override Uri GetLink() => BusApi.GetSiteUri(searchParameters.FromStation, searchParameters.ToStation);
+		protected override Uri GetLink() => BusApi.GetSiteUri();
 
 		protected override bool TryFind(out string goodResultMessage)
 		{
@@ -49,18 +49,7 @@ namespace Notifier.PageViewModels
 
 				if (filteredBusses.Count > 0)
 				{
-					if (searchParameters.SessionForOrder != null)
-					{
-						BusInfo midleBus = filteredBusses[filteredBusses.Count / 2];
-						var orderParameters = new OrderParameters(
-							searchParameters.FromStation, searchParameters.ToStation, midleBus.Id, midleBus.ServiceId);
-						searchParameters.SessionForOrder.Order(in orderParameters);
-						goodResultMessage = $"Was bought at: {DateTime.Now.ToLongTimeString()}. Time: |{midleBus.Time}|";
-					}
-					else
-					{
-						goodResultMessage = $"Was found at: {DateTime.Now.ToLongTimeString()}";
-					}
+					goodResultMessage = $"Was found at: {DateTime.Now.ToLongTimeString()}";
 					return true;
 				}
 				else
