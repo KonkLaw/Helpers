@@ -1,7 +1,7 @@
 ﻿using Prism.Commands;
-using StolbcyMinskBy;
 using System;
 using System.Collections.Generic;
+using BusProBy;
 
 namespace Notifier.PageViewModels
 {
