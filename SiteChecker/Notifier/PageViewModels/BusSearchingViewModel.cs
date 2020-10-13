@@ -1,9 +1,9 @@
-﻿using StolbcyMinskBy;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using BusProBy;
 
 namespace Notifier.PageViewModels
 {
@@ -34,20 +34,20 @@ namespace Notifier.PageViewModels
 			if (IsCanceled)
 				return false;
 
-			var requestParamters = new SearchParameters(
+			var requestParameters = new SearchParameters(
 				searchParameters.FromStation, searchParameters.ToStation, searchParameters.Date);
 
-			if (BusApi.GetSchedule(in requestParamters, out ReadOnlyCollection<BusInfo> schedule))
+			if (BusApi.GetSchedule(in requestParameters, out ReadOnlyCollection<BusInfo> schedule))
 			{
 				if (IsCanceled)
 					return false;
-				List<BusInfo> filteredBusses = schedule.Where(
+				List<BusInfo> filteredBuses = schedule.Where(
 					bus =>
 						bus.Time >= searchParameters.FromTime
 						&& bus.Time <= searchParameters.ToTime
-						&& bus.TicketsCount > 0).ToList();
+						&& bus.FreePlaces > 0).ToList();
 
-				if (filteredBusses.Count > 0)
+				if (filteredBuses.Count > 0)
 				{
 					goodResultMessage = $"Was found at: {DateTime.Now.ToLongTimeString()}";
 					return true;
