@@ -5,11 +5,11 @@ namespace WebApiUtils
 {
     public class JsonParser
     {
-        private readonly string openTang = "{";
-        private readonly string closedTag = "}";
-        private readonly string StartValueTag = "\"";
-        private readonly string StopValueTag = "\"";
-        private readonly string ValueSeparator = ",";
+        private const string OpenTang = "{";
+        private const string ClosedTag = "}";
+        private const string StartValueTag = "\"";
+        private const string StopValueTag = "\"";
+        private const string ValueSeparator = ",";
 
         public object GetStructure(string text)
         {
@@ -19,14 +19,14 @@ namespace WebApiUtils
 
         private void DoRecursion(string text, int offsetIndex)
         {
-            int startIndex = text.IndexOfEnd(openTang, offsetIndex);
+            int startIndex = text.IndexOfEnd(OpenTang, offsetIndex);
 
             var qwe = new List<object>();
             ParseValues(qwe, text, startIndex);
 
         }
 
-        private void ParseValues(List<object> list, string text, int startIndex)
+        private int ParseValues(List<object> list, string text, int startIndex)
         {
             int index = startIndex;
             while (true)
@@ -41,35 +41,45 @@ namespace WebApiUtils
                 index = stopIndex + StopValueTag.Length + 1; // for ':'
 
                 int? indexOfValueSeparator = text.IndexOfWithNull(ValueSeparator, index);
-                int? indexOfTagStart = text.IndexOfWithNull(openTang, index);
-                int? indexOfTagClose = text.IndexOfWithNull(closedTag, index);
+                int? indexOfTagStart = text.IndexOfWithNull(OpenTang, index);
+                int? indexOfTagClose = text.IndexOfWithNull(ClosedTag, index);
 
-                if (indexOfValueSeparator < indexOfTagStart)
+
+                if (indexOfValueSeparator.HasValue &&
+                    (!indexOfTagStart.HasValue || indexOfValueSeparator.Value < indexOfTagStart.Value) &&
+                    (!indexOfTagClose.HasValue || indexOfValueSeparator.Value < indexOfTagClose.Value))
                 {
-                    string valueContent = text.SubstringStop(index, indexOfValueSeparator);
+                    // next value after separator
+                    string valueContent = text.SubstringStop(index, indexOfValueSeparator.Value);
                     var value = new Leaf(valueName, valueContent);
                     list.Add(value);
-                    index = indexOfValueSeparator + ValueSeparator.Length;
+                    index = indexOfValueSeparator.Value + ValueSeparator.Length;
+
                 }
-                else
+                else if (indexOfTagStart.HasValue &&
+                    (!indexOfValueSeparator.HasValue || indexOfTagStart.Value < indexOfValueSeparator.Value) &&
+                    (!indexOfTagClose.HasValue || indexOfTagStart.Value < indexOfTagClose.Value))
                 {
                     var newList = new List<object>();
-                    ParseValues(newList, text, indexOfTagStart);
-                    var b = new Branch(valueName, newList);
+                    index = ParseValues(newList, text, indexOfTagStart.Value);
+                    index += ClosedTag.Length;
+                    var branch = new Branch(valueName, newList);
+                    list.Add(branch);
                 }
+                else if (indexOfTagClose.HasValue &&
+                    (!indexOfValueSeparator.HasValue || indexOfTagClose.Value < indexOfValueSeparator.Value) &&
+                    (!indexOfTagStart.HasValue || indexOfTagClose.Value < indexOfTagStart.Value))
+                {
+                    string valueContent = text.SubstringStop(index, indexOfTagClose.Value);
+                    var value = new Leaf(valueName, valueContent);
+                    list.Add(value);
+                    index = indexOfTagClose.Value + ClosedTag.Length;
+                    break; // end of inner tag.
+                }
+                else
+                    throw new Exception();
             }
-        }
-
-        private static int GetScNumber(int? indexOfValueSeparator, int? indexOfTagStart, int? indexOfTagClose)
-        {
-            if (
-                indexOfValueSeparator.HasValue &&
-                (!indexOfTagStart.HasValue || indexOfValueSeparator.Value < indexOfTagStart.Value) &&
-                (!indexOfTagClose.HasValue || indexOfValueSeparator.Value < indexOfTagClose.Value))
-            {
-                return 0;
-            }
-            else if ()
+            return index;
         }
     }
 
