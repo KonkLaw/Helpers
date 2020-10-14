@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using RwByApi;
 
@@ -34,14 +35,15 @@ namespace Notifier.PageViewModels
 		protected override bool TryFind(out string goodResultMessage)
 		{
 			goodResultMessage = string.Empty;
+			List<TrainInfo> schedule  = TrainsInfoApi.GetInterRegionalBusinessTrains(in trainParameters);
 			foreach (TrainInfo train in selectedTrains)
 			{
 				if (IsCanceled)
 					return false;
-				bool haveTicketsForNotDisabled = TrainsInfoApi.HaveTicketsForNotDisabled(in trainParameters, train);
+				TrainInfo trainInSchedule = schedule.First(t => train.TrainTime == t.TrainTime);
 				if (IsCanceled)
 					return false;
-				if (haveTicketsForNotDisabled)
+				if (trainInSchedule.AnyPlaces)
 				{
 					goodResultMessage = "Was found at: " + DateTime.Now.ToLongTimeString();
 					return true;
