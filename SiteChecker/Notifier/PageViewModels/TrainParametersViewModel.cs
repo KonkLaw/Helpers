@@ -13,7 +13,7 @@ namespace Notifier.PageViewModels
 		public DelegateCommand NextCommand { get; }
 		public DelegateCommand BackCommand { get; }
 		public DelegateCommand Today { get; }
-		public DelegateCommand Tomorow { get; }
+		public DelegateCommand Tomorrow { get; }
 
 		private bool isFromListOpened = true;
 		public bool IsFromListOpened
@@ -74,14 +74,14 @@ namespace Notifier.PageViewModels
 				() => this.navigationViewModel.Show(new TransportSelectionViewModel(navigationViewModel)));
 			this.navigationViewModel = navigationViewModel;
 			Today = new DelegateCommand(() => Date = DateTime.Now.Date);
-			Tomorow = new DelegateCommand(() => Date = DateTime.Now.Date.AddDays(1));
+			Tomorrow = new DelegateCommand(() => Date = DateTime.Now.Date.AddDays(1));
 		}
 
 		private TrainsResult GetTrains()
 		{
 			var trainParameters = new TrainParameters(date!.Value, fromStation, toStation);
 			// TODO: possible fancy async here. Pull it down to response reading.
-			return new TrainsResult(TrainsInfoApi.GetBusinessClassTrains(in trainParameters), in trainParameters);
+			return new TrainsResult(TrainsInfoApi.GetInterRegionalBusinessTrains(in trainParameters), in trainParameters);
 		}
 
 		private async void NextHandler()

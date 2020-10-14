@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
+using HtmlAgilityPack;
 using WebApiUtils;
 
 namespace RwByApi
@@ -23,34 +25,36 @@ namespace RwByApi
 					parameters.Date.ToString("yyyy-MM-dd")));
 		}
 
-		public static List<TrainInfo> GetBusinessClassTrains(in TrainParameters parameters)
-			=> GetTrains(in parameters).Where(train => train.IsBusinessClass).ToList();
+		public static List<TrainInfo> GetInterRegionalBusinessTrains(in TrainParameters parameters)
+			=> GetTrains(in parameters).Where(train => train.IsInterRegionalBusiness).ToList();
 
 		private static List<TrainInfo> GetTrains(in TrainParameters parameters)
 		{
 			string response = WebApiHelper.GetRequestGetBody(GetRequestUri(parameters));
-			return TrainsScheduleResponseParser.ParseTrainsInfo(response);
+			return ParseTrainsResponse(response);
 		}
 
-		public static bool HaveTicketsForNotDisabled(in TrainParameters parameters, TrainInfo trainInfo)
+		private static List<TrainInfo> ParseTrainsResponse(string response)
 		{
-			CheckStations(parameters.FromStation, parameters.ToStation);
-			string response = WebApiHelper.GetRequestGetBody(GetTicketsRequest(parameters, trainInfo));
-			return TrainsTicketsParser.HaveTicketsForNotDisabled(response);
+			var document = new HtmlDocument();
+			document.LoadHtml(response);
+			HtmlNode[] trainsDivs = document.DocumentNode.SelectNodes("//div[@class='sch-table__body js-sort-body']/div[contains(@class, 'sch-table__row')]").ToArray();
+			var result = new List<TrainInfo>();
+			foreach (HtmlNode trainsDiv in trainsDivs)
+			{
+				result.Add(ProcessTrainRow(trainsDiv));
+			}
+			return result;
 		}
 
-		private static Uri GetTicketsRequest(in TrainParameters parameters, TrainInfo trainInfo)
+		private static TrainInfo ProcessTrainRow(HtmlNode train)
 		{
-			const string checkTicketsRequest = "https://rasp.rw.by/ru/ajax/route/car_places/?from={0}&to={1}&date={2}&train_number={3}&car_type=2";
-			CheckStations(parameters.FromStation, parameters.ToStation);
-			string trainNumber = trainInfo.TrainId;
-			return new Uri(
-				string.Format(
-					checkTicketsRequest,
-					parameters.FromStation.Id,
-					parameters.ToStation.Id,
-					parameters.Date.ToString("yyyy-MM-dd"),
-					trainNumber));
+			HtmlNode[] trainNodes = train.ChildNodes[1].ChildNodes.Where(n => n.Name == "div").ToArray();
+			string timeString = trainNodes[1].ChildNodes[1].ChildNodes[1].ChildNodes[1].ChildNodes[1].InnerText;
+			TimeSpan time = TimeSpan.ParseExact(timeString, "hh\\:mm", CultureInfo.InvariantCulture);
+			bool isInterRegionalBusiness = train.InnerHtml.Contains("interregional_business");
+			bool anyPlaces = !train.InnerHtml.Contains("Мест нет");
+			return new TrainInfo(time, isInterRegionalBusiness, anyPlaces);
 		}
 
 		private static void CheckStations(Station from, Station to)
@@ -59,8 +63,26 @@ namespace RwByApi
 				throw new ArgumentException("From equals to start");
 			
 			if (ReliableStations.IndexOf(from) < 0 || ReliableStations.IndexOf(to) < 0)
-				throw new ArgumentException("Some of sations is not recognized");
+				throw new ArgumentException("Some of stations is not recognized");
 		}
+	}
+
+	public class TrainInfo
+	{
+		public readonly TimeSpan TrainTime;
+
+		public readonly bool IsInterRegionalBusiness;
+
+		public readonly bool AnyPlaces;
+
+		public TrainInfo(TimeSpan trainTime, bool isInterRegionalBusiness, bool anyPlaces)
+		{
+			TrainTime = trainTime;
+			IsInterRegionalBusiness = isInterRegionalBusiness;
+			AnyPlaces = anyPlaces;
+		}
+
+		public override string ToString() => TrainTime.ToString(@"hh\:mm");
 	}
 
 	public class Station
