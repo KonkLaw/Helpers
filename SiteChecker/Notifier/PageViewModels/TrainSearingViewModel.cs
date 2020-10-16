@@ -35,15 +35,11 @@ namespace Notifier.PageViewModels
 		protected override bool TryFind(out string goodResultMessage)
 		{
 			goodResultMessage = string.Empty;
-			List<TrainInfo> schedule  = TrainsInfoApi.GetInterRegionalBusinessTrains(in trainParameters);
 			foreach (TrainInfo train in selectedTrains)
 			{
 				if (IsCanceled)
 					return false;
-				TrainInfo trainInSchedule = schedule.First(t => train.TrainTime == t.TrainTime);
-				if (IsCanceled)
-					return false;
-				if (trainInSchedule.AnyPlaces)
+				if (TrainsInfoApi.HasTickets(train.TrainId, in trainParameters))
 				{
 					goodResultMessage = "Was found at: " + DateTime.Now.ToLongTimeString();
 					return true;
