@@ -65,7 +65,9 @@ namespace BusProBy
 			string requestBody = $"https://buspro.by/api/trip?s[company_id]=15&s[city_departure_id]={requestParamters.FromStation.Id}&s[city_destination_id]={requestParamters.ToStation.Id}&s[date_departure]={requestParamters.TripDay:yyyy-MM-dd}&actual=1";
             string response = WebApiHelper.GetRequestGetBody(new Uri(requestBody));
             string correctedJsonBody = "{ \"Document\": { \"array\" :" + response + "}";
-			XDocument document = JsonConvert.DeserializeXNode(correctedJsonBody);
+			XDocument? document = JsonConvert.DeserializeXNode(correctedJsonBody);
+			if (document == null)
+				throw new InvalidOperationException();
             List<BusInfo> busInfos = document.Root.Elements().Select(ParseOnBus).ToList();
             schedule = new ReadOnlyCollection<BusInfo>(busInfos);
 			return true;
