@@ -151,5 +151,7 @@ namespace Notifier.PageViewModels
 			FromTime = fromTime;
 			ToTime = toTime;
         }
+
+		public string GetDescrpiption() => $"From: {FromStation}, To: {ToStation}, {Environment.NewLine}Date: {Date:yyyy-MM-dd}, {Environment.NewLine}Time: [{FromTime:hh\\:mm}, {ToTime:hh\\:mm}]";
 	}
 }

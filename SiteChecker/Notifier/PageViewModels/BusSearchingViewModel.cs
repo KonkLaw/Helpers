@@ -19,7 +19,7 @@ namespace Notifier.PageViewModels
 		}
 
 		private BusSearchingViewModel(NavigationViewModel navigationViewModel, in BusSearchParameters searchParameters)
-			: base(navigationViewModel)
+			: base(navigationViewModel, searchParameters.GetDescrpiption())
 		{
 			this.searchParameters = searchParameters;
 		}
