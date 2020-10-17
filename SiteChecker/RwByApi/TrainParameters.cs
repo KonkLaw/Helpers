@@ -14,5 +14,7 @@ namespace RwByApi
 			FromStation = outStation;
 			ToStation = inStation;
 		}
+
+		public string GetDescription() => $"From: {FromStation}, To: {ToStation} {Environment.NewLine}Date: {Date:yyyy-MM-dd},";
 	}
 }

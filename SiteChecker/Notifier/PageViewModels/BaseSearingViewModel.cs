@@ -19,6 +19,13 @@ namespace Notifier.PageViewModels
 		public ICommand LinkCommand { get; }
 		public ICommand CancelCommand { get; }
 
+		private string details = string.Empty;
+		public string Details
+		{
+			get => details;
+			private set => SetProperty(ref details, value);
+		}
+
 		private string message = string.Empty;
 		public string Message
 		{
@@ -26,12 +33,13 @@ namespace Notifier.PageViewModels
 			private set => SetProperty(ref message, value);
 		}
 
-		protected BaseSearingViewModel(NavigationViewModel navigationViewModel)
+		protected BaseSearingViewModel(NavigationViewModel navigationViewModel, string description)
 		{
 			NavigationViewModel = navigationViewModel;
 			CancelCommand = new DelegateCommand(CancelHandler);
 			LinkCommand = new DelegateCommand(LinkHandler);
 			TestSound = new DelegateCommand(PlaySound);
+			details = description;
 		}
 
 		protected abstract Uri GetLink();

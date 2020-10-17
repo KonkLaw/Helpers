@@ -22,11 +22,23 @@ namespace Notifier.PageViewModels
         }
 
         private TrainSearingViewModel(in TrainParameters trainParameters, List<TrainInfo> selectedTrains, NavigationViewModel navigationViewModel)
-			: base(navigationViewModel)
+			: base(navigationViewModel, GetDescription(in trainParameters, selectedTrains))
         {
             this.trainParameters = trainParameters;
             this.selectedTrains = selectedTrains;
         }
+
+		private static string GetDescription(in TrainParameters parameters, List<TrainInfo> selectedTrains)
+        {
+			string times = parameters.GetDescription() + Environment.NewLine + "Trains {";
+            foreach (TrainInfo train in selectedTrains)
+            {
+				times +=  train.TrainTime.ToString("hh\\:mm") + " (" + train.TrainId + "), ";
+			}
+			times = times.Remove(times.Length - 2);
+			times += "}";
+			return times;
+		}
 
 		protected override Uri GetLink() => TrainsInfoApi.GetRequestUri(in trainParameters);
 
