@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using BusProBy;
+using System.Globalization;
 
 namespace Notifier.PageViewModels
 {
@@ -150,8 +151,11 @@ namespace Notifier.PageViewModels
 			Date = date;
 			FromTime = fromTime;
 			ToTime = toTime;
-        }
+		}
 
-		public string GetDescrpiption() => $"From: {FromStation}, To: {ToStation}, {Environment.NewLine}Date: {Date:yyyy-MM-dd}, {Environment.NewLine}Time: [{FromTime:hh\\:mm}, {ToTime:hh\\:mm}]";
+		public string GetDescrpiption()
+			=> $"From: {FromStation}, To: {ToStation}, " +
+			$"{Environment.NewLine}Date: {Date.ToString("yyyy-MM-dd dddd", CultureInfo.GetCultureInfo("ru-ru"))}, " +
+			$"{Environment.NewLine}Time: [{FromTime:hh\\:mm}, {ToTime:hh\\:mm}]";
 	}
 }
