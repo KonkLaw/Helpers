@@ -71,7 +71,7 @@ namespace RwByApi
 			HtmlNode[] trainNodes = train.ChildNodes[1].ChildNodes.Where(n => n.Name == "div").ToArray();
 			string timeString = trainNodes[1].ChildNodes[1].ChildNodes[1].ChildNodes[1].ChildNodes[1].InnerText;
 			TimeSpan time = TimeSpan.ParseExact(timeString, "hh\\:mm", CultureInfo.InvariantCulture);
-			string trainId = train.ChildNodes[1].ChildNodes[1].ChildNodes[3].ChildNodes[0].InnerText;
+			string trainId = train.ChildNodes[1].ChildNodes[1].Element("a").ChildNodes[0].InnerText;
 			bool isInterRegionalBusiness = train.InnerHtml.Contains("interregional_business");
 			bool anyPlaces = !train.InnerHtml.Contains("Мест нет");
 			return new TrainInfo(time, trainId, isInterRegionalBusiness, anyPlaces);

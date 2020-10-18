@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace RwByApi
 {
@@ -15,6 +16,6 @@ namespace RwByApi
 			ToStation = inStation;
 		}
 
-		public string GetDescription() => $"From: {FromStation}, To: {ToStation} {Environment.NewLine}Date: {Date:yyyy-MM-dd},";
+		public string GetDescription() => $"From: {FromStation}, To: {ToStation} {Environment.NewLine}Date: {Date.ToString("yyyy-MM-dd dddd", CultureInfo.GetCultureInfo("ru-ru"))}";
 	}
 }
