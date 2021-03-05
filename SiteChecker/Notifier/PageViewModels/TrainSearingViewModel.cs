@@ -33,7 +33,7 @@ namespace Notifier.PageViewModels
 			string times = parameters.GetDescription() + Environment.NewLine + "Trains {";
             foreach (TrainInfo train in selectedTrains)
             {
-				times +=  train.TrainTime.ToString("hh\\:mm") + " (" + train.TrainId + "), ";
+				times +=  train.TrainTime.ToShortString() + " (" + train.TrainId + "), ";
 			}
 			times = times.Remove(times.Length - 2);
 			times += "}";

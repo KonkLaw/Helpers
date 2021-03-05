@@ -69,10 +69,10 @@ namespace Notifier.PageViewModels
 
 		public TrainParametersViewmodel(NavigationViewModel navigationViewModel)
 		{
+			this.navigationViewModel = navigationViewModel;
 			NextCommand = new DelegateCommand(NextHandler, GetIsNextAllowed);
 			BackCommand = new DelegateCommand(
 				() => this.navigationViewModel.Show(new TransportSelectionViewModel(navigationViewModel)));
-			this.navigationViewModel = navigationViewModel;
 			Today = new DelegateCommand(() => Date = DateTime.Now.Date);
 			Tomorrow = new DelegateCommand(() => Date = DateTime.Now.Date.AddDays(1));
 		}

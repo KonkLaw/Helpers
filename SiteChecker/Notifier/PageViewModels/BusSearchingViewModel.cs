@@ -4,25 +4,28 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using BusProBy;
+using CredentialHelper;
 
 namespace Notifier.PageViewModels
 {
 	class BusSearchingViewModel : BaseSearingViewModel
 	{
 		private readonly BusSearchParameters searchParameters;
+        private readonly Credentials? credentialsForOrder;
 
-		public static BusSearchingViewModel Create(NavigationViewModel navigationViewModel, in BusSearchParameters searchParameters)
+        public static BusSearchingViewModel Create(NavigationViewModel navigationViewModel, in BusSearchParameters searchParameters, Credentials? credentialsForOrder)
 		{
-			var busSearchingViewmodel = new BusSearchingViewModel(navigationViewModel, in searchParameters);
+			var busSearchingViewmodel = new BusSearchingViewModel(navigationViewModel, in searchParameters, credentialsForOrder);
 			Task.Run(busSearchingViewmodel.SearchProcess);
 			return busSearchingViewmodel;
 		}
 
-		private BusSearchingViewModel(NavigationViewModel navigationViewModel, in BusSearchParameters searchParameters)
+		private BusSearchingViewModel(NavigationViewModel navigationViewModel, in BusSearchParameters searchParameters, Credentials? credentialsForOrder)
 			: base(navigationViewModel, searchParameters.GetDescrpiption())
 		{
 			this.searchParameters = searchParameters;
-		}
+            this.credentialsForOrder = credentialsForOrder;
+        }
 
 		protected override object GetCancelViewModel() => new TransportSelectionViewModel(NavigationViewModel);
 
@@ -49,8 +52,19 @@ namespace Notifier.PageViewModels
 
 				if (filteredBuses.Count > 0)
 				{
-					goodResultMessage = $"Was found at: {DateTime.Now.ToLongTimeString()}";
-					return true;
+					if (credentialsForOrder.HasValue)
+					{
+						Credentials credential = credentialsForOrder.Value;
+						BusInfo targetBus = filteredBuses[filteredBuses.Count / 2];
+						BusApi.Order(targetBus, searchParameters.FromStation, credential.Login, credential.Password);
+						goodResultMessage = $"Was ordered for {targetBus.Time.ToShortString()} at: {DateTime.Now.ToLongTimeString()}";
+						return true;
+					}
+					else
+					{
+						goodResultMessage = $"Was found at: {DateTime.Now.ToLongTimeString()}";
+						return true;
+					}
 				}
 				else
 					return false;
