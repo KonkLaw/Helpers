@@ -4,7 +4,7 @@ namespace Notifier.UtilTypes
 {
 	public static class StorageHelper
 	{
-		private static readonly WindowsCredentialStorage Storage = new WindowsCredentialStorage();
+		private static readonly WindowsCredentialStorage Storage = new WindowsCredentialStorage("BusProBy");
 
 		public static void Save(Credentials credentials) => Storage.Save(credentials);
 

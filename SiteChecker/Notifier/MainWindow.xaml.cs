@@ -23,6 +23,7 @@ namespace Notifier
 			var mainViewmodel = new NavigationViewModel();
             mainViewmodel.DeclareMapping<TransportSelectionViewModel>(new TransportationSelectionView());
 			mainViewmodel.DeclareMapping<BusSearchingViewModel>(new SearchingVeiw());
+			mainViewmodel.DeclareMapping<BusCredentialsViewModel>(new BusCredentialsView());
 
 			mainViewmodel.DeclareMapping<TrainParametersViewmodel>(new TrainParametersView());
 			mainViewmodel.DeclareMapping<TrainSelectionViewModel>(new TrainSelectionView());
