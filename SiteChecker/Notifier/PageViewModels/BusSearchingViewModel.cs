@@ -5,10 +5,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using BusProBy;
 using CredentialHelper;
+using Notifier.UtilTypes;
 
 namespace Notifier.PageViewModels
 {
-	class BusSearchingViewModel : BaseSearingViewModel
+    class BusSearchingViewModel : BaseSearingViewModel
 	{
 		private readonly BusSearchParameters searchParameters;
         private readonly Credentials? credentialsForOrder;

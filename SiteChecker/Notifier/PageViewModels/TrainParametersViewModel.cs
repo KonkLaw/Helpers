@@ -1,8 +1,8 @@
-﻿using Prism.Commands;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using RwByApi;
+using Notifier.UtilTypes;
 
 namespace Notifier.PageViewModels
 {

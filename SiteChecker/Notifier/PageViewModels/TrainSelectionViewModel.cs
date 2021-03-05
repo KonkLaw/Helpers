@@ -1,7 +1,6 @@
-﻿using Prism.Commands;
-using Prism.Mvvm;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Notifier.UtilTypes;
 using RwByApi;
 
 namespace Notifier.PageViewModels

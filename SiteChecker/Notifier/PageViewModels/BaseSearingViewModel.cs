@@ -1,5 +1,4 @@
 ﻿using Notifier.UtilTypes;
-using Prism.Commands;
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
