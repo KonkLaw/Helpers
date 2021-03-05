@@ -1,4 +1,4 @@
-﻿using Prism.Mvvm;
+﻿using Notifier.UtilTypes;
 
 namespace Notifier.PageViewModels
 {

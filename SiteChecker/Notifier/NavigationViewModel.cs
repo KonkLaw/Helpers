@@ -1,4 +1,4 @@
-﻿using Prism.Mvvm;
+﻿using Notifier.UtilTypes;
 using System;
 using System.Collections.Generic;
 using System.Windows.Controls;

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Notifier
+namespace Notifier.UtilTypes
 {
     static class Utilities
     {

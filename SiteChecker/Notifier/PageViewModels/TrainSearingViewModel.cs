@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Notifier.UtilTypes;
 using RwByApi;
 
 namespace Notifier.PageViewModels
 {
-	class TrainSearingViewModel : BaseSearingViewModel
+    class TrainSearingViewModel : BaseSearingViewModel
 	{
         private readonly TrainParameters trainParameters;
         private readonly List<TrainInfo> selectedTrains;

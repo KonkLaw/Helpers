@@ -1,5 +1,5 @@
 ﻿using CredentialHelper;
-using Prism.Commands;
+using Notifier.UtilTypes;
 
 namespace Notifier.PageViewModels
 {

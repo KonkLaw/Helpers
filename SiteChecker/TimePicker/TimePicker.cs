@@ -13,7 +13,8 @@ namespace MyControls
 		static readonly TimeSpan MinValue = new TimeSpan(6, 0, 0);
 		static readonly TimeSpan MaxValue = new TimeSpan(22, 0, 0);
 
-		public static DependencyProperty ValueProperty = DependencyProperty.Register(
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2211:Non-constant fields should not be visible", Justification = "<Pending>")]
+        public static DependencyProperty ValueProperty = DependencyProperty.Register(
 					nameof(Value),
 					typeof(TimeSpan),
 					typeof(TimePicker),
