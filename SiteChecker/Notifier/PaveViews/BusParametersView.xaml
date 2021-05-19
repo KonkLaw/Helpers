@@ -17,6 +17,7 @@
 			<RowDefinition/>
             <RowDefinition/>
 			<RowDefinition/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -38,14 +39,18 @@
 				<ColumnDefinition Width="*"/>
 			</Grid.ColumnDefinitions>
 			<Button Grid.Column="0" Content="Today" Command="{Binding Today}"/>
-			<Button Grid.Column="1" Content="Tomorow" Command="{Binding Tomorow}"/>
+			<Button Grid.Column="1" Content="Tomorrow" Command="{Binding Tomorrow}"/>
 		</Grid>
 			<Label Grid.Column="0" Grid.Row="4" Content="From: "/>
 		<mycontrols:TimePicker Grid.Column="1" Grid.Row="4" Value="{Binding Path=FromTime}"/>
 		<Label Grid.Column="0" Grid.Row="5" Content="To: "/>
 		<mycontrols:TimePicker Grid.Column="1" Grid.Row="5" Value="{Binding Path=ToTime}"/>
-        <CheckBox Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="6" Content="Order if it's found" IsChecked="{Binding ShouldBy}" />
-        <Grid Grid.Column="0" Grid.Row="7" Grid.ColumnSpan="2" >
+        <CheckBox Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="6" Content="Order if it's found" IsChecked="{Binding ShouldBy}" IsEnabled="{Binding CanOrder, Mode=OneTime}" />
+        
+        <Label Grid.Column ="0" Grid.Row ="7" Content="Passengers count: "/>
+        <ComboBox Grid.Column ="1" Grid.Row ="7" SelectedItem="{Binding PassengersCount}" ItemsSource="{x:Static local:BusParametersViewmodel.AvailablePassengersCount}"/>
+
+        <Grid Grid.Column="0" Grid.Row="8" Grid.ColumnSpan="2" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>

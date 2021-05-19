@@ -10,8 +10,10 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-		<Button Grid.Column="0" Content="БЧ" Command="{Binding RailwayCommand}"/>
-		<Button Grid.Column="1" Content="Bus" Command="{Binding BusCommand}"/>
+		<Button Grid.Column="0" MinWidth = "70" Content="БЧ" Command="{Binding RailwayCommand}"/>
+		<Button Grid.Column="1" MinWidth = "70" Content="Bus Stolbtcy" Command="{Binding BusStolbtcyCommand}"/>
+		<Button Grid.Column="2" MinWidth = "70" Content="Bus Atlas" Command="{Binding BusAtlasCommand}"/>
     </Grid>
 </UserControl>

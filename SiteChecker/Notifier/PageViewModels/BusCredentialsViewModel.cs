@@ -1,4 +1,5 @@
 ﻿using CredentialHelper;
+using Notifier.Model;
 using Notifier.UtilTypes;
 
 namespace Notifier.PageViewModels
@@ -8,6 +9,7 @@ namespace Notifier.PageViewModels
         private readonly NavigationViewModel navigationViewModel;
         private readonly BusSearchParameters searchParameters;
         private readonly WindowsCredentialStorage credentialHelper;
+        private readonly IBaseBusModel busServiceModel;
 
         private string? name;
         public string? Name
@@ -34,14 +36,16 @@ namespace Notifier.PageViewModels
         public DelegateCommand OkClick { get; }
 
         public BusCredentialsViewModel(
-            NavigationViewModel navigationViewModel,
-            in BusSearchParameters searchParameters,
-            WindowsCredentialStorage credentialHelper)
+	        NavigationViewModel navigationViewModel,
+	        in BusSearchParameters searchParameters,
+	        WindowsCredentialStorage credentialHelper,
+	        IBaseBusModel busServiceModel)
         {
             OkClick = new DelegateCommand(Ok, NextAllowed);
             this.navigationViewModel = navigationViewModel;
             this.searchParameters = searchParameters;
             this.credentialHelper = credentialHelper;
+            this.busServiceModel = busServiceModel;
         }
 
         private void ValidateNextButton() => OkClick.RaiseCanExecuteChanged();
@@ -52,7 +56,7 @@ namespace Notifier.PageViewModels
         {
             var credentials = new Credentials(Name, "375" + phone);
             credentialHelper.Save(credentials);
-            navigationViewModel.Show(BusSearchingViewModel.Create(navigationViewModel, in searchParameters, credentials));
+            navigationViewModel.Show(BusSearchingViewModel.Create(navigationViewModel, in searchParameters, credentials, busServiceModel));
         }
     }
 }
