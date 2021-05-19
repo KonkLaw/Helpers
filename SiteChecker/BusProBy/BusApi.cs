@@ -8,7 +8,7 @@ using System.Xml.Linq;
 using Newtonsoft.Json;
 using WebApiUtils;
 
-namespace BusProBy
+namespace BusStolbtcy
 {
 	public class Station
 	{
@@ -40,11 +40,11 @@ namespace BusProBy
 		}
 	}
 
-	public class BusInfo
+	public readonly struct BusInfo
 	{
-		public string TripId { get; }
-		public TimeSpan Time { get; }
-		public int FreePlaces { get; }
+		public readonly string TripId;
+		public readonly TimeSpan Time;
+		public readonly int FreePlaces;
 
 		public BusInfo(string tripId, TimeSpan time, int freePlaces)
 		{
@@ -61,12 +61,8 @@ namespace BusProBy
 		private const string PickUpStationMalinovka = "617";
 		private const string PickUpStationPripinak = "625";
 
-		public static readonly ReadOnlyCollection<Station> Stations = new ReadOnlyCollection<Station>(
-			new[]
-			{
-				new Station("Минск", "101", PickUpStationMalinovka),
-				new Station("Столбцы", "102", PickUpStationPripinak)
-			});
+		public static Station MinskStation = new Station("Минск", "101", PickUpStationMalinovka);
+		public static Station StolbtcyStation = new Station("Столбцы", "102", PickUpStationPripinak);
 
 		private static readonly Uri OrderLink = new Uri("https://buspro.by/api/reservation");
 
@@ -85,7 +81,7 @@ namespace BusProBy
 			return true;
 		}
 
-        public static void Order(BusInfo busInfo, Station fromStation, string login, string phone)
+        public static void Order(in BusInfo busInfo, Station fromStation, string login, string phone, int passengersCount)
         {
 			string phoneNew = "+375 (" + phone.Substring(3, 2) + ") " + phone.Substring(5, 3) + '-' + phone.Substring(8, 2) + '-' + phone.Substring(10, 2);
 			string body =
@@ -94,7 +90,7 @@ namespace BusProBy
 				$"\"finishStayId\":null," +
 				$"\"phone\":\"{phoneNew}\"," +
 				$"\"name\":\"{login}\"," +
-				$"\"seats\":1,\"source\":\"web\",\"promocode\":null,\"tariff\":null,\"note\":\"\"}}";
+				$"\"seats\":{passengersCount},\"source\":\"web\",\"promocode\":null,\"tariff\":null,\"note\":\"\"}}";
 
 			const DecompressionMethods decompressionMethod = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 			var postRequestOptions = new PostRequestOptions("application/json; charset=UTF-8", decompressionMethod);

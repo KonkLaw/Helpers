@@ -23,12 +23,32 @@ namespace WebApiUtils
 
 	public static class WebApiHelper
 	{
+		private static string GetBodyFromWebResponse(WebResponse webResponse)
+		{
+			using (Stream? responseStream = webResponse.GetResponseStream())
+			{
+				using (var streamReader = new StreamReader(responseStream!))
+				{
+					return streamReader.ReadToEnd();
+				}
+			}
+		}
+
 		public static string GetRequestGetBody(Uri uri)
 		{
-			using WebResponse webResponse = WebRequest.Create(uri).GetResponse();
-			using Stream responseStream = webResponse.GetResponseStream();
-			using var streamReader = new StreamReader(responseStream);
-			return streamReader.ReadToEnd();
+			using (WebResponse? response = WebRequest.Create(uri).GetResponse())
+			{
+				return GetBodyFromWebResponse(response);
+			}
+		}
+
+		public static string GetRequestGetBodyHttp(Uri uri, out HttpStatusCode statusCode)
+		{
+			using (HttpWebResponse webResponse = (HttpWebResponse)WebRequest.Create(uri).GetResponse())
+			{
+				statusCode = webResponse.StatusCode;
+				return GetBodyFromWebResponse(webResponse);
+			}
 		}
 
 		public static WebHeaderCollection GetRequestGetHeaders(Uri uri)
