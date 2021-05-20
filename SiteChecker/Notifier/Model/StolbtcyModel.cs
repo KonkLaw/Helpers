@@ -20,7 +20,7 @@ namespace Notifier.Model
 			if (searchParameters.FromStation == PageViewModels.Station.Minsk)
 			{
 				from = BusApi.MinskStation;
-				to = BusApi.MinskStation;
+				to = BusApi.StolbtcyStation;
 			}
 			else
 			{
