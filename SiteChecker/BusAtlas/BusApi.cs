@@ -20,22 +20,14 @@ namespace BusAtlas
 		{
 			string dateString = searchParameters.TripDay.ToString("yyyy-MM-dd");
 			string requestUrl = "https://atlasbus.by/api/search?from_id=" + $"{searchParameters.FromStation.Id}&to_id={searchParameters.ToStation.Id}&calendar_width=30&date={dateString}&passengers=1";
-
-			string response;
-			List<BusInfo> busInfos;
-			HttpStatusCode statusCode;
-
-			response = WebApiHelper.GetRequestGetBodyHttp(new Uri(requestUrl), out statusCode); // looks like this call is necessary
-			Thread.Sleep(500);
-			if (statusCode != HttpStatusCode.OK || (busInfos = TryGetBuses(response)).Count == 0)
+			string response = WebApiHelper.GetRequestGetBody(new Uri(requestUrl));
+			schedule = TryGetBuses(response).AsReadOnly();
+			if (schedule.Count == 0) // additional check
 			{
-				response = WebApiHelper.GetRequestGetBodyHttp(new Uri(requestUrl), out statusCode);
-				if (statusCode != HttpStatusCode.OK | (busInfos = TryGetBuses(response)).Count == 0)
-					;
-					//throw new InvalidOperationException();
+				response = WebApiHelper.GetRequestGetBody(new Uri(requestUrl));
+				schedule = TryGetBuses(response).AsReadOnly();
 			}
 
-			schedule = busInfos.AsReadOnly();
 			return true;
 		}
 
