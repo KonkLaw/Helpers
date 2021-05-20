@@ -29,7 +29,7 @@ namespace BusAtlas
 			Time = time;
 		}
 
-		public override string ToString() => $"time: {Time}";
+		public override string ToString() => $"{Time}; Count={TicketsCount}";
 	}
 
 	public class Station
