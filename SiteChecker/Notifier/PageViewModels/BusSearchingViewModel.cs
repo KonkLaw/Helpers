@@ -5,30 +5,31 @@ using Notifier.Model;
 
 namespace Notifier.PageViewModels
 {
-    class BusSearchingViewModel : BaseSearingViewModel
+	class BusSearchingViewModel : BaseSearingViewModel
 	{
 		private readonly BusSearchParameters searchParameters;
-        private readonly Credentials? credentialsForOrder;
-        private readonly IBaseBusModel busServiceModel;
+		private readonly Credentials? credentialsForOrder;
+		private readonly IBaseBusModel busServiceModel;
 
-        public static BusSearchingViewModel Create(
-	        NavigationViewModel navigationViewModel,
-	        in BusSearchParameters searchParameters,
-	        Credentials? credentialsForOrder,
-	        IBaseBusModel busServiceModel)
+		public static BusSearchingViewModel Create(
+			NavigationViewModel navigationViewModel,
+			in BusSearchParameters searchParameters,
+			Credentials? credentialsForOrder,
+			IBaseBusModel busServiceModel)
 		{
-			var busSearchingViewmodel = new BusSearchingViewModel(navigationViewModel, in searchParameters, credentialsForOrder, busServiceModel);
+			var busSearchingViewmodel = new BusSearchingViewModel(navigationViewModel, in searchParameters,
+				credentialsForOrder, busServiceModel);
 			Task.Run(busSearchingViewmodel.SearchProcess);
 			return busSearchingViewmodel;
 		}
 
 		private BusSearchingViewModel(NavigationViewModel navigationViewModel, in BusSearchParameters searchParameters,
 			Credentials? credentialsForOrder, IBaseBusModel busServiceModel)
-			: base(navigationViewModel, searchParameters.GetDescription())
+			: base(navigationViewModel, searchParameters.GetDescription(busServiceModel.ServiceDescription))
 		{
 			this.searchParameters = searchParameters;
-            this.credentialsForOrder = credentialsForOrder;
-            this.busServiceModel = busServiceModel;
+			this.credentialsForOrder = credentialsForOrder;
+			this.busServiceModel = busServiceModel;
 		}
 
 		protected override object GetCancelViewModel() => new TransportSelectionViewModel(NavigationViewModel);

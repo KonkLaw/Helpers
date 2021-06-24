@@ -8,7 +8,9 @@ namespace Notifier.Model
 {
 	interface IBaseBusModel
 	{
-		bool CanOrder { get;}
+		string ServiceDescription { get; }
+
+		bool CanOrder { get; }
 
 		bool TryFind(
 			BusSearchParameters searchParameters,
@@ -20,7 +22,9 @@ namespace Notifier.Model
 
 	abstract class BaseBusModel<TBus> : IBaseBusModel
 	{
-		public abstract bool CanOrder { get;}
+		public abstract string ServiceDescription { get; }
+
+		public abstract bool CanOrder { get; }
 
 		public abstract bool TryFind(
 			BusSearchParameters searchParameters,

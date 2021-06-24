@@ -11,7 +11,9 @@ namespace Notifier.Model
 {
 	class AtlasBaseBusModel : BaseBusModel<BusInfo>
 	{
-		public override bool CanOrder { get; } = false;
+		public override string ServiceDescription => "Atlas Bus";
+
+		public override bool CanOrder => false;
 
 		public override bool TryFind(BusSearchParameters searchParameters, Credentials? credentialsForOrder, ref string goodResultMessage)
 		{

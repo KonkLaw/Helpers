@@ -11,6 +11,8 @@ namespace Notifier.Model
 {
 	class StolbtcyModel : BaseBusModel<BusInfo>
 	{
+		public override string ServiceDescription => "Stolbtcy-Minsk bus";
+
 		public override bool CanOrder { get; } = true;
 
 		public override bool TryFind(BusSearchParameters searchParameters, Credentials? credentialsForOrder, ref string goodResultMessage)
