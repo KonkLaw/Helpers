@@ -26,7 +26,7 @@
 									<Button Padding="0" Margin="0,0,0,0" x:Name="PART_PlusButton"  Grid.Row="0" Content="▲" />
 									<Button Padding="0" Margin="0,0,0,0" x:Name="PART_MinusButton" Grid.Row="1" Content="▼" />
 								</Grid>
-								<Popup x:Name="PART_HoursPopup" Width="90" Height="120">
+								<Popup x:Name="PART_HoursPopup" Width="50" Height="330">
 									<ListView x:Name="PART_HoursList"/>
 								</Popup>
 							</Grid>

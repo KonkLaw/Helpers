@@ -63,6 +63,26 @@ namespace Notifier.PageViewModels
 			NavigationViewModel.Show(GetCancelViewModel());
 		}
 
+        protected bool TryFind111(out string goodResultMessage)
+        {
+            bool res;
+            try
+            {
+                res = TryFind(out goodResultMessage);
+            }
+            catch (Exception e)
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    new ErrorWindow(e.ToString()).ShowDialog();
+                });
+
+                throw;
+            }
+
+            return res;
+        }
+
 		protected abstract bool TryFind(out string goodResultMessage);
 
 		protected void SearchProcess()
@@ -70,7 +90,7 @@ namespace Notifier.PageViewModels
 			const int waitTimeoutSeconds = 10;
 			while (!isCanceled)
 			{
-				if (TryFind(out string goodResultMessage))
+				if (TryFind111(out string goodResultMessage))
 				{
 					Application.Current.Dispatcher.Invoke(() =>
 					{

@@ -10,8 +10,10 @@ namespace MyControls
 	{
 		private const double DefaultSmallStepMinutes = 5;
 		private const double DefaultBigStepMinutes = 60;
-		static readonly TimeSpan MinValue = new TimeSpan(6, 0, 0);
-		static readonly TimeSpan MaxValue = new TimeSpan(22, 0, 0);
+        private const int MinHours = 6;
+        private const int MaxHours = 22;
+		static readonly TimeSpan MinValue = new TimeSpan(MinHours, 0, 0);
+		static readonly TimeSpan MaxValue = new TimeSpan(MaxHours, 0, 0);
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2211:Non-constant fields should not be visible", Justification = "<Pending>")]
         public static DependencyProperty ValueProperty = DependencyProperty.Register(
@@ -65,12 +67,13 @@ namespace MyControls
 		{
 			hoursButton = GetTemplateChild("PART_HoursButton") as Button;
 			textBox = GetTemplateChild("PART_TextBox") as TextBox;
-			textBox.IsReadOnly = true;
+			textBox!.IsReadOnly = true;
 			plusButton = GetTemplateChild("PART_PlusButton") as Button;
 			minusButton = GetTemplateChild("PART_MinusButton") as Button;
 			popup = GetTemplateChild("PART_HoursPopup") as Popup;
 			listView = GetTemplateChild("PART_HoursList") as ListView;
-			listView.ItemsSource = Enumerable.Range(6, 22 - 6).Select(t => new TimeSpan(t, 0, 0));
+			listView!.ItemsSource = Enumerable.Range(MinHours, MaxHours - MinHours).Select(
+                t => new TimeSpanPresentation(new TimeSpan(t, 0, 0)));
 			listView.SelectionChanged += ListView_SelectionChanged;
 
 			hoursButton.MouseWheel += HoursButton_MouseWheel;
@@ -98,9 +101,9 @@ namespace MyControls
 
 		private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			if (e.AddedItems.Count == 1 && e.AddedItems[0] is TimeSpan newTime)
+			if (e.AddedItems.Count == 1 && e.AddedItems[0] is TimeSpanPresentation newTime)
 			{
-				Value = newTime;
+				Value = newTime.TimeSpan;
 				popup.IsOpen = false;
 			}
 		}
@@ -113,4 +116,16 @@ namespace MyControls
 
 		private void ChangeTime(double minutesDelta) => Value = Value.Add(TimeSpan.FromMinutes(minutesDelta));
 	}
+
+    class TimeSpanPresentation
+    {
+        public readonly TimeSpan TimeSpan;
+
+        public TimeSpanPresentation(TimeSpan timeSpan)
+        {
+            TimeSpan = timeSpan;
+        }
+
+        public override string ToString() => TimeSpan.ToString("hh\\:mm");
+    }
 }

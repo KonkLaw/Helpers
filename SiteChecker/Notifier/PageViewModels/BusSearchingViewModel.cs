@@ -17,7 +17,7 @@ namespace Notifier.PageViewModels
 			Credentials? credentialsForOrder,
 			IBaseBusModel busServiceModel)
 		{
-			var busSearchingViewmodel = new BusSearchingViewModel(navigationViewModel, in searchParameters,
+			BusSearchingViewModel busSearchingViewmodel = new(navigationViewModel, in searchParameters,
 				credentialsForOrder, busServiceModel);
 			Task.Run(busSearchingViewmodel.SearchProcess);
 			return busSearchingViewmodel;

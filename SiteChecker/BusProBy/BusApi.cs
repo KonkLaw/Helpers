@@ -83,7 +83,7 @@ namespace BusStolbtcy
 
         public static void Order(in BusInfo busInfo, Station fromStation, string login, string phone, int passengersCount)
         {
-			string phoneNew = "+375 (" + phone.Substring(3, 2) + ") " + phone.Substring(5, 3) + '-' + phone.Substring(8, 2) + '-' + phone.Substring(10, 2);
+            string phoneNew = "+375 (" + phone.Substring(3, 2) + ") " + phone.Substring(5, 3) + '-' + phone.Substring(8, 2) + '-' + phone.Substring(10, 2);
 			string body =
 				$"{{\"tripId\":{busInfo.TripId}," +
 				$"\"stayId\":{fromStation.DefaultPickStationId}," +
@@ -93,11 +93,11 @@ namespace BusStolbtcy
 				$"\"seats\":{passengersCount},\"source\":\"web\",\"promocode\":null,\"tariff\":null,\"note\":\"\"}}";
 
 			const DecompressionMethods decompressionMethod = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-			var postRequestOptions = new PostRequestOptions("application/json; charset=UTF-8", decompressionMethod);
-            string responce = WebApiHelper.PostRequestResponseBody(OrderLink, body, postRequestOptions);
-			const string sucessResponce = "{\"status\":\"success\"}";
-			if (responce != sucessResponce)
-				throw new InvalidOperationException("Bad responce:" + responce);
+			PostRequestOptions postRequestOptions = new ("application/json; charset=UTF-8", decompressionMethod);
+            string response = WebApiHelper.PostRequestResponseBody(OrderLink, body, postRequestOptions);
+			const string successResponseKeyWord = "success";
+			if (!response.Contains(successResponseKeyWord))
+				throw new InvalidOperationException("Bad responce:" + response);
 		}
 
         private static BusInfo ParseOnBus(XElement element)

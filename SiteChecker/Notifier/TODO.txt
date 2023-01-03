@@ -1,7 +1,5 @@
-﻿* fix secure string (web + saving)
-* Secure strign and null check
-* start staion / stop station
-* start time / stop time
+﻿* start time / stop time editing (make better for touch screens)
 * non freezed checkbox
 
-* add scrool
+* search on both services at same time!!!
+* better error handling notification + repeat loop until stop or (possible) error fixing
