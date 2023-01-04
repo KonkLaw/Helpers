@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using CredentialHelper;
 using Notifier.Model;
@@ -12,7 +11,7 @@ class BusParametersViewmodel : BasePageViewModel
 {
     private static readonly WindowsCredentialStorage CredentialHelper = new WindowsCredentialStorage("Bus");
     private readonly NavigationViewModel navigationViewModel;
-    private readonly IBaseBusModel busServiceModel;
+    private readonly ISearchServiceProvider searchProvider;
 
     public DelegateCommand BackCommand { get; }
     public DelegateCommand NextCommand { get; }
@@ -27,11 +26,10 @@ class BusParametersViewmodel : BasePageViewModel
         set => SetProperty(ref isFromListOpened, value);
     }
 
-    public static IEnumerable<Station> Stations { get; } = Station.Stations;
+    public static IEnumerable<Station> Stations => Station.Stations;
     public static IEnumerable<int> AvailablePassengersCount { get; } = Enumerable.Range(1, 4);
 
     private Station? fromStation;
-
     public Station? FromStation
     {
         get => fromStation;
@@ -47,7 +45,6 @@ class BusParametersViewmodel : BasePageViewModel
     }
 
     private Station? toStation;
-
     public Station? ToStation
     {
         get => toStation;
@@ -63,7 +60,6 @@ class BusParametersViewmodel : BasePageViewModel
     }
 
     private DateTime? date;
-
     public DateTime? Date
     {
         get => date;
@@ -75,7 +71,6 @@ class BusParametersViewmodel : BasePageViewModel
     }
 
     private DateTime startDate = DateTime.Now.Date;
-
     public DateTime StartDate
     {
         get => startDate;
@@ -87,7 +82,6 @@ class BusParametersViewmodel : BasePageViewModel
     }
 
     private TimeSpan fromTime = new TimeSpan(13, 0, 0);
-
     public TimeSpan FromTime
     {
         get => fromTime;
@@ -99,7 +93,6 @@ class BusParametersViewmodel : BasePageViewModel
     }
 
     private TimeSpan toTime = new TimeSpan(16, 0, 0);
-
     public TimeSpan ToTime
     {
         get => toTime;
@@ -111,7 +104,6 @@ class BusParametersViewmodel : BasePageViewModel
     }
 
     private bool shouldBy;
-
     public bool ShouldBy
     {
         get => shouldBy;
@@ -119,19 +111,18 @@ class BusParametersViewmodel : BasePageViewModel
     }
 
     private int passengersCount = 1;
-
     public int PassengersCount
     {
         get => passengersCount;
         set => SetProperty(ref passengersCount, value);
     }
 
-    public bool CanOrder => busServiceModel.CanOrder;
+    public bool CanOrder => searchProvider.CanOrder;
 
-    public BusParametersViewmodel(NavigationViewModel navigationViewModel, IBaseBusModel busServiceModel)
+    public BusParametersViewmodel(NavigationViewModel navigationViewModel, ISearchServiceProvider searchProvider)
     {
         this.navigationViewModel = navigationViewModel;
-        this.busServiceModel = busServiceModel;
+        this.searchProvider = searchProvider;
         shouldBy = CanOrder;
         BackCommand = new DelegateCommand(
             () => navigationViewModel.Show(new TransportSelectionViewModel(navigationViewModel)));
@@ -145,26 +136,27 @@ class BusParametersViewmodel : BasePageViewModel
         if (!date.HasValue || fromStation == null || toStation == null)
             return;
 
-        var searchParameters = new BusSearchParameters(fromStation, toStation, date.Value.Date, fromTime, toTime,
-            passengersCount);
+        var searchParameters = new BusSearchParameters(fromStation, toStation, date.Value.Date, fromTime, toTime, passengersCount);
+        ISearchService searchService = searchProvider.CreateBusSearchService(in searchParameters);
 
-        Credentials? credentialsToBuy;
         if (ShouldBy)
         {
+            var orderSearchService = (IOrderSearchService)searchService;
             if (CredentialHelper.TryLoad(out Credentials credentials))
-                credentialsToBuy = credentials;
+            {
+                
+                orderSearchService.SetCredentials(credentials);
+            }
             else
             {
-                navigationViewModel.Show(new BusCredentialsViewModel(navigationViewModel, in searchParameters,
-                    CredentialHelper, busServiceModel));
+                navigationViewModel.Show(new BusCredentialsViewModel(navigationViewModel, CredentialHelper, orderSearchService));
                 return;
             }
         }
-        else
-            credentialsToBuy = null;
 
-        navigationViewModel.Show(BusSearchingViewModel.Create(navigationViewModel, in searchParameters,
-            credentialsToBuy, busServiceModel));
+        var searchViewModel = new SearchViewModel(navigationViewModel, searchService);
+        navigationViewModel.Show(searchViewModel);
+        searchViewModel.RunSearch();
     }
 
     private void ValidateNextButtonAllowed() => NextCommand.RaiseCanExecuteChanged();
@@ -173,60 +165,4 @@ class BusParametersViewmodel : BasePageViewModel
         => fromStation != null && toStation != null && fromStation != toStation
            && date.HasValue
            && toTime - fromTime > new TimeSpan(0, 22, 0);
-}
-
-readonly struct BusSearchParameters
-{
-    public readonly Station FromStation;
-    public readonly Station ToStation;
-    public readonly DateTime Date;
-    public readonly TimeSpan FromTime;
-    public readonly TimeSpan ToTime;
-    public readonly int PassengersCount;
-
-    public BusSearchParameters(
-        Station fromStation, Station toStation, DateTime date, TimeSpan fromTime, TimeSpan toTime,
-        int passengersCount)
-    {
-        FromStation = fromStation;
-        ToStation = toStation;
-        Date = date;
-        FromTime = fromTime;
-        ToTime = toTime;
-        PassengersCount = passengersCount;
-    }
-
-    public string GetDescription(string serviceDescription)
-        => $"Service:    {serviceDescription}" +
-           $"{Environment.NewLine}" +
-           $"Direction:  {FromStation}-{ToStation}" +
-           $"{Environment.NewLine}" +
-           $"Date:       {Date.ToString("yyyy-MM-dd dddd", CultureInfo.GetCultureInfo("ru-ru"))}" +
-           $"{Environment.NewLine}" +
-           $"Time:       {FromTime:hh\\:mm}-{ToTime:hh\\:mm}";
-}
-
-class Station
-{
-    public static Station Stolbtcy { get; } = new Station("Столбцы");
-
-    public static Station Minsk { get; } = new Station("Минск");
-
-    public static Station[] Stations { get; } = {Stolbtcy, Minsk};
-
-    public readonly string Name;
-
-    private Station(string name) => Name = name;
-
-    public override string ToString() => Name;
-
-    public static Station GetOpposite(Station station)
-    {
-        if (station == Stolbtcy)
-            return Minsk;
-        if (station == Minsk)
-            return Stolbtcy;
-
-        throw new InvalidOperationException();
-    }
 }

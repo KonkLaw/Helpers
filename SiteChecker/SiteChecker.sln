@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29509.3
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApiUtils", "WebApiUtils\WebApiUtils.csproj", "{A37FD35C-3184-4B7F-9F85-72DF1258117B}"
 EndProject
@@ -30,7 +30,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{284C6A3C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AtlasbusByApi", "Depricated\AtlasbusByApi\AtlasbusByApi.csproj", "{D948F546-71E1-4140-9674-6BE59E2FF8DE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusStolbtcy", "BusProBy\BusStolbtcy.csproj", "{3BCDE775-349C-47CA-8E93-3974D3B96BB2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusStowbtcy", "BusProBy\BusStowbtcy.csproj", "{3BCDE775-349C-47CA-8E93-3974D3B96BB2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusAtlas", "BusAtlas\BusAtlas.csproj", "{D707B5A3-30A7-4031-A1ED-C5DF0B9F5F89}"
 EndProject

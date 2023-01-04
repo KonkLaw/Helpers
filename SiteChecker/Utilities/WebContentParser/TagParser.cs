@@ -107,8 +107,7 @@ static class TagParser
         return currentIndex + 1;
     }
 
-    private static void FindNextTagIndex(
-        string text, ref int currentIndex, out bool openTagNotClose)
+    private static void FindNextTagIndex(string text, ref int currentIndex, out bool openTagNotClose)
     {
         while (true)
         {

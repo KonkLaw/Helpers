@@ -45,7 +45,7 @@
 		<mycontrols:TimePicker Grid.Column="1" Grid.Row="4" Value="{Binding Path=FromTime}"/>
 		<Label Grid.Column="0" Grid.Row="5" Content="To: "/>
 		<mycontrols:TimePicker Grid.Column="1" Grid.Row="5" Value="{Binding Path=ToTime}"/>
-        <CheckBox Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="6" Content="Order if it's found" IsChecked="{Binding ShouldBy}" IsEnabled="{Binding CanOrder, Mode=OneTime}" />
+        <CheckBox Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="6" Content="Order if it's found" IsChecked="{Binding ShouldBy}" Visibility="{Binding CanOrder, Mode=OneTime, Converter={StaticResource BooleanToVisibilityConverter}}" />
         
         <Label Grid.Column ="0" Grid.Row ="7" Content="Passengers count: "/>
         <ComboBox Grid.Column ="1" Grid.Row ="7" SelectedItem="{Binding PassengersCount}" ItemsSource="{x:Static local:BusParametersViewmodel.AvailablePassengersCount}"/>

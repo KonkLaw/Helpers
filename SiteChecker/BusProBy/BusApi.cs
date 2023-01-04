@@ -8,7 +8,7 @@ using System.Xml.Linq;
 using Newtonsoft.Json;
 using WebApiUtils;
 
-namespace BusStolbtcy;
+namespace BusStowbtcy;
 
 public class Station
 {

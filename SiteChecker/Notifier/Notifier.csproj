@@ -18,7 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BusAtlas\BusAtlas.csproj" />
-    <ProjectReference Include="..\BusProBy\BusStolbtcy.csproj" />
+    <ProjectReference Include="..\BusProBy\BusStowbtcy.csproj" />
     <ProjectReference Include="..\CredentialHelper\CredentialHelper.csproj" />
     <ProjectReference Include="..\RwByApi\RwByApi.csproj" />
     <ProjectReference Include="..\TimePicker\MyControls.csproj" />

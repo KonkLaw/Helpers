@@ -21,14 +21,12 @@ public partial class MainWindow : Window
     private NavigationViewModel SetupView()
     {
         var mainViewmodel = new NavigationViewModel();
-        mainViewmodel.DeclareMapping<TransportSelectionViewModel>(new TransportationSelectionView());
-        mainViewmodel.DeclareMapping<BusSearchingViewModel>(new SearchingView());
-        mainViewmodel.DeclareMapping<BusCredentialsViewModel>(new BusCredentialsView());
 
+        mainViewmodel.DeclareMapping<TransportSelectionViewModel>(new TransportationSelectionView());
+        mainViewmodel.DeclareMapping<SearchViewModel>(new SearchingView());
+        mainViewmodel.DeclareMapping<BusCredentialsViewModel>(new BusCredentialsView());
         mainViewmodel.DeclareMapping<TrainParametersViewmodel>(new TrainParametersView());
         mainViewmodel.DeclareMapping<TrainSelectionViewModel>(new TrainSelectionView());
-        mainViewmodel.DeclareMapping<TrainSearingViewModel>(new SearchingView());
-
         mainViewmodel.DeclareMapping<BusParametersViewmodel>(new BusParametersView());
 
         mainViewmodel.Show(new TransportSelectionViewModel(mainViewmodel));

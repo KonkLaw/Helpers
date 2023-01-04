@@ -46,4 +46,6 @@ class NavigationViewModel : BindableBase
         view.DataContext = viewmodel;
         CurrentPage = view;
     }
+
+    public void ShowErrorWindow(string? errorDescription) => new ErrorWindow(errorDescription).ShowDialog();
 }

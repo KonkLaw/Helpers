@@ -8,7 +8,7 @@ namespace Notifier.PageViewModels;
 
 class TrainParametersViewmodel : BasePageViewModel
 {
-    public static IEnumerable<RwByApi.Station> Stations => TrainsInfoApi.ReliableStations;
+    public static IEnumerable<Station> Stations => TrainsInfoApi.ReliableStations;
 
     public DelegateCommand NextCommand { get; }
     public DelegateCommand BackCommand { get; }
@@ -22,8 +22,8 @@ class TrainParametersViewmodel : BasePageViewModel
         set => SetProperty(ref isFromListOpened, value);
     }
 
-    private RwByApi.Station? fromStation;
-    public RwByApi.Station? FromStation
+    private Station? fromStation;
+    public Station? FromStation
     {
         get => fromStation;
         set
@@ -37,8 +37,8 @@ class TrainParametersViewmodel : BasePageViewModel
         }
     }
 
-    private RwByApi.Station? toStation;
-    public RwByApi.Station? ToStation
+    private Station? toStation;
+    public Station? ToStation
     {
         get => toStation;
         set
@@ -111,7 +111,7 @@ readonly struct TrainsResult
 
 class StationsHelpers
 {
-    internal static RwByApi.Station GetOpposite(RwByApi.Station station)
+    internal static Station GetOpposite(Station station)
     {
         if (TrainsInfoApi.ReliableStations[0] == station)
             return TrainsInfoApi.ReliableStations[1];

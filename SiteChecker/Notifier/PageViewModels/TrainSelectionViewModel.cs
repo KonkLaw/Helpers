@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using Notifier.SearchServices;
 using Notifier.UtilTypes;
 using RwByApi;
 
@@ -7,6 +9,9 @@ namespace Notifier.PageViewModels;
 
 class TrainSelectionViewModel : BasePageViewModel
 {
+    private readonly NavigationViewModel navigationViewModel;
+    private readonly TrainParameters trainParameters;
+
     public DelegateCommand NextCommand { get; }
     public DelegateCommand BackCommand { get; }
 
@@ -28,25 +33,26 @@ class TrainSelectionViewModel : BasePageViewModel
         }
     }
 
-    private readonly NavigationViewModel mainViewmodel;
-    private readonly TrainParameters trainParameters;
-
-    public TrainSelectionViewModel(in TrainsResult trainsResult, NavigationViewModel mainViewmodel)
+    public TrainSelectionViewModel(in TrainsResult trainsResult, NavigationViewModel navigationViewModel)
     {
+        this.navigationViewModel = navigationViewModel;
         trainParameters = trainsResult.TrainParameters;
         trains = trainsResult.Trains.Select(t => new TrainViewModel(t)).ToList();
 
         NextCommand = new DelegateCommand(NextHandler, () => trains.Any(t => t.IsSelected));
-        BackCommand = new DelegateCommand(() => mainViewmodel.Show(new TrainParametersViewmodel(mainViewmodel)));
-        this.mainViewmodel = mainViewmodel;
+        BackCommand = new DelegateCommand(() => navigationViewModel.Show(new TrainParametersViewmodel(navigationViewModel)));
     }
 
     private void ValidateNextButton() => NextCommand.RaiseCanExecuteChanged();
 
     private void NextHandler()
     {
-        List<TrainInfo> selectedTrains = trains.Where(t => t.IsSelected).Select(t => t.TrainInfo).ToList();
-        mainViewmodel.Show(TrainSearingViewModel.CreateRunSearch(in trainParameters, selectedTrains, mainViewmodel));
+        ReadOnlyCollection<TrainInfo> selectedTrains =
+            trains.Where(t => t.IsSelected).Select(t => t.TrainInfo).ToList().AsReadOnly();
+        var searchViewModel = new SearchViewModel(
+            navigationViewModel, new TrainSearchService(in trainParameters, selectedTrains));
+        navigationViewModel.Show(searchViewModel);
+        searchViewModel.RunSearch();
     }
 }
 

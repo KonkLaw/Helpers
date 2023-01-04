@@ -5,10 +5,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 			xmlns:local="clr-namespace:Notifier.PageViewModels"
              mc:Ignorable="d" 
-			 d:DataContext="{d:DesignInstance local:TrainSearingViewModel}">
+			 d:DataContext="{d:DesignInstance local:SearchViewModel}">
     <Grid>
         <Grid.RowDefinitions>
 			<RowDefinition/>
+            <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
@@ -18,7 +19,8 @@
         <TextBlock  Grid.Row="1" Text="{Binding Details}" TextWrapping="Wrap"/>
 		<Button Grid.Row="2" Content="Link" Command="{Binding LinkCommand}" Background="DeepSkyBlue" BorderThickness="0"/>
         <Label Grid.Row="3" Content="{Binding Message}" HorizontalAlignment="Center"/>
-		<Button Grid.Row="4" Content="Cancel" Command="{Binding CancelCommand}"/>
+        <Button Grid.Row="4" Content="Error details" Command="{Binding ShowErrorDetails}" Visibility="{Binding IsErrorDetailsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+        <Button Grid.Row="5" Content="Cancel" Command="{Binding CancelCommand}"/>
     </Grid>
 </UserControl>
 

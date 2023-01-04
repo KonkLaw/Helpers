@@ -1,5 +1,1 @@
-﻿* start time / stop time editing (make better for touch screens)
-* non freezed checkbox
-
-* search on both services at same time!!!
-* better error handling notification + repeat loop until stop or (possible) error fixing
+﻿* better last timer error

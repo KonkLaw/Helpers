@@ -12,8 +12,8 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-		<Button Grid.Column="0" MinWidth = "70" Content="БЧ" Command="{Binding RailwayCommand}"/>
-		<Button Grid.Column="1" MinWidth = "70" Content="Bus Stolbtcy" Command="{Binding BusStolbtcyCommand}"/>
-		<Button Grid.Column="2" MinWidth = "70" Content="Bus Atlas" Command="{Binding BusAtlasCommand}"/>
+		<Button Grid.Column="0" MinWidth = "76" Content="БЧ" Command="{Binding RailwayCommand}"/>
+		<Button Grid.Column="1" MinWidth = "76" Content="Bus Stolbtcy" Command="{Binding BusStowbtcyCommand}"/>
+		<Button Grid.Column="2" MinWidth = "76" Content="Bus Atlas" Command="{Binding BusAtlasCommand}"/>
     </Grid>
 </UserControl>

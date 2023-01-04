@@ -12,7 +12,7 @@ public partial class ErrorWindow : Window
         InitializeComponent();
     }
 
-    public ErrorWindow(string text)
+    public ErrorWindow(string? text)
     {
         InitializeComponent();
         TextBox.Text = text;
