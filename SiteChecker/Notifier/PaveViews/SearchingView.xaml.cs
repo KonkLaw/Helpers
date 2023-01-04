@@ -3,11 +3,11 @@
 namespace Notifier.PaveViews;
 
 /// <summary>
-/// Interaction logic for BusCredentials.xaml
+/// Interaction logic for SearchingView.xaml
 /// </summary>
-public partial class BusCredentialsView : UserControl
+public partial class SearchingView : UserControl
 {
-    public BusCredentialsView()
+    public SearchingView()
     {
         InitializeComponent();
     }

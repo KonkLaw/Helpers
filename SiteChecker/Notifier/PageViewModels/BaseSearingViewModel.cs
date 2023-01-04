@@ -6,114 +6,113 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 
-namespace Notifier.PageViewModels
+namespace Notifier.PageViewModels;
+
+abstract class BaseSearingViewModel : BasePageViewModel
 {
-	abstract class BaseSearingViewModel : BasePageViewModel
-	{
-		protected readonly NavigationViewModel NavigationViewModel;
-		private bool isCanceled = false;
-		protected bool IsCanceled => isCanceled;
+    protected readonly NavigationViewModel NavigationViewModel;
+    private bool isCanceled = false;
+    protected bool IsCanceled => isCanceled;
 		
-		public ICommand TestSound { get; }
-		public ICommand LinkCommand { get; }
-		public ICommand CancelCommand { get; }
+    public ICommand TestSound { get; }
+    public ICommand LinkCommand { get; }
+    public ICommand CancelCommand { get; }
 
-		private string details = string.Empty;
-		public string Details
-		{
-			get => details;
-			private set => SetProperty(ref details, value);
-		}
+    private string details = string.Empty;
+    public string Details
+    {
+        get => details;
+        private set => SetProperty(ref details, value);
+    }
 
-		private string message = string.Empty;
-		public string Message
-		{
-			get => message;
-			private set => SetProperty(ref message, value);
-		}
+    private string message = string.Empty;
+    public string Message
+    {
+        get => message;
+        private set => SetProperty(ref message, value);
+    }
 
-		protected BaseSearingViewModel(NavigationViewModel navigationViewModel, string description)
-		{
-			NavigationViewModel = navigationViewModel;
-			CancelCommand = new DelegateCommand(CancelHandler);
-			LinkCommand = new DelegateCommand(LinkHandler);
-			TestSound = new DelegateCommand(PlaySound);
-			details = description;
-		}
+    protected BaseSearingViewModel(NavigationViewModel navigationViewModel, string description)
+    {
+        NavigationViewModel = navigationViewModel;
+        CancelCommand = new DelegateCommand(CancelHandler);
+        LinkCommand = new DelegateCommand(LinkHandler);
+        TestSound = new DelegateCommand(PlaySound);
+        details = description;
+    }
 
-		protected abstract Uri GetLink();
+    protected abstract Uri GetLink();
 
-		protected abstract object GetCancelViewModel();
+    protected abstract object GetCancelViewModel();
 
-		private void LinkHandler()
-		{
-			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-			{
-				string url = GetLink().AbsoluteUri;
-				url = url.Replace("&", "^&");
-				Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
-			}
-			else
-				throw new InvalidOperationException("You are damned as a user of wrong a operating system. Please install correct operating system)");
-		}
-
-		private void CancelHandler()
-		{
-			isCanceled = true;
-			NavigationViewModel.Show(GetCancelViewModel());
-		}
-
-        protected bool TryFind111(out string goodResultMessage)
+    private void LinkHandler()
+    {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            bool res;
-            try
+            string url = GetLink().AbsoluteUri;
+            url = url.Replace("&", "^&");
+            Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+        }
+        else
+            throw new InvalidOperationException("You are damned as a user of wrong a operating system. Please install correct operating system)");
+    }
+
+    private void CancelHandler()
+    {
+        isCanceled = true;
+        NavigationViewModel.Show(GetCancelViewModel());
+    }
+
+    protected bool TryFind111(out string goodResultMessage)
+    {
+        bool res;
+        try
+        {
+            res = TryFind(out goodResultMessage);
+        }
+        catch (Exception e)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
             {
-                res = TryFind(out goodResultMessage);
-            }
-            catch (Exception e)
+                new ErrorWindow(e.ToString()).ShowDialog();
+            });
+
+            throw;
+        }
+
+        return res;
+    }
+
+    protected abstract bool TryFind(out string goodResultMessage);
+
+    protected void SearchProcess()
+    {
+        const int waitTimeoutSeconds = 10;
+        while (!isCanceled)
+        {
+            if (TryFind111(out string goodResultMessage))
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    new ErrorWindow(e.ToString()).ShowDialog();
+                    Message = goodResultMessage;
                 });
-
-                throw;
+                while (!isCanceled)
+                {
+                    PlaySound();
+                    Thread.Sleep(2000);
+                }
             }
+            else
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    Message = "Alive at : " + DateTime.Now.ToLongTimeString();
 
-            return res;
+                });
+                Thread.Sleep(waitTimeoutSeconds * 1000);
+            }
         }
+    }
 
-		protected abstract bool TryFind(out string goodResultMessage);
-
-		protected void SearchProcess()
-		{
-			const int waitTimeoutSeconds = 10;
-			while (!isCanceled)
-			{
-				if (TryFind111(out string goodResultMessage))
-				{
-					Application.Current.Dispatcher.Invoke(() =>
-					{
-						Message = goodResultMessage;
-					});
-					while (!isCanceled)
-					{
-						PlaySound();
-						Thread.Sleep(2000);
-					}
-				}
-				else
-				{
-					Application.Current.Dispatcher.Invoke(() =>
-					{
-						Message = "Alive at : " + DateTime.Now.ToLongTimeString();
-
-					});
-					Thread.Sleep(waitTimeoutSeconds * 1000);
-				}
-			}
-		}
-
-		private static void PlaySound() => Sounds.Instance.Play();
-	}
+    private static void PlaySound() => Sounds.Instance.Play();
 }

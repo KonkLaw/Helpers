@@ -1,15 +1,14 @@
 ﻿using System.Windows.Controls;
 
-namespace Notifier.PaveViews
+namespace Notifier.PaveViews;
+
+/// <summary>
+/// Interaction logic for TrainSelectionView.xaml
+/// </summary>
+public partial class TrainSelectionView : UserControl
 {
-	/// <summary>
-	/// Interaction logic for FisrtStepView.xaml
-	/// </summary>
-	public partial class TrainSelectionView : UserControl
-	{
-		public TrainSelectionView()
-		{
-			InitializeComponent();
-		}
-	}
+    public TrainSelectionView()
+    {
+        InitializeComponent();
+    }
 }

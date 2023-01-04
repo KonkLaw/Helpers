@@ -2,26 +2,25 @@
 using System.Media;
 using System.Reflection;
 
-namespace Notifier.UtilTypes
+namespace Notifier.UtilTypes;
+
+class Sounds
 {
-		class Sounds
-	{
-		private readonly SoundPlayer soundsPlayer;
-		public static Sounds Instance = new Sounds();
+    private readonly SoundPlayer soundsPlayer;
+    public static Sounds Instance = new Sounds();
 
-		private Sounds()
-		{
-			Assembly assembly = Assembly.GetExecutingAssembly();
-			string resourceName = "Notifier.Resources.Sound.wav";
+    private Sounds()
+    {
+        Assembly assembly = Assembly.GetExecutingAssembly();
+        string resourceName = "Notifier.Resources.Sound.wav";
 
-			using Stream? stream = assembly.GetManifestResourceStream(resourceName);
-			soundsPlayer = new SoundPlayer(stream);
-			soundsPlayer.Load();
-		}
+        using Stream? stream = assembly.GetManifestResourceStream(resourceName);
+        soundsPlayer = new SoundPlayer(stream);
+        soundsPlayer.Load();
+    }
 
-		public void Play()
-		{
-			soundsPlayer.Play();
-		}
-	}
+    public void Play()
+    {
+        soundsPlayer.Play();
+    }
 }

@@ -1,15 +1,14 @@
 ﻿using System.Windows.Controls;
 
-namespace Notifier.PaveViews
+namespace Notifier.PaveViews;
+
+/// <summary>
+/// Interaction logic for BusParametersView.xaml
+/// </summary>
+public partial class BusParametersView : UserControl
 {
-	/// <summary>
-	/// Interaction logic for BusParametersView.xaml
-	/// </summary>
-	public partial class BusParametersView : UserControl
+    public BusParametersView()
     {
-        public BusParametersView()
-        {
-            InitializeComponent();
-        }
-	}
+        InitializeComponent();
+    }
 }

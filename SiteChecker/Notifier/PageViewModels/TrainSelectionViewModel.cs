@@ -3,69 +3,68 @@ using System.Linq;
 using Notifier.UtilTypes;
 using RwByApi;
 
-namespace Notifier.PageViewModels
+namespace Notifier.PageViewModels;
+
+class TrainSelectionViewModel : BasePageViewModel
 {
-    class TrainSelectionViewModel : BasePageViewModel
+    public DelegateCommand NextCommand { get; }
+    public DelegateCommand BackCommand { get; }
+
+    private List<TrainViewModel> trains;
+    public List<TrainViewModel> Trains
     {
-        public DelegateCommand NextCommand { get; }
-        public DelegateCommand BackCommand { get; }
+        get => trains;
+        set => SetProperty(ref trains, value);
+    }
 
-        private List<TrainViewModel> trains;
-        public List<TrainViewModel> Trains
+    private int selectedIndex;
+    public int SelectedIndex
+    {
+        get => selectedIndex;
+        set
         {
-            get => trains;
-            set => SetProperty(ref trains, value);
-        }
-
-        private int selectedIndex;
-        public int SelectedIndex
-        {
-            get => selectedIndex;
-            set
-            {
-                if (SetProperty(ref selectedIndex, value))
-                    ValidateNextButton();
-            }
-        }
-
-        private readonly NavigationViewModel mainViewmodel;
-        private readonly TrainParameters trainParameters;
-
-        public TrainSelectionViewModel(in TrainsResult trainsResult, NavigationViewModel mainViewmodel)
-        {
-            trainParameters = trainsResult.TrainParameters;
-            trains = trainsResult.Trains.Select(t => new TrainViewModel(t)).ToList();
-
-            NextCommand = new DelegateCommand(NextHandler, () => trains.Any(t => t.IsSelected));
-            BackCommand = new DelegateCommand(() => mainViewmodel.Show(new TrainParametersViewmodel(mainViewmodel)));
-            this.mainViewmodel = mainViewmodel;
-        }
-
-        private void ValidateNextButton() => NextCommand.RaiseCanExecuteChanged();
-
-        private void NextHandler()
-        {
-            List<TrainInfo> selectedTrains = trains.Where(t => t.IsSelected).Select(t => t.TrainInfo).ToList();
-            mainViewmodel.Show(TrainSearingViewModel.CreateRunSearch(in trainParameters, selectedTrains, mainViewmodel));
+            if (SetProperty(ref selectedIndex, value))
+                ValidateNextButton();
         }
     }
 
-    public class TrainViewModel : BindableBase
+    private readonly NavigationViewModel mainViewmodel;
+    private readonly TrainParameters trainParameters;
+
+    public TrainSelectionViewModel(in TrainsResult trainsResult, NavigationViewModel mainViewmodel)
     {
-        public TrainInfo TrainInfo { get; }
+        trainParameters = trainsResult.TrainParameters;
+        trains = trainsResult.Trains.Select(t => new TrainViewModel(t)).ToList();
 
-        private bool isSelected;
-
-        public bool IsSelected
-        {
-            get => isSelected;
-            set
-            {
-                isSelected = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public TrainViewModel(TrainInfo trainInfo) => TrainInfo = trainInfo;
+        NextCommand = new DelegateCommand(NextHandler, () => trains.Any(t => t.IsSelected));
+        BackCommand = new DelegateCommand(() => mainViewmodel.Show(new TrainParametersViewmodel(mainViewmodel)));
+        this.mainViewmodel = mainViewmodel;
     }
+
+    private void ValidateNextButton() => NextCommand.RaiseCanExecuteChanged();
+
+    private void NextHandler()
+    {
+        List<TrainInfo> selectedTrains = trains.Where(t => t.IsSelected).Select(t => t.TrainInfo).ToList();
+        mainViewmodel.Show(TrainSearingViewModel.CreateRunSearch(in trainParameters, selectedTrains, mainViewmodel));
+    }
+}
+
+public class TrainViewModel : BindableBase
+{
+    public TrainInfo TrainInfo { get; }
+
+    private bool isSelected;
+
+    public bool IsSelected
+    {
+        get => isSelected;
+        set
+        {
+            isSelected = value;
+            RaisePropertyChanged();
+        }
+    }
+
+    public TrainViewModel(TrainInfo trainInfo) => TrainInfo = trainInfo;
 }

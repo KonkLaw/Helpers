@@ -4,57 +4,56 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
-namespace Notifier.UtilTypes
+namespace Notifier.UtilTypes;
+
+public class BindableBase : INotifyPropertyChanged
 {
-    public class BindableBase : INotifyPropertyChanged
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    public bool SetProperty<T>(ref T storage, T newValue, [CallerMemberName] string propertyName = null)
     {
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        public bool SetProperty<T>(ref T storage, T newValue, [CallerMemberName] string propertyName = null)
-        {
-            if (EqualityComparer<T>.Default.Equals(storage, newValue))
-                return false;
-            storage = newValue;
-            RaisePropertyChanged(propertyName);
-            return true;
-        }
-
-        public void RaisePropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        if (EqualityComparer<T>.Default.Equals(storage, newValue))
+            return false;
+        storage = newValue;
+        RaisePropertyChanged(propertyName);
+        return true;
     }
 
-    class DelegateCommand : ICommand
+    public void RaisePropertyChanged([CallerMemberName] string propertyName = null)
     {
-        public event EventHandler? CanExecuteChanged;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+}
 
-        private readonly Action handler;
-        private readonly Func<bool>? canExecute;
+class DelegateCommand : ICommand
+{
+    public event EventHandler? CanExecuteChanged;
 
-        public DelegateCommand(Action handler)
-        {
-            this.handler = handler;
-        }
+    private readonly Action handler;
+    private readonly Func<bool>? canExecute;
 
-        public DelegateCommand(Action handler, Func<bool> canExecute) : this(handler)
-        {
-            this.canExecute = canExecute;
-        }
+    public DelegateCommand(Action handler)
+    {
+        this.handler = handler;
+    }
 
-        public bool CanExecute(object? parameter)
-        {
-            if (canExecute == null)
-                return true;
-            else
-                return canExecute();
-        }
+    public DelegateCommand(Action handler, Func<bool> canExecute) : this(handler)
+    {
+        this.canExecute = canExecute;
+    }
 
-        public void Execute(object? parameter) => handler();
+    public bool CanExecute(object? parameter)
+    {
+        if (canExecute == null)
+            return true;
+        else
+            return canExecute();
+    }
 
-        internal void RaiseCanExecuteChanged()
-        {
-            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
-        }
+    public void Execute(object? parameter) => handler();
+
+    internal void RaiseCanExecuteChanged()
+    {
+        CanExecuteChanged?.Invoke(this, EventArgs.Empty);
     }
 }

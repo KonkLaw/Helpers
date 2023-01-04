@@ -2,37 +2,36 @@
 using Notifier.PaveViews;
 using System.Windows;
 
-namespace Notifier
+namespace Notifier;
+
+/// <summary>
+/// Interaction logic for MainWindow.xaml
+/// </summary>
+public partial class MainWindow : Window
 {
-	/// <summary>
-	/// Interaction logic for MainWindow.xaml
-	/// </summary>
-	public partial class MainWindow : Window
-	{
-		public MainWindow()
-		{
-			InitializeComponent();
-			DataContext = SetupView();
+    public MainWindow()
+    {
+        InitializeComponent();
+        DataContext = SetupView();
 
-			Left = (SystemParameters.PrimaryScreenWidth - Width) / 2;
-			Top = (SystemParameters.PrimaryScreenHeight - Height) / 2;
-		}
+        Left = (SystemParameters.PrimaryScreenWidth - Width) / 2;
+        Top = (SystemParameters.PrimaryScreenHeight - Height) / 2;
+    }
 
-		private NavigationViewModel SetupView()
-		{
-			var mainViewmodel = new NavigationViewModel();
-            mainViewmodel.DeclareMapping<TransportSelectionViewModel>(new TransportationSelectionView());
-			mainViewmodel.DeclareMapping<BusSearchingViewModel>(new SearchingVeiw());
-			mainViewmodel.DeclareMapping<BusCredentialsViewModel>(new BusCredentialsView());
+    private NavigationViewModel SetupView()
+    {
+        var mainViewmodel = new NavigationViewModel();
+        mainViewmodel.DeclareMapping<TransportSelectionViewModel>(new TransportationSelectionView());
+        mainViewmodel.DeclareMapping<BusSearchingViewModel>(new SearchingView());
+        mainViewmodel.DeclareMapping<BusCredentialsViewModel>(new BusCredentialsView());
 
-			mainViewmodel.DeclareMapping<TrainParametersViewmodel>(new TrainParametersView());
-			mainViewmodel.DeclareMapping<TrainSelectionViewModel>(new TrainSelectionView());
-			mainViewmodel.DeclareMapping<TrainSearingViewModel>(new SearchingVeiw());
+        mainViewmodel.DeclareMapping<TrainParametersViewmodel>(new TrainParametersView());
+        mainViewmodel.DeclareMapping<TrainSelectionViewModel>(new TrainSelectionView());
+        mainViewmodel.DeclareMapping<TrainSearingViewModel>(new SearchingView());
 
-            mainViewmodel.DeclareMapping<BusParametersViewmodel>(new BusParametersView());
+        mainViewmodel.DeclareMapping<BusParametersViewmodel>(new BusParametersView());
 
-			mainViewmodel.Show(new TransportSelectionViewModel(mainViewmodel));
-			return mainViewmodel;
-		}
-	}
+        mainViewmodel.Show(new TransportSelectionViewModel(mainViewmodel));
+        return mainViewmodel;
+    }
 }

@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace Notifier.UtilTypes
+namespace Notifier.UtilTypes;
+
+static class Utilities
 {
-    static class Utilities
-    {
-        public static string ToShortString(this TimeSpan timeSpan) => timeSpan.ToString(@"hh\:mm");
-    }
+    public static string ToShortString(this TimeSpan timeSpan) => timeSpan.ToString(@"hh\:mm");
 }
