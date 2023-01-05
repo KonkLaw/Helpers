@@ -1,2 +1,1 @@
-﻿* better last timer error
-* passengers count in descripts
+﻿

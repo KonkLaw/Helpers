@@ -15,27 +15,27 @@ class SearchViewModel : BasePageViewModel
     private readonly ISearchService searchService;
 
     private bool isCanceled;
-    private string? errorDescription;
 
     public ICommand TestSound { get; }
     public ICommand LinkCommand { get; }
     public ICommand CancelCommand { get; }
     public ICommand ShowErrorDetails { get; }
 
-    public string Details { get; }
+    public string Description { get; }
 
     private string message = string.Empty;
+
     public string Message
     {
         get => message;
         private set => SetProperty(ref message, value);
     }
 
-    private bool isErrorDetailsVisible;
-    public bool IsErrorDetailsVisible
+    private ErrorInfo? errorInfo;
+    public ErrorInfo? ErrorInfo
     {
-        get => isErrorDetailsVisible;
-        set => SetProperty(ref isErrorDetailsVisible, value);
+        get => errorInfo;
+        set => SetProperty(ref errorInfo, value);
     }
 
     public SearchViewModel(NavigationViewModel navigationViewModel, ISearchService searchService)
@@ -46,7 +46,7 @@ class SearchViewModel : BasePageViewModel
         LinkCommand = new DelegateCommand(LinkHandler);
         TestSound = new DelegateCommand(PlaySound);
         ShowErrorDetails = new DelegateCommand(ShowErrorDetailsHandler);
-        Details = searchService.GetSearchDescription();
+        Description = searchService.GetSearchDescription();
     }
 
     private void CancelHandler()
@@ -69,7 +69,7 @@ class SearchViewModel : BasePageViewModel
 
     private static void PlaySound() => Sounds.Instance.Play();
 
-    private void ShowErrorDetailsHandler() => navigationViewModel.ShowErrorWindow(errorDescription);
+    private void ShowErrorDetailsHandler() => navigationViewModel.ShowErrorWindow(errorInfo!.Description);
 
     protected bool? ProcessRequest(out string details)
     {
@@ -102,8 +102,7 @@ class SearchViewModel : BasePageViewModel
             if (result.HasValue && result.Value)
             {
                 Message = details;
-                IsErrorDetailsVisible = false;
-                errorDescription = null;
+                ErrorInfo = null;
 
                 while (!isCanceled)
                 {
@@ -114,18 +113,20 @@ class SearchViewModel : BasePageViewModel
             else if (result.HasValue && !result.Value)
             {
                 Message = details;
-                IsErrorDetailsVisible = false;
-                errorDescription = null;
+                ErrorInfo = null;
                 Thread.Sleep(waitTimeoutMilliseconds);
             }
             else
             {
-                Message = "Error at: " + DateTime.Now.TimeOfDay.ToShortString();
-                IsErrorDetailsVisible = true;
-                errorDescription = details;
+                if (ErrorInfo == null)
+                    ErrorInfo = new ErrorInfo(details, TimeOnly.FromDateTime(DateTime.Now));
+                else 
+                    ErrorInfo = ErrorInfo with { Description = details };
+
+                Message = "First problems at: " + ErrorInfo.Time;
 
                 int timeOnPause = 0;
-                while (!isCanceled || timeOnPause < waitTimeoutMilliseconds)
+                while (!isCanceled && timeOnPause < waitTimeoutMilliseconds)
                 {
                     PlaySound();
                     Thread.Sleep(soundMilliseconds);
@@ -137,3 +138,5 @@ class SearchViewModel : BasePageViewModel
 
     public void RunSearch() => Task.Run(SearchProcess);
 }
+
+record ErrorInfo(string Description, TimeOnly Time);
